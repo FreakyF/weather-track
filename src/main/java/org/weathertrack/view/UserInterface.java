@@ -1,4 +1,4 @@
-package org.weathertrack.view.cli;
+package org.weathertrack.view;
 
 public interface UserInterface {
 	String getCityNameFromUser();
