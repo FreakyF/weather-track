@@ -24,7 +24,7 @@ location.
 
 ## Functionality
 
-* Location selection - Choose any city or location to access weather information specific to your desired area.
+* Location selection - Choose any city to access weather information specific to your desired area.
 * Real-Time Weather Updates - Stay up to date with the latest weather conditions as this app provides you with real-time
   updates on temperature, humidity, wind speed, and other relevant data.
 * Multiple Units of Measurement - Customize the display of weather information according to your preferences. Switch
