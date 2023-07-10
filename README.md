@@ -14,7 +14,7 @@ conditions and forecasts for cities worldwide. At the core of this application i
 interface that ensures effortless navigation and interaction.
 The interface is meticulously designed to be visually appealing and user-friendly, allowing users to seamlessly explore
 its various features.
-From selecting a specific city or location to accessing up-to-the-minute weather updates, every aspect of the user
+From selecting a specific city to accessing up-to-the-minute weather updates, every aspect of the user
 interface is thoughtfully crafted to enhance the overall experience.
 One of the key highlights this application is its ability to provide real-time weather updates.
 Leveraging reliable data feeds from trusted sources, the application guarantees the most accurate temperature readings,
