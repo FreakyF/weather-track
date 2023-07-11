@@ -1,0 +1,34 @@
+<configuration scan="true">
+    <property name="LOG_FILE" value="logs.log"/>
+    <property name="LOG_DIR" value="logs/"/>
+    <property name="PATTERN" value="%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <property name="MAX_HISTORY" value="30"/>
+    <property name="MAX_TOTAL_SIZE" value="5GB"/>
+    <property name="MAX_FILE_SIZE" value="10MB"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${MAX_TOTAL_SIZE}</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.TimeBasedFileNamingAndTriggeringPolicy">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
