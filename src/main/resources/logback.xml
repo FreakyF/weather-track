@@ -1,10 +1,15 @@
 <configuration scan="true">
-    <property name="LOG_FILE" value="logs.log"/>
-    <property name="LOG_DIR" value="logs/"/>
-    <property name="PATTERN" value="%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <timestamp key="FILE_TIMESTAMP" datePattern="HH-mm-ss"/>
+    <timestamp key="FOLDER_TIMESTAMP" datePattern="YYYY-MM-dd"/>
+
+    <property name="LOG_FILE" value="${FILE_TIMESTAMP}.log"/>
+    <property name="LOG_DIR" value="logs/${FOLDER_TIMESTAMP}"/>
+
+    <property name="PATTERN" value="%d{YYYY-MM-ddy HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
     <property name="MAX_HISTORY" value="30"/>
-    <property name="MAX_TOTAL_SIZE" value="1KB"/>
-    <property name="MAX_FILE_SIZE" value="10MB"/>
+    <property name="MAX_TOTAL_SIZE" value="5GB"/>
+    <property name="MAX_FILE_SIZE" value="50MB"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -15,7 +20,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/${LOG_FILE}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/%i-%d{YYYY-MM-dd}.gz</fileNamePattern>
             <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
             <totalSizeCap>${MAX_TOTAL_SIZE}</totalSizeCap>
             <maxHistory>${MAX_HISTORY}</maxHistory>
@@ -25,8 +30,16 @@
         </encoder>
     </appender>
 
-    <root level="TRACE">
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="FILE"/>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC_FILE"/>
+        <appender-ref ref="ASYNC_CONSOLE"/>
     </root>
 </configuration>
