@@ -7,7 +7,7 @@ public class Main {
 	private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
 	public static void main(String[] args) {
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < 10000; i++) {
 			logger.trace("Example log from {}", Main.class.getSimpleName());
 			logger.info("Example log from {}", Main.class.getSimpleName());
 			logger.debug("Example log from {}", Main.class.getSimpleName());
