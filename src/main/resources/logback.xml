@@ -1,50 +1,64 @@
 <configuration scan="true">
+    <!-- Application name -->
+    <property name="APP_NAME" value="weather-track"/>
+
+    <!-- Timestamps for logs and logs folder -->
     <timestamp key="FILE_TIMESTAMP" datePattern="HH-mm-ss"/>
     <timestamp key="FOLDER_TIMESTAMP" datePattern="YYYY-MM-dd"/>
 
-    <property name="LOG_FILE" value="${FILE_TIMESTAMP}.log"/>
-    <property name="LOG_DIR" value="logs/${FOLDER_TIMESTAMP}"/>
+    <!-- Log file and directory -->
+    <property name="LOG_FILE" value="${APP_NAME}.log"/>
+    <property name="LOG_DIR" value="logs/"/>
+    <property name="LOG_ARCHIVE" value="${LOG_DIR}/archive/"/>
 
-    <property name="PATTERN" value="%d{YYYY-MM-ddy HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <!-- Log and archive pattern -->
+    <property name="LOG_PATTERN" value="%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <property name="ARCHIVE_PATTERN" value="${LOG_ARCHIVE}/%i-${APP_NAME}-%d{YYYY-MM-dd}.gz"/>
 
-    <property name="MAX_HISTORY" value="30"/>
-    <property name="MAX_TOTAL_SIZE" value="5GB"/>
-    <property name="MAX_FILE_SIZE" value="50MB"/>
+    <!-- Maximum history, total size, and file size -->
+    <property name="MAX_HISTORY" value="30"/> <!-- Number of days -->
+    <property name="MAX_TOTAL_SIZE" value="5GB"/> <!-- Maximum size of all archived log files -->
+    <property name="MAX_FILE_SIZE" value="50MB"/> <!-- Maximum size of a single .log file -->
 
+    <!-- Console appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${PATTERN}</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
+    <!-- File appender -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/${LOG_FILE}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/%i-%d{YYYY-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>${ARCHIVE_PATTERN}</fileNamePattern>
             <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
             <totalSizeCap>${MAX_TOTAL_SIZE}</totalSizeCap>
             <maxHistory>${MAX_HISTORY}</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>${PATTERN}</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
+    <!-- Async console appender -->
     <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="CONSOLE"/>
     </appender>
 
+    <!-- Async file appender -->
     <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="FILE"/>
     </appender>
 
+    <!-- Root logger -->
     <root level="TRACE">
         <appender-ref ref="ASYNC_CONSOLE"/>
         <appender-ref ref="ASYNC_FILE"/>
     </root>
 
+    <!-- Logger for 'org.weathertrack' -->
     <logger name="org.weathertrack" level="INFO">
         <appender-ref ref="ASYNC_FILE"/>
     </logger>
-
 </configuration>
