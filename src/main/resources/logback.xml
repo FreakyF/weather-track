@@ -1,33 +1,26 @@
 <configuration scan="true">
-    <!-- Application name -->
     <property name="APP_NAME" value="weather-track"/>
 
-    <!-- Timestamps for logs and logs folder -->
     <timestamp key="FILE_TIMESTAMP" datePattern="HH-mm-ss"/>
     <timestamp key="FOLDER_TIMESTAMP" datePattern="YYYY-MM-dd"/>
 
-    <!-- Log file and directory -->
     <property name="LOG_FILE" value="${APP_NAME}.log"/>
     <property name="LOG_DIR" value="logs/"/>
     <property name="LOG_ARCHIVE" value="${LOG_DIR}/archive/"/>
 
-    <!-- Log and archive pattern -->
     <property name="LOG_PATTERN" value="%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
     <property name="ARCHIVE_PATTERN" value="${LOG_ARCHIVE}/%i-${APP_NAME}-%d{YYYY-MM-dd}.gz"/>
 
-    <!-- Maximum history, total size, and file size -->
     <property name="MAX_HISTORY" value="30"/> <!-- Number of days -->
     <property name="MAX_TOTAL_SIZE" value="5GB"/> <!-- Maximum size of all archived log files -->
     <property name="MAX_FILE_SIZE" value="50MB"/> <!-- Maximum size of a single .log file -->
 
-    <!-- Console appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
-    <!-- File appender -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/${LOG_FILE}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -39,26 +32,26 @@
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>TRACE</level>
+            <onMatch>DENY</onMatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>DENY</onMatch>
+        </filter>
     </appender>
 
-    <!-- Async console appender -->
     <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="CONSOLE"/>
     </appender>
 
-    <!-- Async file appender -->
     <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="FILE"/>
     </appender>
 
-    <!-- Root logger -->
     <root level="TRACE">
         <appender-ref ref="ASYNC_CONSOLE"/>
         <appender-ref ref="ASYNC_FILE"/>
     </root>
-
-    <!-- Logger for 'org.weathertrack' -->
-    <logger name="org.weathertrack" level="INFO">
-        <appender-ref ref="ASYNC_FILE"/>
-    </logger>
 </configuration>
