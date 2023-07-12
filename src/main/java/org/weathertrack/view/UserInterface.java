@@ -5,5 +5,5 @@ public interface UserInterface {
 
 	void printCitiesWithSameName(String cityName);
 
-	void printWeather(String cityName);
+	void printWeather();
 }

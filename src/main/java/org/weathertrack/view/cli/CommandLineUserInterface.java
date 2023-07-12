@@ -1,15 +1,16 @@
 package org.weathertrack.view.cli;
 
 import org.weathertrack.view.UserInterface;
+import org.weathertrack.view.util.WeatherUIResources;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class UserInterfaceCLI implements UserInterface {
+public class CommandLineUserInterface implements UserInterface {
 	private final Scanner scanner;
 
-	public UserInterfaceCLI() {
+	public CommandLineUserInterface() {
 		this.scanner = new Scanner(System.in);
 	}
 
@@ -40,22 +41,14 @@ public class UserInterfaceCLI implements UserInterface {
 	}
 
 	@Override
-	public void printWeather(String cityName) {
-		String temperature = "0";
-		String cloudiness = "0";
-		String rainChance = "0";
-		String windSpeed = "0";
-		String weatherCondition = "0";
-		String humidity = "0";
-		String pressure = "0";
+	public void printWeather() {
 
-		System.out.println("\nWeather Information for " + cityName + ":");
-		System.out.println("Weather Condition: " + weatherCondition);
-		System.out.println("Temperature: " + temperature + "°C");
-		System.out.println("Cloudiness: " + cloudiness + "%");
-		System.out.println("Rain Chance: " + rainChance + "%");
-		System.out.println("Wind Speed: " + windSpeed + " m/s");
-		System.out.println("Humidity: " + humidity + "%");
-		System.out.println("Pressure: " + pressure + " hPa");
+		System.out.println(WeatherUIResources.WEATHER_CONDITION);
+		System.out.println(WeatherUIResources.TEMPERATURE);
+		System.out.println(WeatherUIResources.CLOUDINESS);
+		System.out.println(WeatherUIResources.RAIN_CHANCE);
+		System.out.println(WeatherUIResources.WIND_SPEED);
+		System.out.println(WeatherUIResources.HUMIDITY);
+		System.out.println(WeatherUIResources.PRESSURE);
 	}
 }
