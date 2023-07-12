@@ -38,8 +38,13 @@
         <appender-ref ref="FILE"/>
     </appender>
 
-    <root level="INFO">
-        <appender-ref ref="ASYNC_FILE"/>
+    <root level="TRACE">
         <appender-ref ref="ASYNC_CONSOLE"/>
+        <appender-ref ref="ASYNC_FILE"/>
     </root>
+
+    <logger name="org.weathertrack" level="INFO">
+        <appender-ref ref="ASYNC_FILE"/>
+    </logger>
+
 </configuration>
