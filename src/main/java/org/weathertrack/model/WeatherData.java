@@ -1,13 +1,23 @@
 package org.weathertrack.model;
 
 public class WeatherData {
-	private String temperature;
-	private String cloudiness;
-	private String rainChance;
-	private String windSpeed;
-	private String weatherCondition;
-	private String humidity;
-	private String pressure;
+	private final String temperature;
+	private final String cloudiness;
+	private final String rainChance;
+	private final String windSpeed;
+	private final String weatherCondition;
+	private final String humidity;
+	private final String pressure;
+
+	public WeatherData(String temperature, String cloudiness, String rainChance, String windSpeed, String weatherCondition, String humidity, String pressure) {
+		this.temperature = temperature;
+		this.cloudiness = cloudiness;
+		this.rainChance = rainChance;
+		this.windSpeed = windSpeed;
+		this.weatherCondition = weatherCondition;
+		this.humidity = humidity;
+		this.pressure = pressure;
+	}
 
 	public String getTemperature() {
 		return temperature;
