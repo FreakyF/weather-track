@@ -9,7 +9,13 @@ public class WeatherData {
 	private final String humidity;
 	private final String pressure;
 
-	public WeatherData(String temperature, String cloudiness, String rainChance, String windSpeed, String weatherCondition, String humidity, String pressure) {
+	public WeatherData(String temperature,
+	                   String cloudiness,
+	                   String rainChance,
+	                   String windSpeed,
+	                   String weatherCondition,
+	                   String humidity,
+	                   String pressure) {
 		this.temperature = temperature;
 		this.cloudiness = cloudiness;
 		this.rainChance = rainChance;
