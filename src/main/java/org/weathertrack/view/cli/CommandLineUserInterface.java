@@ -4,7 +4,6 @@ import org.weathertrack.model.WeatherData;
 import org.weathertrack.view.UserInterface;
 import org.weathertrack.view.util.WeatherUIResources;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,16 +26,20 @@ public class CommandLineUserInterface implements UserInterface {
 	}
 
 	@Override
-	public void printCitiesWithSameName(String cityName) {
-		System.out.println("\nCities with the name " + cityName + ":");
+	public void printCitiesWithSameName(String cityName, List<String> citiesWithSameName) {
+		System.out.println("Cities with the name " + cityName + ":");
 
-		List<String> citiesWithSameName = new ArrayList<>();
 		if (citiesWithSameName.isEmpty()) {
 			System.out.println("No cities found with the name " + cityName + ".");
 		} else {
+			StringBuilder message = new StringBuilder();
 			for (int i = 0; i < citiesWithSameName.size(); i++) {
-				System.out.println(i + ". " + citiesWithSameName.get(i));
+				message.append(i).append(". ").append(citiesWithSameName.get(i));
+				if (i != citiesWithSameName.size() - 1) {
+					message.append("\n");
+				}
 			}
+			System.out.println(message);
 		}
 	}
 
