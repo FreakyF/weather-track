@@ -1,5 +1,6 @@
 package org.weathertrack.view.cli;
 
+import org.weathertrack.model.WeatherData;
 import org.weathertrack.view.UserInterface;
 import org.weathertrack.view.util.WeatherUIResources;
 
@@ -37,18 +38,16 @@ public class CommandLineUserInterface implements UserInterface {
 				System.out.println(i + ". " + citiesWithSameName.get(i));
 			}
 		}
-
 	}
 
 	@Override
-	public void printWeather() {
-
-		System.out.println(WeatherUIResources.WEATHER_CONDITION);
-		System.out.println(WeatherUIResources.TEMPERATURE);
-		System.out.println(WeatherUIResources.CLOUDINESS);
-		System.out.println(WeatherUIResources.RAIN_CHANCE);
-		System.out.println(WeatherUIResources.WIND_SPEED);
-		System.out.println(WeatherUIResources.HUMIDITY);
-		System.out.println(WeatherUIResources.PRESSURE);
+	public void printWeather(WeatherData weatherData) {
+		System.out.println((WeatherUIResources.WEATHER_CONDITION) + " " + weatherData.getWeatherCondition());
+		System.out.println((WeatherUIResources.TEMPERATURE) + " " + weatherData.getTemperature());
+		System.out.println((WeatherUIResources.CLOUDINESS) + " " + weatherData.getCloudiness());
+		System.out.println((WeatherUIResources.RAIN_CHANCE) + " " + weatherData.getRainChance());
+		System.out.println((WeatherUIResources.WIND_SPEED) + " " + weatherData.getWindSpeed());
+		System.out.println((WeatherUIResources.HUMIDITY) + " " + weatherData.getHumidity());
+		System.out.println((WeatherUIResources.PRESSURE) + " " + weatherData.getPressure());
 	}
 }
