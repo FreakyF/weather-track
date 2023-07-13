@@ -32,14 +32,6 @@
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>TRACE</level>
-            <onMatch>DENY</onMatch>
-        </filter>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>DEBUG</level>
-            <onMatch>DENY</onMatch>
-        </filter>
     </appender>
 
     <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
@@ -50,8 +42,11 @@
         <appender-ref ref="FILE"/>
     </appender>
 
-    <root level="TRACE">
+    <root level="INFO">
         <appender-ref ref="ASYNC_CONSOLE"/>
+    </root>
+
+    <root level="WARN">
         <appender-ref ref="ASYNC_FILE"/>
     </root>
 </configuration>
