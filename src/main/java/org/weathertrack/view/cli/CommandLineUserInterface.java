@@ -7,6 +7,7 @@ import org.weathertrack.view.util.WeatherUIResources;
 import java.util.List;
 import java.util.Scanner;
 
+@SuppressWarnings("java:S106")
 public class CommandLineUserInterface implements UserInterface {
 	private final Scanner scanner;
 
@@ -33,18 +34,31 @@ public class CommandLineUserInterface implements UserInterface {
 			if (i != citiesWithSameName.size() - 1) {
 				message.append("\n");
 			}
-			System.out.println(message);
 		}
+		System.out.println(message);
 	}
 
 	@Override
 	public void printWeather(WeatherData weatherData) {
-		System.out.println((WeatherUIResources.WEATHER_CONDITION) + " " + weatherData.getWeatherCondition());
-		System.out.println((WeatherUIResources.TEMPERATURE) + " " + weatherData.getTemperature());
-		System.out.println((WeatherUIResources.CLOUDINESS) + " " + weatherData.getCloudiness());
-		System.out.println((WeatherUIResources.RAIN_CHANCE) + " " + weatherData.getRainChance());
-		System.out.println((WeatherUIResources.WIND_SPEED) + " " + weatherData.getWindSpeed());
-		System.out.println((WeatherUIResources.HUMIDITY) + " " + weatherData.getHumidity());
-		System.out.println((WeatherUIResources.PRESSURE) + " " + weatherData.getPressure());
+		var weatherCondition = String.format(WeatherUIResources.WEATHER_CONDITION, weatherData.getWeatherCondition());
+		System.out.println(weatherCondition);
+
+		var temperature = String.format(WeatherUIResources.TEMPERATURE, weatherData.getTemperature());
+		System.out.println(temperature);
+
+		var cloudiness = String.format(WeatherUIResources.CLOUDINESS, weatherData.getCloudiness());
+		System.out.println(cloudiness);
+
+		var rainChance = String.format(WeatherUIResources.RAIN_CHANCE, weatherData.getRainChance());
+		System.out.println(rainChance);
+
+		var windSpeed = String.format(WeatherUIResources.WIND_SPEED, weatherData.getWindSpeed());
+		System.out.println(windSpeed);
+
+		var humidity = String.format(WeatherUIResources.HUMIDITY, weatherData.getHumidity());
+		System.out.println(humidity);
+
+		var pressure = String.format(WeatherUIResources.PRESSURE, weatherData.getPressure());
+		System.out.println(pressure);
 	}
 }
