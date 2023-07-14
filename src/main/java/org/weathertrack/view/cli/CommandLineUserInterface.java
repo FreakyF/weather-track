@@ -19,7 +19,7 @@ public class CommandLineUserInterface implements UserInterface {
 	public String getCityNameFromUser() {
 		String cityName;
 		do {
-			cityName = userInputService.getUserInput("Enter the city name: ").trim();
+			cityName = userInputService.getUserInput("Enter the city name: ");
 		} while (cityName.isBlank());
 
 		return cityName;

@@ -13,6 +13,6 @@ public class CommandLineUserInputService implements UserInputService {
 	@Override
 	public String getUserInput(String message) {
 		System.out.print(message);
-		return scanner.nextLine();
+		return scanner.nextLine().trim();
 	}
 }
