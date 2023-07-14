@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 public class LogbackLogger<T> extends BaseLogger<T> {
 	private final Logger logger;
 
-	public LogbackLogger(Class<T> className) {
-		super(className);
-		logger = LoggerFactory.getLogger(className);
+	public LogbackLogger(Class<T> tClass) {
+		super(tClass);
+		logger = LoggerFactory.getLogger(tClass);
 	}
 
 	@Override
