@@ -2,18 +2,18 @@ package org.weathertrack.model;
 
 public class WeatherData {
 	private final String weatherCondition;
-	private final float temperature;
+	private final double temperature;
 	private final int cloudiness;
 	private final int rainChance;
-	private final float windSpeed;
+	private final double windSpeed;
 	private final int humidity;
 	private final int pressure;
 
 	public WeatherData(String weatherCondition,
-	                   float temperature,
+	                   double temperature,
 	                   int cloudiness,
 	                   int rainChance,
-	                   float windSpeed,
+	                   double windSpeed,
 	                   int humidity,
 	                   int pressure) {
 		this.weatherCondition = weatherCondition;
@@ -29,7 +29,7 @@ public class WeatherData {
 		return weatherCondition;
 	}
 
-	public float getTemperature() {
+	public double getTemperature() {
 		return temperature;
 	}
 
@@ -41,7 +41,7 @@ public class WeatherData {
 		return rainChance;
 	}
 
-	public float getWindSpeed() {
+	public double getWindSpeed() {
 		return windSpeed;
 	}
 
