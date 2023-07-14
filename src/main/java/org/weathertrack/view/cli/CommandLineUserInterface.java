@@ -26,18 +26,12 @@ public class CommandLineUserInterface implements UserInterface {
 	}
 
 	@Override
-	public void printCitiesWithSameName(String cityName, List<String> citiesWithSameName) {
-		System.out.println("Cities with the name " + cityName + ":");
-
-		if (citiesWithSameName.isEmpty()) {
-			System.out.println("No cities found with the name " + cityName + ".");
-		} else {
-			StringBuilder message = new StringBuilder();
-			for (int i = 0; i < citiesWithSameName.size(); i++) {
-				message.append(i).append(". ").append(citiesWithSameName.get(i));
-				if (i != citiesWithSameName.size() - 1) {
-					message.append("\n");
-				}
+	public void printCitiesWithSameName(List<String> citiesWithSameName) {
+		StringBuilder message = new StringBuilder();
+		for (int i = 0; i < citiesWithSameName.size(); i++) {
+			message.append(i).append(". ").append(citiesWithSameName.get(i));
+			if (i != citiesWithSameName.size() - 1) {
+				message.append("\n");
 			}
 			System.out.println(message);
 		}
