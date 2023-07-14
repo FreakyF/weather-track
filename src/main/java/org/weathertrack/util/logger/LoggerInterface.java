@@ -1,6 +1,6 @@
 package org.weathertrack.util.logger;
 
-public interface Logger<T> {
+public interface LoggerInterface<T> {
 	void info(String message);
 
 	void warn(String message);
