@@ -3,7 +3,7 @@ package org.weathertrack.util.logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LogbackLogger<T> extends AbstractLogger<T> {
+public class LogbackLogger<T> extends BaseLogger<T> {
 	private final Logger logger;
 
 	public LogbackLogger(Class<T> className) {

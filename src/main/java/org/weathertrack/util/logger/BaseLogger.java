@@ -1,9 +1,9 @@
 package org.weathertrack.util.logger;
 
-public abstract class AbstractLogger<T> implements LoggerInterface<T> {
+public abstract class BaseLogger<T> implements LoggerInterface<T> {
 	protected final String className;
 
-	protected AbstractLogger(Class<T> className) {
+	protected BaseLogger(Class<T> className) {
 		this.className = className.getSimpleName();
 	}
 
