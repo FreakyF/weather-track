@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserInterface {
 	String getCityNameFromUser();
 
-	void printCitiesWithSameName(String cityName, List<String> citiesWithSameName);
+	void printCitiesWithSameName(List<String> citiesWithSameName);
 
 	void printWeather(WeatherData weatherData);
 }
