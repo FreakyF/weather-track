@@ -40,25 +40,25 @@ public class CommandLineUserInterface implements UserInterface {
 
 	@Override
 	public void printWeather(WeatherData weatherData) {
-		var weatherCondition = String.format(WeatherUIResources.WEATHER_CONDITION, weatherData.getWeatherCondition());
-		System.out.println(weatherCondition);
+		var weatherConditionMessage = String.format(WeatherUIResources.WEATHER_CONDITION, weatherData.getWeatherCondition());
+		System.out.println(weatherConditionMessage);
 
-		var temperature = String.format(WeatherUIResources.TEMPERATURE, weatherData.getTemperature());
-		System.out.println(temperature);
+		var temperatureMessage = String.format(WeatherUIResources.TEMPERATURE, weatherData.getTemperature());
+		System.out.println(temperatureMessage);
 
-		var cloudiness = String.format(WeatherUIResources.CLOUDINESS, weatherData.getCloudiness());
-		System.out.println(cloudiness);
+		var cloudinessMessage = String.format(WeatherUIResources.CLOUDINESS, weatherData.getCloudiness());
+		System.out.println(cloudinessMessage);
 
-		var rainChance = String.format(WeatherUIResources.RAIN_CHANCE, weatherData.getRainChance());
-		System.out.println(rainChance);
+		var rainChanceMessage = String.format(WeatherUIResources.RAIN_CHANCE, weatherData.getRainChance());
+		System.out.println(rainChanceMessage);
 
-		var windSpeed = String.format(WeatherUIResources.WIND_SPEED, weatherData.getWindSpeed());
-		System.out.println(windSpeed);
+		var windSpeedMessage = String.format(WeatherUIResources.WIND_SPEED, weatherData.getWindSpeed());
+		System.out.println(windSpeedMessage);
 
-		var humidity = String.format(WeatherUIResources.HUMIDITY, weatherData.getHumidity());
-		System.out.println(humidity);
+		var humidityMessage = String.format(WeatherUIResources.HUMIDITY, weatherData.getHumidity());
+		System.out.println(humidityMessage);
 
-		var pressure = String.format(WeatherUIResources.PRESSURE, weatherData.getPressure());
-		System.out.println(pressure);
+		var pressureMessage = String.format(WeatherUIResources.PRESSURE, weatherData.getPressure());
+		System.out.println(pressureMessage);
 	}
 }
