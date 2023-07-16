@@ -1,10 +1,8 @@
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.weathertrack.service.input.CommandLineUserInputService;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
@@ -13,9 +11,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class UserInputTest {
-	private final InputStream systemIn = System.in;
 	private CommandLineUserInputService userInputService;
 	private Scanner mockScanner;
+
+	private static final String EXPECTED_USER_MESSAGE = "User message";
+	private static final String EXPECTED_PROMPT_MESSAGE = "Prompt message";
 
 	@BeforeEach
 	void setUp() {
@@ -23,22 +23,16 @@ class UserInputTest {
 		userInputService = new CommandLineUserInputService(mockScanner);
 	}
 
-	@AfterEach
-	void teardown() {
-		System.setIn(systemIn);
-	}
-
 	@Test
 	void getUserInput_ShouldReturnUserInput() {
 		// When
-		var expectedInput = "Hello, World!";
-		when(mockScanner.nextLine()).thenReturn(expectedInput);
+		when(mockScanner.nextLine()).thenReturn(EXPECTED_USER_MESSAGE);
 
 		// Given
-		var result = userInputService.getUserInput("Message");
+		var result = userInputService.getUserInput(EXPECTED_PROMPT_MESSAGE);
 
 		// Then
-		assertEquals(expectedInput, result);
+		assertEquals(EXPECTED_USER_MESSAGE, result);
 	}
 
 	@Test
@@ -47,12 +41,12 @@ class UserInputTest {
 		ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outputStreamCaptor));
 
-		var expectedMessage = "Hello";
-		when(mockScanner.nextLine()).thenReturn("abc");
+		when(mockScanner.nextLine()).thenReturn(EXPECTED_USER_MESSAGE);
+
 		// Given
-		userInputService.getUserInput(expectedMessage);
+		userInputService.getUserInput(EXPECTED_PROMPT_MESSAGE);
 
 		// Then
-		assertEquals(expectedMessage, outputStreamCaptor.toString().trim());
+		assertEquals(EXPECTED_PROMPT_MESSAGE, outputStreamCaptor.toString().trim());
 	}
 }
