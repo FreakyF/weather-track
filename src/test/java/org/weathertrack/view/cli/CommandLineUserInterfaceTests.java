@@ -23,6 +23,7 @@ class CommandLineUserInterfaceTests {
 	private static final String EXPECTED_LOG_MESSAGE =
 			"Tried to print cities with the same name, when the list of cities is empty!";
 
+	@SuppressWarnings("unchecked")
 	@BeforeEach
 	void setUp() {
 		System.setOut(new PrintStream(outputStream));
