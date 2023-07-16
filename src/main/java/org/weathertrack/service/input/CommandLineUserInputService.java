@@ -6,8 +6,8 @@ import java.util.Scanner;
 public class CommandLineUserInputService implements UserInputService {
 	private final Scanner scanner;
 
-	public CommandLineUserInputService() {
-		scanner = new Scanner(System.in);
+	public CommandLineUserInputService(Scanner scanner) {
+		this.scanner = scanner;
 	}
 
 	@Override
