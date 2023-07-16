@@ -2,6 +2,7 @@ package org.weathertrack.view.cli;
 
 import org.weathertrack.model.WeatherData;
 import org.weathertrack.service.input.UserInputService;
+import org.weathertrack.util.logger.LoggerInterface;
 import org.weathertrack.view.UserInterface;
 import org.weathertrack.view.util.WeatherUIResources;
 
@@ -11,8 +12,11 @@ import java.util.List;
 public class CommandLineUserInterface implements UserInterface {
 	private final UserInputService userInputService;
 
-	public CommandLineUserInterface(UserInputService userInputService) {
+	private final LoggerInterface<CommandLineUserInterface> logger;
+
+	public CommandLineUserInterface(UserInputService userInputService, LoggerInterface<CommandLineUserInterface> logger) {
 		this.userInputService = userInputService;
+		this.logger = logger;
 	}
 
 	@Override
@@ -27,14 +31,20 @@ public class CommandLineUserInterface implements UserInterface {
 
 	@Override
 	public void printCitiesWithSameName(List<String> citiesWithSameName) {
+		if (citiesWithSameName.isEmpty()) {
+			logger.warn("Tried to print cities with the same name, when the list of cities is empty!");
+			return;
+		}
+
 		StringBuilder message = new StringBuilder();
 		for (int i = 0; i < citiesWithSameName.size(); i++) {
-			message.append(i).append(". ").append(citiesWithSameName.get(i));
-			if (i != citiesWithSameName.size() - 1) {
+			message.append(i + 1).append(". ").append(citiesWithSameName.get(i));
+			var isLastCity = i == citiesWithSameName.size() - 1;
+			if (!isLastCity) {
 				message.append("\n");
 			}
 		}
-		System.out.println(message);
+		System.out.print(message);
 	}
 
 	@Override
