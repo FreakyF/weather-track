@@ -1,6 +1,7 @@
+package org.weathertrack.service.input;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.weathertrack.service.input.CommandLineUserInputService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
