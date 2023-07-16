@@ -1,0 +1,44 @@
+<configuration scan="true">
+    <property name="APP_NAME" value="weather-track"/>
+
+    <timestamp key="FILE_TIMESTAMP" datePattern="HH-mm-ss"/>
+    <timestamp key="FOLDER_TIMESTAMP" datePattern="YYYY-MM-dd"/>
+
+    <property name="LOG_FILE" value="${APP_NAME}.log"/>
+    <property name="LOG_DIR" value="logs/"/>
+    <property name="LOG_ARCHIVE" value="${LOG_DIR}/archive/"/>
+
+    <property name="LOG_PATTERN" value="%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <property name="ARCHIVE_PATTERN" value="${LOG_ARCHIVE}/%i-${APP_NAME}-%d{YYYY-MM-dd}.gz"/>
+
+    <property name="MAX_HISTORY" value="30"/> <!-- Number of days -->
+    <property name="MAX_TOTAL_SIZE" value="5GB"/> <!-- Maximum size of all archived log files -->
+    <property name="MAX_FILE_SIZE" value="50MB"/> <!-- Maximum size of a single .log file -->
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${ARCHIVE_PATTERN}</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <totalSizeCap>${MAX_TOTAL_SIZE}</totalSizeCap>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
