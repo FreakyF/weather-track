@@ -25,6 +25,6 @@ public class WeatherUIResources {
 	public static final String HUMIDITY = properties.getProperty("HUMIDITY");
 	public static final String PRESSURE = properties.getProperty("PRESSURE");
 
-	private WeatherUIResources() {
+	WeatherUIResources() {
 	}
 }
