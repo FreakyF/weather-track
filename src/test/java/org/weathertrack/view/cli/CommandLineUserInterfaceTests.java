@@ -110,7 +110,8 @@ class CommandLineUserInterfaceTests {
 			"Rain Chance: 10%",
 			"Wind Speed: 15.0",
 			"Humidity: 70%",
-			"Pressure: 1015 hPa"})
+			"Pressure: 1015 hPa"
+	})
 	void printWeather_shouldPrintWeatherInformation(String expectedOutput) {
 		// Given
 		commandLineUserInterface.printWeather(mockWeatherData);
