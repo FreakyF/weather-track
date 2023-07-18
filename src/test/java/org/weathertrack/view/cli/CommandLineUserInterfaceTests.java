@@ -85,15 +85,6 @@ class CommandLineUserInterfaceTests {
 
 	@Test
 	void printWeather_shouldPrintWeather() {
-		// When
-		var mockWeatherData = new WeatherData("Sunny",
-				25.0,
-				30,
-				10,
-				15.0,
-				70,
-				1015);
-
 		// Given
 		commandLineUserInterface.printWeather(mockWeatherData);
 
@@ -121,8 +112,6 @@ class CommandLineUserInterfaceTests {
 			"Humidity: 70%",
 			"Pressure: 1015 hPa"})
 	void printWeather_shouldPrintWeatherInformation(String expectedOutput) {
-		// When
-
 		// Given
 		commandLineUserInterface.printWeather(mockWeatherData);
 
