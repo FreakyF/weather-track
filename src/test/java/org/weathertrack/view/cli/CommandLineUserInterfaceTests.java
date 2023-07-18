@@ -2,6 +2,8 @@ package org.weathertrack.view.cli;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.weathertrack.model.WeatherData;
 import org.weathertrack.service.input.CommandLineUserInputService;
 import org.weathertrack.util.logger.LoggerInterface;
@@ -12,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -23,6 +26,15 @@ class CommandLineUserInterfaceTests {
 
 	private static final String EXPECTED_LOG_MESSAGE =
 			"Tried to print cities with the same name, when the list of cities is empty!";
+
+	private static final WeatherData mockWeatherData = new WeatherData(
+			"Sunny",
+			25.0,
+			30,
+			10,
+			15.0,
+			70,
+			1015);
 
 	@SuppressWarnings("unchecked")
 	@BeforeEach
@@ -42,7 +54,7 @@ class CommandLineUserInterfaceTests {
 		commandLineUserInterface.printCitiesWithSameName(cities);
 
 		// Then
-		String expectedOutput = "1. New York\n2. London\n3. Paris";
+		var expectedOutput = "1. New York\n2. London\n3. Paris";
 		assertEquals(expectedOutput, outputStream.toString());
 	}
 
@@ -67,7 +79,7 @@ class CommandLineUserInterfaceTests {
 		commandLineUserInterface.printCitiesWithSameName(cities);
 
 		// Then
-		String expectedOutput = "1. New York";
+		var expectedOutput = "1. New York";
 		assertEquals(expectedOutput, outputStream.toString());
 	}
 
@@ -86,7 +98,7 @@ class CommandLineUserInterfaceTests {
 		commandLineUserInterface.printWeather(mockWeatherData);
 
 		// Then
-		String expectedOutput =
+		var expectedOutput =
 				"""
 						Weather Condition: Sunny\r
 						Temperature: 25.0\r
@@ -97,5 +109,25 @@ class CommandLineUserInterfaceTests {
 						Pressure: 1015 hPa\r
 						""";
 		assertEquals(expectedOutput, outputStream.toString());
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {
+			"Weather Condition: Sunny",
+			"Temperature: 25.0",
+			"Cloudiness: 30%",
+			"Rain Chance: 10%",
+			"Wind Speed: 15.0",
+			"Humidity: 70%",
+			"Pressure: 1015 hPa"})
+	void printWeather_shouldPrintWeatherInformation(String expectedOutput) {
+		// When
+
+		// Given
+		commandLineUserInterface.printWeather(mockWeatherData);
+
+		// Then
+		var output = outputStream.toString();
+		assertTrue(output.contains(expectedOutput));
 	}
 }
