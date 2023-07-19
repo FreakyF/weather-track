@@ -1,7 +1,6 @@
 package org.weathertrack.view.util;
 
 public class LogMessages {
-
 	public static final String WEATHER_CONDITION_IS_NULL
 			= "Tried to get weather condition but the weather condition is null!";
 	public static final String WEATHER_CONDITION_IS_EMPTY
