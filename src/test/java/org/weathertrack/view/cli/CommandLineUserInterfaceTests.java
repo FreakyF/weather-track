@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.weathertrack.model.WeatherData;
 import org.weathertrack.service.input.CommandLineUserInputService;
 import org.weathertrack.util.logger.LoggerInterface;
+import org.weathertrack.view.util.LogMessages;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -22,11 +23,8 @@ class CommandLineUserInterfaceTests {
 	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	private CommandLineUserInterface commandLineUserInterface;
 
-	private LoggerInterface<CommandLineUserInterface> logger;
-
-	private static final String EXPECTED_LOG_MESSAGE =
-			"Tried to print cities with the same name, when the list of cities is empty!";
-
+	private static final LoggerInterface<WeatherData> loggerWeatherData = mock(LoggerInterface.class);
+	private LoggerInterface<CommandLineUserInterface> loggerCLI;
 	private static final WeatherData mockWeatherData = new WeatherData(
 			"Sunny",
 			25.0,
@@ -34,15 +32,16 @@ class CommandLineUserInterfaceTests {
 			10,
 			15.0,
 			70,
-			1015);
+			1015,
+			loggerWeatherData);
 
 	@SuppressWarnings("unchecked")
 	@BeforeEach
 	void setUp() {
 		System.setOut(new PrintStream(outputStream));
 		CommandLineUserInputService userInputService = mock(CommandLineUserInputService.class);
-		logger = mock(LoggerInterface.class);
-		commandLineUserInterface = new CommandLineUserInterface(userInputService, logger);
+		loggerCLI = mock(LoggerInterface.class);
+		commandLineUserInterface = new CommandLineUserInterface(userInputService, loggerCLI);
 	}
 
 	@Test
@@ -67,7 +66,7 @@ class CommandLineUserInterfaceTests {
 		commandLineUserInterface.printCitiesWithSameName(cities);
 
 		// Then
-		verify(logger).warn(EXPECTED_LOG_MESSAGE);
+		verify(loggerCLI).warn(LogMessages.CITIES_WITH_SAME_NAME_IS_EMPTY);
 	}
 
 	@Test
