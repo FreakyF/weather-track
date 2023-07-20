@@ -1,64 +1,44 @@
 package org.weathertrack.model;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.weathertrack.util.logger.LoggerInterface;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.weathertrack.view.util.LogMessages;
 
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class WeatherDataTests {
-	private LoggerInterface<WeatherData> logger;
 
 	private WeatherData weatherData;
 
-	@SuppressWarnings("unchecked")
-	@BeforeEach
-	void setUp() {
-		logger = mock(LoggerInterface.class);
+	private static Stream<Arguments> WeatherCondition_ShouldThrowError_withAppropriateMessage() {
+		return Stream.of(
+				Arguments.of(null, LogMessages.WEATHER_CONDITION_IS_NULL),
+				Arguments.of("", LogMessages.WEATHER_CONDITION_IS_EMPTY),
+				Arguments.of(" ", LogMessages.WEATHER_CONDITION_IS_EMPTY)
+		);
 	}
 
-	@Test
-	void WeatherCondition_whenIsNull_ShouldLogError() {
-		// When
-		weatherData = new WeatherData(
-				null,
+	@ParameterizedTest
+	@MethodSource
+	void WeatherCondition_ShouldThrowError_withAppropriateMessage(String weatherConditionValue, String exceptionMessage) {
+		// Given
+		var throwedException = assertThrows(IllegalStateException.class, () -> weatherData = new WeatherData(
+				weatherConditionValue,
 				15.2,
 				10,
 				20,
 				30.2,
 				40,
-				1015,
-				logger
-		);
-
-		// Given
-		weatherData.getWeatherCondition();
+				1015
+		));
 
 		// Then
-		verify(logger).error(LogMessages.WEATHER_CONDITION_IS_NULL);
-	}
-
-	@Test
-	void WeatherCondition_whenIsEmptyString_ShouldLogError() {
-		// When
-		weatherData = new WeatherData(
-				"",
-				15.2,
-				10,
-				20,
-				30.2,
-				40,
-				1015,
-				logger
-		);
-		// Given
-		weatherData.getWeatherCondition();
-
-		// Then
-		verify(logger).error(LogMessages.WEATHER_CONDITION_IS_EMPTY);
+		assertEquals(exceptionMessage, throwedException.getMessage());
 	}
 
 	@Test
@@ -72,8 +52,7 @@ class WeatherDataTests {
 				20,
 				30.2,
 				40,
-				1015,
-				logger
+				1015
 		);
 
 		// Given
@@ -84,7 +63,24 @@ class WeatherDataTests {
 	}
 
 	@Test
-	void Temperature_whenTemperatureIsGood_ShouldReturnTemperature() {
+	void TemperatureCelsius_ShouldThrowError_WhenBelowAbsoluteZero() {
+		// Given
+		var throwedException = assertThrows(IllegalArgumentException.class, () -> weatherData = new WeatherData(
+				"Sunny",
+				-318.5,
+				10,
+				20,
+				30.2,
+				40,
+				1015
+		));
+
+		// Then
+		assertEquals(LogMessages.TEMPERATURE_IS_BELOW_ABSOLUTE_ZERO, throwedException.getMessage());
+	}
+
+	@Test
+	void TemperatureCelsius_whenTemperatureCelsiusIsGood_ShouldReturnTemperatureCelsius() {
 		// When
 		final var expectedOutput = 20.2;
 		weatherData = new WeatherData(
@@ -94,19 +90,18 @@ class WeatherDataTests {
 				20,
 				30.2,
 				40,
-				1015,
-				logger
+				1015
 		);
 
 		// Given
-		var result = weatherData.getTemperature();
+		var result = weatherData.getTemperatureCelsius();
 
 		// Then
 		assertEquals(expectedOutput, result);
 	}
 
 	@Test
-	void Temperature_whenIsNegative_ShouldReturnTemperature() {
+	void TemperatureCelsius_whenIsNegative_ShouldReturnTemperatureCelsius() {
 		// When
 		final var expectedOutput = -20.2;
 		weatherData = new WeatherData(
@@ -116,19 +111,18 @@ class WeatherDataTests {
 				20,
 				30.2,
 				40,
-				1015,
-				logger
+				1015
 		);
 
 		// Given
-		var result = weatherData.getTemperature();
+		var result = weatherData.getTemperatureCelsius();
 
 		// Then
 		assertEquals(expectedOutput, result);
 	}
 
 	@Test
-	void Temperature_whenIsZero_ShouldReturnTemperature() {
+	void TemperatureCelsius_whenIsZero_ShouldReturnTemperatureCelsius() {
 		// When
 		final var expectedOutput = 0;
 		weatherData = new WeatherData(
@@ -138,57 +132,39 @@ class WeatherDataTests {
 				20,
 				30.2,
 				40,
-				1015,
-				logger
+				1015
 		);
 
 		// Given
-		var result = weatherData.getTemperature();
+		var result = weatherData.getTemperatureCelsius();
 
 		// Then
 		assertEquals(expectedOutput, result);
 	}
 
-	@Test
-	void Cloudiness_whenIsOverOneHundred_ShouldLogError() {
-		// When
-		weatherData = new WeatherData(
-				"Sunny",
-				0,
-				101,
-				20,
-				30.2,
-				40,
-				1015,
-				logger
+	private static Stream<Arguments> Cloudiness_ShouldThrowError_withAppropriateMessage() {
+		return Stream.of(
+				Arguments.of(101, LogMessages.CLOUDINESS_IS_ABOVE_100),
+				Arguments.of(-1, LogMessages.CLOUDINESS_IS_BELOW_0)
 		);
-
-		// Given
-		weatherData.getCloudiness();
-
-		// Then
-		verify(logger).error(LogMessages.CLOUDINESS_IS_ABOVE_100);
 	}
 
-	@Test
-	void Cloudiness_whenIsBelowZero_ShouldLogError() {
-		// When
-		weatherData = new WeatherData(
+	@ParameterizedTest
+	@MethodSource
+	void Cloudiness_ShouldThrowError_withAppropriateMessage(int cloudinessValue, String exceptionMessage) {
+		// Given
+		var throwedException = assertThrows(IllegalArgumentException.class, () -> weatherData = new WeatherData(
 				"Sunny",
-				0,
-				-1,
+				15.2,
+				cloudinessValue,
 				20,
 				30.2,
 				40,
-				1015,
-				logger
-		);
-
-		// Given
-		weatherData.getCloudiness();
+				1015
+		));
 
 		// Then
-		verify(logger).error(LogMessages.CLOUDINESS_IS_BELOW_0);
+		assertEquals(exceptionMessage, throwedException.getMessage());
 	}
 
 	@Test
@@ -202,8 +178,7 @@ class WeatherDataTests {
 				20,
 				30.2,
 				40,
-				1015,
-				logger
+				1015
 		);
 
 		// Given
@@ -213,46 +188,29 @@ class WeatherDataTests {
 		assertEquals(expectedOutput, result);
 	}
 
-	@Test
-	void RainChance_whenIsAboveHundred_ShouldLogError() {
-		// When
-		weatherData = new WeatherData(
-				"Sunny",
-				0,
-				10,
-				101,
-				30.2,
-				40,
-				1015,
-				logger
+	private static Stream<Arguments> RainChance_ShouldThrowError_WithAppropriateMessage() {
+		return Stream.of(
+				Arguments.of(101, LogMessages.RAIN_CHANCE_IS_ABOVE_100),
+				Arguments.of(-1, LogMessages.RAIN_CHANCE_IS_BELOW_0)
 		);
-
-		// Given
-		weatherData.getRainChance();
-
-		// Then
-		verify(logger).error(LogMessages.RAIN_CHANCE_IS_ABOVE_100);
 	}
 
-	@Test
-	void RainChance_whenIsBelowZero_ShouldLogError() {
-		// When
-		weatherData = new WeatherData(
+	@ParameterizedTest
+	@MethodSource
+	void RainChance_ShouldThrowError_WithAppropriateMessage(int rainChanceValue, String exceptionMessage) {
+		// Given
+		var throwedException = assertThrows(IllegalArgumentException.class, () -> weatherData = new WeatherData(
 				"Sunny",
-				0,
+				15.2,
 				10,
-				-1,
+				rainChanceValue,
 				30.2,
 				40,
-				1015,
-				logger
-		);
-
-		// Given
-		weatherData.getRainChance();
+				1015
+		));
 
 		// Then
-		verify(logger).error(LogMessages.RAIN_CHANCE_IS_BELOW_0);
+		assertEquals(exceptionMessage, throwedException.getMessage());
 	}
 
 	@Test
@@ -266,8 +224,7 @@ class WeatherDataTests {
 				30,
 				30.2,
 				40,
-				1015,
-				logger
+				1015
 		);
 
 		// Given
@@ -277,25 +234,28 @@ class WeatherDataTests {
 		assertEquals(expectedOutput, result);
 	}
 
-	@Test
-	void WindSpeed_whenIsBelowZero_ShouldLogError() {
-		// When
-		weatherData = new WeatherData(
-				"Sunny",
-				0,
-				10,
-				10,
-				-30,
-				40,
-				1015,
-				logger
+	private static Stream<Arguments> WindSpeed_ShouldThrowError_WithAppropriateMessage() {
+		return Stream.of(
+				Arguments.of(-32.5, LogMessages.WIND_SPEED_IS_BELOW_0)
 		);
+	}
 
+	@ParameterizedTest
+	@MethodSource
+	void WindSpeed_ShouldThrowError_WithAppropriateMessage(double windSpeedValue, String exceptionMessage) {
 		// Given
-		weatherData.getWindSpeed();
+		var throwedException = assertThrows(IllegalArgumentException.class, () -> weatherData = new WeatherData(
+				"Sunny",
+				15.2,
+				10,
+				10,
+				windSpeedValue,
+				40,
+				1015
+		));
 
 		// Then
-		verify(logger).error(LogMessages.WIND_SPEED_IS_BELOW_0);
+		assertEquals(exceptionMessage, throwedException.getMessage());
 	}
 
 	@Test
@@ -309,8 +269,7 @@ class WeatherDataTests {
 				30,
 				30.2,
 				40,
-				1015,
-				logger
+				1015
 		);
 
 		// Given
@@ -320,46 +279,29 @@ class WeatherDataTests {
 		assertEquals(expectedOutput, result);
 	}
 
-	@Test
-	void Humidity_whenIsAboveHundred_ShouldLogError() {
-		// When
-		weatherData = new WeatherData(
-				"Sunny",
-				0,
-				10,
-				10,
-				30,
-				101,
-				1015,
-				logger
+	private static Stream<Arguments> Humidity_ShouldThrowError_WithAppropriateMessag() {
+		return Stream.of(
+				Arguments.of(101, LogMessages.HUMIDITY_IS_ABOVE_100),
+				Arguments.of(-1, LogMessages.HUMIDITY_IS_BELOW_0)
 		);
-
-		// Given
-		weatherData.getHumidity();
-
-		// Then
-		verify(logger).error(LogMessages.HUMIDITY_IS_ABOVE_100);
 	}
 
-	@Test
-	void Humidity_whenIsBelowZero_ShouldLogError() {
-		// When
-		weatherData = new WeatherData(
-				"Sunny",
-				0,
-				10,
-				10,
-				30,
-				-1,
-				1015,
-				logger
-		);
-
+	@ParameterizedTest
+	@MethodSource
+	void Humidity_ShouldThrowError_WithAppropriateMessag(int humidityValue, String exceptionMessage) {
 		// Given
-		weatherData.getHumidity();
+		var throwedException = assertThrows(IllegalArgumentException.class, () -> weatherData = new WeatherData(
+				"Sunny",
+				15.2,
+				10,
+				10,
+				32.5,
+				humidityValue,
+				1015
+		));
 
 		// Then
-		verify(logger).error(LogMessages.HUMIDITY_IS_BELOW_0);
+		assertEquals(exceptionMessage, throwedException.getMessage());
 	}
 
 	@Test
@@ -373,8 +315,7 @@ class WeatherDataTests {
 				30,
 				30.2,
 				40,
-				1015,
-				logger
+				1015
 		);
 
 		// Given
@@ -384,25 +325,28 @@ class WeatherDataTests {
 		assertEquals(expectedOutput, result);
 	}
 
-	@Test
-	void Pressure_whenIsBelowZero_ShouldLogError() {
-		// When
-		weatherData = new WeatherData(
-				"Sunny",
-				0,
-				10,
-				10,
-				30,
-				10,
-				-1,
-				logger
+	private static Stream<Arguments> Pressure_ShouldThrowError_WithAppropriateMessage() {
+		return Stream.of(
+				Arguments.of(-32, LogMessages.PRESSURE_IS_BELOW_0)
 		);
+	}
 
+	@ParameterizedTest
+	@MethodSource
+	void Pressure_ShouldThrowError_WithAppropriateMessage(int pressureValue, String exceptionMessage) {
 		// Given
-		weatherData.getPressure();
+		var throwedException = assertThrows(IllegalArgumentException.class, () -> weatherData = new WeatherData(
+				"Sunny",
+				15.2,
+				10,
+				10,
+				32.5,
+				40,
+				pressureValue
+		));
 
 		// Then
-		verify(logger).error(LogMessages.PRESSURE_IS_BELOW_0);
+		assertEquals(exceptionMessage, throwedException.getMessage());
 	}
 
 	@Test
@@ -416,8 +360,7 @@ class WeatherDataTests {
 				30,
 				30.2,
 				40,
-				1015,
-				logger
+				1015
 		);
 
 		// Given
