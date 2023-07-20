@@ -58,7 +58,7 @@ public class CommandLineUserInterface implements UserInterface {
 
 		var temperatureMessage = String.format(
 				WeatherUIResources.TEMPERATURE,
-				weatherData.getTemperature()
+				weatherData.getTemperatureCelsius()
 		);
 		System.out.println(temperatureMessage);
 
