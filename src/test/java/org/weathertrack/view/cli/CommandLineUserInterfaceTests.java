@@ -22,8 +22,6 @@ import static org.mockito.Mockito.verify;
 class CommandLineUserInterfaceTests {
 	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	private CommandLineUserInterface commandLineUserInterface;
-	@SuppressWarnings("unchecked")
-	private static final LoggerInterface<WeatherData> loggerWeatherData = mock(LoggerInterface.class);
 	private LoggerInterface<CommandLineUserInterface> loggerCLI;
 	private static final WeatherData mockWeatherData = new WeatherData(
 			"Sunny",
@@ -32,8 +30,8 @@ class CommandLineUserInterfaceTests {
 			10,
 			15.0,
 			70,
-			1015,
-			loggerWeatherData);
+			1015
+	);
 
 	@SuppressWarnings("unchecked")
 	@BeforeEach
