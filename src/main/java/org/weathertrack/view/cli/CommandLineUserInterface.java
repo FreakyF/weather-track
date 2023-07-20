@@ -52,44 +52,44 @@ public class CommandLineUserInterface implements UserInterface {
 	public void printWeather(WeatherData weatherData) {
 		var weatherConditionMessage = String.format(
 				WeatherUIResources.WEATHER_CONDITION,
-				weatherData.getWeatherCondition()
+				weatherData.weatherCondition()
 		);
 		System.out.println(weatherConditionMessage);
 
 		var temperatureMessage = String.format(
 				WeatherUIResources.TEMPERATURE,
-				weatherData.getTemperatureCelsius()
+				weatherData.temperatureCelsius()
 		);
 		System.out.println(temperatureMessage);
 
 		var cloudinessMessage = String.format(
 				WeatherUIResources.CLOUDINESS,
-				weatherData.getCloudiness()
+				weatherData.cloudiness()
 		);
 		System.out.println(cloudinessMessage);
 
 		var rainChanceMessage = String.format(
 				WeatherUIResources.RAIN_CHANCE,
-				weatherData.getRainChance()
+				weatherData.rainChance()
 		);
 
 		System.out.println(rainChanceMessage);
 
 		var windSpeedMessage = String.format(
 				WeatherUIResources.WIND_SPEED,
-				weatherData.getWindSpeed()
+				weatherData.windSpeed()
 		);
 		System.out.println(windSpeedMessage);
 
 		var humidityMessage = String.format(
 				WeatherUIResources.HUMIDITY,
-				weatherData.getHumidity()
+				weatherData.humidity()
 		);
 		System.out.println(humidityMessage);
 
 		var pressureMessage = String.format(
 				WeatherUIResources.PRESSURE,
-				weatherData.getPressure()
+				weatherData.pressure()
 		);
 		System.out.println(pressureMessage);
 	}

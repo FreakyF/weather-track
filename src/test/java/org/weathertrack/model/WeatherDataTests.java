@@ -56,7 +56,7 @@ class WeatherDataTests {
 		);
 
 		// Given
-		var result = weatherData.getWeatherCondition();
+		var result = weatherData.weatherCondition();
 
 		// Then
 		assertEquals(expectedOutput, result);
@@ -94,7 +94,7 @@ class WeatherDataTests {
 		);
 
 		// Given
-		var result = weatherData.getTemperatureCelsius();
+		var result = weatherData.temperatureCelsius();
 
 		// Then
 		assertEquals(expectedOutput, result);
@@ -115,7 +115,7 @@ class WeatherDataTests {
 		);
 
 		// Given
-		var result = weatherData.getTemperatureCelsius();
+		var result = weatherData.temperatureCelsius();
 
 		// Then
 		assertEquals(expectedOutput, result);
@@ -136,7 +136,7 @@ class WeatherDataTests {
 		);
 
 		// Given
-		var result = weatherData.getTemperatureCelsius();
+		var result = weatherData.temperatureCelsius();
 
 		// Then
 		assertEquals(expectedOutput, result);
@@ -182,7 +182,7 @@ class WeatherDataTests {
 		);
 
 		// Given
-		var result = weatherData.getCloudiness();
+		var result = weatherData.cloudiness();
 
 		// Then
 		assertEquals(expectedOutput, result);
@@ -228,7 +228,7 @@ class WeatherDataTests {
 		);
 
 		// Given
-		var result = weatherData.getRainChance();
+		var result = weatherData.rainChance();
 
 		// Then
 		assertEquals(expectedOutput, result);
@@ -273,7 +273,7 @@ class WeatherDataTests {
 		);
 
 		// Given
-		var result = weatherData.getRainChance();
+		var result = weatherData.rainChance();
 
 		// Then
 		assertEquals(expectedOutput, result);
@@ -319,7 +319,7 @@ class WeatherDataTests {
 		);
 
 		// Given
-		var result = weatherData.getHumidity();
+		var result = weatherData.humidity();
 
 		// Then
 		assertEquals(expectedOutput, result);
@@ -364,7 +364,7 @@ class WeatherDataTests {
 		);
 
 		// Given
-		var result = weatherData.getPressure();
+		var result = weatherData.pressure();
 
 		// Then
 		assertEquals(expectedOutput, result);

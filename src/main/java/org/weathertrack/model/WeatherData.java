@@ -2,72 +2,18 @@ package org.weathertrack.model;
 
 import org.weathertrack.view.util.LogMessages;
 
-public class WeatherData {
+public record WeatherData(String weatherCondition, double temperatureCelsius, int cloudiness, int rainChance,
+                          double windSpeed, int humidity, int pressure) {
 	private static final double ABSOLUTE_ZERO = -273.15;
-	private final String weatherCondition;
-	private final double temperatureCelsius;
-	private final int cloudiness;
-	private final int rainChance;
-	private final double windSpeed;
-	private final int humidity;
-	private final int pressure;
 
-	public WeatherData(String weatherCondition,
-	                   double temperatureCelsius,
-	                   int cloudiness,
-	                   int rainChance,
-	                   double windSpeed,
-	                   int humidity,
-	                   int pressure) {
-
+	public WeatherData {
 		validateWeatherCondition(weatherCondition);
-		this.weatherCondition = weatherCondition;
-
 		validateTemperature(temperatureCelsius);
-		this.temperatureCelsius = temperatureCelsius;
-
 		validateCloudiness(cloudiness);
-		this.cloudiness = cloudiness;
-
 		validateRainChance(rainChance);
-		this.rainChance = rainChance;
-
 		validateWindSpeed(windSpeed);
-		this.windSpeed = windSpeed;
-
 		validateHumidity(humidity);
-		this.humidity = humidity;
-
 		validatePressure(pressure);
-		this.pressure = pressure;
-	}
-
-	public String getWeatherCondition() {
-		return weatherCondition;
-	}
-
-	public double getTemperatureCelsius() {
-		return temperatureCelsius;
-	}
-
-	public int getCloudiness() {
-		return cloudiness;
-	}
-
-	public int getRainChance() {
-		return rainChance;
-	}
-
-	public double getWindSpeed() {
-		return windSpeed;
-	}
-
-	public int getHumidity() {
-		return humidity;
-	}
-
-	public int getPressure() {
-		return pressure;
 	}
 
 	private void validateWeatherCondition(String weatherCondition) {
