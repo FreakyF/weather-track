@@ -5,6 +5,9 @@ public class LogMessages {
 			= "Tried to get weather condition but the weather condition is null!";
 	public static final String WEATHER_CONDITION_IS_EMPTY
 			= "Tried to get weather condition but the weather condition is empty!";
+
+	public static final String TEMPERATURE_IS_BELOW_ABSOLUTE_ZERO
+			= "Tried to get temperature but the temperature is below the absolute zero!";
 	public static final String CLOUDINESS_IS_ABOVE_100
 			= "Tried to get cloudiness but cloudiness is above 100%";
 	public static final String CLOUDINESS_IS_BELOW_0
