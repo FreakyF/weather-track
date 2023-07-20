@@ -3,6 +3,8 @@ package org.weathertrack.util.validation;
 import org.weathertrack.view.util.LogMessages;
 
 public class WeatherDataValidator {
+	private static final double ABSOLUTE_ZERO = -273.15;
+
 	public String validateWeatherCondition(String weatherCondition) {
 		if (weatherCondition == null) {
 			throw new IllegalStateException(LogMessages.WEATHER_CONDITION_IS_NULL);
@@ -14,7 +16,11 @@ public class WeatherDataValidator {
 		return trimmedWeatherCondition;
 	}
 
+	// The temperature will be in Celsius and then calculated depending on the user choice of unit.
 	public double validateTemperature(double temperature) {
+		if (temperature < ABSOLUTE_ZERO) {
+			throw new IllegalArgumentException(LogMessages.TEMPERATURE_IS_BELOW_ABSOLUTE_ZERO);
+		}
 		return temperature;
 	}
 
