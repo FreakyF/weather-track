@@ -1,6 +1,6 @@
 package org.weathertrack.view.util;
 
-public class LogMessages {
+public class ExceptionMessages {
 	public static final String WEATHER_CONDITION_IS_NULL
 			= "Tried to get weather condition but the weather condition is null!";
 	public static final String WEATHER_CONDITION_IS_EMPTY
@@ -27,7 +27,7 @@ public class LogMessages {
 	public static final String CITIES_WITH_SAME_NAME_IS_EMPTY =
 			"Tried to print cities with the same name, when the list of cities is empty!";
 
-	private LogMessages() {
+	private ExceptionMessages() {
 
 	}
 }

@@ -4,7 +4,7 @@ import org.weathertrack.model.WeatherData;
 import org.weathertrack.service.input.UserInputService;
 import org.weathertrack.util.logger.LoggerInterface;
 import org.weathertrack.view.UserInterface;
-import org.weathertrack.view.util.LogMessages;
+import org.weathertrack.view.util.ExceptionMessages;
 import org.weathertrack.view.util.WeatherUIResources;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public class CommandLineUserInterface implements UserInterface {
 	@Override
 	public void printCitiesWithSameName(List<String> citiesWithSameName) {
 		if (citiesWithSameName.isEmpty()) {
-			logger.warn(LogMessages.CITIES_WITH_SAME_NAME_IS_EMPTY);
+			logger.warn(ExceptionMessages.CITIES_WITH_SAME_NAME_IS_EMPTY);
 			return;
 		}
 

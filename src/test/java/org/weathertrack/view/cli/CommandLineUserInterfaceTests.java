@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.weathertrack.model.WeatherData;
 import org.weathertrack.service.input.CommandLineUserInputService;
 import org.weathertrack.util.logger.LoggerInterface;
-import org.weathertrack.view.util.LogMessages;
+import org.weathertrack.view.util.ExceptionMessages;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -64,7 +64,7 @@ class CommandLineUserInterfaceTests {
 		commandLineUserInterface.printCitiesWithSameName(cities);
 
 		// Then
-		verify(loggerCLI).warn(LogMessages.CITIES_WITH_SAME_NAME_IS_EMPTY);
+		verify(loggerCLI).warn(ExceptionMessages.CITIES_WITH_SAME_NAME_IS_EMPTY);
 	}
 
 	@Test
