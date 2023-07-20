@@ -2,8 +2,14 @@ package org.weathertrack.model;
 
 import org.weathertrack.view.util.LogMessages;
 
-public record WeatherData(String weatherCondition, double temperatureCelsius, int cloudiness, int rainChance,
-                          double windSpeed, int humidity, int pressure) {
+public record WeatherData(
+		String weatherCondition,
+		double temperatureCelsius,
+		int cloudiness,
+		int rainChance,
+		double windSpeed,
+		int humidity,
+		int pressure) {
 	private static final double ABSOLUTE_ZERO = -273.15;
 
 	public WeatherData {
