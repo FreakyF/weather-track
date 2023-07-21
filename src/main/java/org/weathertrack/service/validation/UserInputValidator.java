@@ -4,12 +4,12 @@ import org.weathertrack.service.validation.model.InputValidationResult;
 
 public class UserInputValidator implements InputValidator {
 	@Override
-	public InputValidationResult validateCityNameInput() {
+	public InputValidationResult validateCityNameInput(String userCityInput) {
 		return null;
 	}
 
 	@Override
-	public InputValidationResult validateMenuEntryInput() {
+	public InputValidationResult validateMenuEntryInput(int userMenuEntry) {
 		return null;
 	}
 }

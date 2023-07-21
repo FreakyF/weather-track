@@ -3,7 +3,7 @@ package org.weathertrack.service.validation;
 import org.weathertrack.service.validation.model.InputValidationResult;
 
 public interface InputValidator {
-	InputValidationResult validateCityNameInput();
+	InputValidationResult validateCityNameInput(String userCityInput);
 
-	InputValidationResult validateMenuEntryInput();
+	InputValidationResult validateMenuEntryInput(int userMenuEntry);
 }
