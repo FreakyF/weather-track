@@ -27,6 +27,5 @@ public class ExceptionMessage {
 			"Tried to print cities with the same name, when the list of cities is empty!";
 
 	private ExceptionMessage() {
-
 	}
 }
