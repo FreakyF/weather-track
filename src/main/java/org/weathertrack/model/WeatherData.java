@@ -14,7 +14,7 @@ public record WeatherData(
 
 	public WeatherData {
 		validateWeatherCondition(weatherCondition);
-		validateTemperature(temperatureCelsius);
+		validateTemperatureCelsius(temperatureCelsius);
 		validateCloudiness(cloudiness);
 		validateRainChance(rainChance);
 		validateWindSpeed(windSpeed);
@@ -32,9 +32,8 @@ public record WeatherData(
 		}
 	}
 
-	// The temperature will be in Celsius and then calculated depending on the user choice of unit.
-	private void validateTemperature(double temperature) {
-		if (temperature < ABSOLUTE_ZERO) {
+	private void validateTemperatureCelsius(double temperatureCelsius) {
+		if (temperatureCelsius < ABSOLUTE_ZERO) {
 			throw new IllegalArgumentException(ExceptionMessage.TEMPERATURE_IS_BELOW_ABSOLUTE_ZERO);
 		}
 	}
@@ -65,7 +64,6 @@ public record WeatherData(
 	private void validateHumidity(int humidity) {
 		if (humidity > 100) {
 			throw new IllegalArgumentException(ExceptionMessage.HUMIDITY_IS_ABOVE_100);
-			// return something.
 		} else if (humidity < 0) {
 			throw new IllegalArgumentException(ExceptionMessage.HUMIDITY_IS_BELOW_0);
 		}
