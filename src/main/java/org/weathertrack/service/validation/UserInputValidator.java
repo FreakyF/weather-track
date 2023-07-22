@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class UserInputValidator implements InputValidator {
 	private static final int MAXIMUM_CITY_NAME_LENGTH = 170;
-	InputValidationResult inputValidationResult;
+	private static final Pattern CITY_NAME_PATTERN = Pattern.compile("[\\p{L}'\\- ]+");
 
 	@Override
 	public InputValidationResult validateCityNameInput(String userCityInput) {
@@ -15,38 +15,24 @@ public class UserInputValidator implements InputValidator {
 			throw new IllegalArgumentException(InputValidationExceptionMessage.USER_INPUT_IS_NULL);
 		}
 		if (userCityInput.isBlank()) {
-			inputValidationResult = new InputValidationResult(
-					false,
-					ValidationMessage.CITY_INPUT_EMPTY + ValidationMessage.PLEASE_TRY_AGAIN);
-			return inputValidationResult;
+			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_EMPTY);
+
 		}
 		if (userCityInput.length() > MAXIMUM_CITY_NAME_LENGTH) {
-			inputValidationResult = new InputValidationResult(
-					false,
-					ValidationMessage.CITY_INPUT_TOO_LONG + ValidationMessage.PLEASE_TRY_AGAIN);
-			return inputValidationResult;
+			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_TOO_LONG);
 		}
-		Pattern pattern = Pattern.compile("[\\p{L}'\\- ]+");
-		if (!pattern.matcher(userCityInput).matches()) {
-			inputValidationResult = new InputValidationResult(
-					false,
-					ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS + ValidationMessage.PLEASE_TRY_AGAIN);
-			return inputValidationResult;
+		if (!CITY_NAME_PATTERN.matcher(userCityInput).matches()) {
+			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS);
 		}
 
-		inputValidationResult = new InputValidationResult(true, null);
-		return inputValidationResult;
+		return new InputValidationResult(true, null);
 	}
 
 	@Override
 	public InputValidationResult validateMenuEntryInput(int userMenuEntry) {
 		if (userMenuEntry > 0) {
-			inputValidationResult = new InputValidationResult(
-					true,
-					ValidationMessage.MENU_ENTRY_IS_ZERO + ValidationMessage.PLEASE_TRY_AGAIN);
-			return inputValidationResult;
+			return new InputValidationResult(true, ValidationMessage.MENU_ENTRY_IS_ZERO);
 		}
-		inputValidationResult = new InputValidationResult(true, null);
-		return inputValidationResult;
+		return new InputValidationResult(true, null);
 	}
 }
