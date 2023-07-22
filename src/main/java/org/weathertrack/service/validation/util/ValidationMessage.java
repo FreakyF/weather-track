@@ -29,6 +29,11 @@ public class ValidationMessage {
 			= properties.getProperty("CITY_INPUT_CONTAINS_NUMBERS");
 	public static final String CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS
 			= properties.getProperty("CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS");
+	public static final String MENU_ENTRY_IS_ZERO
+			= properties.getProperty("MENU_ENTRY_IS_ZERO");
+
+	public static final String MENU_ENTRY_IS_NOT_AN_INTEGER
+			= properties.getProperty("MENU_ENTRY_IS_NOT_AN_INTEGER");
 
 	private ValidationMessage() {
 	}
