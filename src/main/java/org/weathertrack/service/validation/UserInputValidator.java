@@ -11,25 +11,21 @@ public class UserInputValidator implements InputValidator {
 
 	@Override
 	public InputValidationResult validateCityNameInput(String userCityInput) {
-		// check for null
 		if (userCityInput == null) {
 			throw new IllegalStateException(InputValidationExceptionMessage.USER_INPUT_IS_NULL);
 		}
-		// check if it's empty or not trimmed
 		if (userCityInput.isBlank()) {
 			inputValidationResult = new InputValidationResult(
 					false,
 					ValidationMessage.CITY_INPUT_EMPTY + ValidationMessage.PLEASE_TRY_AGAIN);
 			return inputValidationResult;
 		}
-		// check maximum length
 		if (userCityInput.length() > MAXIMUM_CITY_NAME_LENGTH) {
 			inputValidationResult = new InputValidationResult(
 					false,
 					ValidationMessage.CITY_INPUT_TOO_LONG + ValidationMessage.PLEASE_TRY_AGAIN);
 			return inputValidationResult;
 		}
-		// check for valid characters
 		Pattern pattern = Pattern.compile("[\\p{L}'\\- ]+");
 		if (!pattern.matcher(userCityInput).matches()) {
 			inputValidationResult = new InputValidationResult(
