@@ -19,8 +19,8 @@ public class ValidationMessage {
 
 	public static final String PLEASE_TRY_AGAIN
 			= properties.getProperty("PLEASE_TRY_AGAIN");
-	public static final String CITY_INPUT_EMPTY
-			= properties.getProperty("CITY_INPUT_EMPTY") + PLEASE_TRY_AGAIN;
+	public static final String CITY_INPUT_BLANK
+			= properties.getProperty("CITY_INPUT_BLANK") + PLEASE_TRY_AGAIN;
 	public static final String CITY_INPUT_TOO_LONG
 			= properties.getProperty("CITY_INPUT_TOO_LONG") + PLEASE_TRY_AGAIN;
 	public static final String CITY_INPUT_CONTAINS_NUMBERS

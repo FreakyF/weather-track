@@ -24,8 +24,8 @@ class UserInputValidatorTests {
 	private static Stream<Arguments>
 	validateCityNameInput_WhenUserCityInput_IsEmpty_ShouldReturnInvalidInputValidationResult() {
 		return Stream.of(
-				Arguments.of("", ValidationMessage.CITY_INPUT_EMPTY),
-				Arguments.of(" ", ValidationMessage.CITY_INPUT_EMPTY)
+				Arguments.of("", ValidationMessage.CITY_INPUT_BLANK),
+				Arguments.of(" ", ValidationMessage.CITY_INPUT_BLANK)
 		);
 	}
 
