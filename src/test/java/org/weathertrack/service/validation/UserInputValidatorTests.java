@@ -46,8 +46,8 @@ class UserInputValidatorTests {
 	private static Stream<Arguments>
 	validateCityNameInput_WhenUserCityInput_IsTooLong_ShouldReturnInvalidInputValidationResult() {
 		return Stream.of(
-				Arguments.of(generateCityName(170), ValidationMessage.CITY_INPUT_TOO_LONG),
 				Arguments.of(generateCityName(171), ValidationMessage.CITY_INPUT_TOO_LONG),
+				Arguments.of(generateCityName(172), ValidationMessage.CITY_INPUT_TOO_LONG),
 				Arguments.of(generateCityName(220), ValidationMessage.CITY_INPUT_TOO_LONG)
 		);
 	}
@@ -107,7 +107,7 @@ class UserInputValidatorTests {
 	@Test
 	void validateCityNameInput_WhenUserCityInput_IsNull_ShouldThrowError() {
 		// When
-		var throwedException = assertThrows(IllegalStateException.class, () ->
+		var throwedException = assertThrows(IllegalArgumentException.class, () ->
 				sut.validateCityNameInput(null));
 
 		// Then
@@ -144,7 +144,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateMenuEntryInput(userCityInputValue);
 
 		// Then
-		assertEquals(InputValidationExceptionMessage.USER_MENU_ENTRY_IS_ZERO, actualResult.getValidationMessage());
+		assertEquals(ValidationMessage.MENU_ENTRY_IS_ZERO, actualResult.getValidationMessage());
 	}
 
 	private static Stream<Arguments>
