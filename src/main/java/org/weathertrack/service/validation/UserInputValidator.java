@@ -17,18 +17,24 @@ public class UserInputValidator implements InputValidator {
 		}
 		// check if it's empty or not trimmed
 		if (userCityInput.isBlank()) {
-			inputValidationResult = new InputValidationResult(false, ValidationMessage.CITY_INPUT_EMPTY);
+			inputValidationResult = new InputValidationResult(
+					false,
+					ValidationMessage.CITY_INPUT_EMPTY + ValidationMessage.PLEASE_TRY_AGAIN);
 			return inputValidationResult;
 		}
 		// check maximum length
 		if (userCityInput.length() > MAXIMUM_CITY_NAME_LENGTH) {
-			inputValidationResult = new InputValidationResult(false, ValidationMessage.CITY_INPUT_TOO_LONG);
+			inputValidationResult = new InputValidationResult(
+					false,
+					ValidationMessage.CITY_INPUT_TOO_LONG + ValidationMessage.PLEASE_TRY_AGAIN);
 			return inputValidationResult;
 		}
 		// check for valid characters
 		Pattern pattern = Pattern.compile("[\\p{L}'\\- ]+");
 		if (!pattern.matcher(userCityInput).matches()) {
-			inputValidationResult = new InputValidationResult(false, ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS);
+			inputValidationResult = new InputValidationResult(
+					false,
+					ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS + ValidationMessage.PLEASE_TRY_AGAIN);
 			return inputValidationResult;
 		}
 
@@ -39,7 +45,9 @@ public class UserInputValidator implements InputValidator {
 	@Override
 	public InputValidationResult validateMenuEntryInput(int userMenuEntry) {
 		if (userMenuEntry > 0) {
-			inputValidationResult = new InputValidationResult(true, ValidationMessage.MENU_ENTRY_IS_ZERO);
+			inputValidationResult = new InputValidationResult(
+					true,
+					ValidationMessage.MENU_ENTRY_IS_ZERO + ValidationMessage.PLEASE_TRY_AGAIN);
 			return inputValidationResult;
 		}
 		inputValidationResult = new InputValidationResult(true, null);
