@@ -1,7 +1,5 @@
 package org.weathertrack.service.validation.util;
 
-import org.weathertrack.view.util.WeatherUIResources;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -11,7 +9,7 @@ public class ValidationMessage {
 	private static Properties properties;
 
 	static {
-		try (InputStream inputStream = WeatherUIResources.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
+		try (InputStream inputStream = ValidationMessage.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
 			properties = new Properties();
 			properties.load(inputStream);
 		} catch (IOException e) {
