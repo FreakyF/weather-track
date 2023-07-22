@@ -38,14 +38,16 @@ class UserInputValidatorTests {
 		assertEquals(inputValidationResultValue, actualResult.validationMessage());
 	}
 
+	static String generateCityName(int length) {
+		return "x".repeat(Math.max(0, length));
+	}
+
 	private static Stream<Arguments>
 	validateCityNameInput_WhenUserCityInput_IsTooLong_ShouldReturnInvalidInputValidationResult() {
 		return Stream.of(
-				Arguments.of("", ValidationMessage.CITY_INPUT_TOO_LONG),
-				Arguments.of(" ", ValidationMessage.CITY_INPUT_TOO_LONG),
-				Arguments.of("               ", ValidationMessage.CITY_INPUT_TOO_LONG),
-				Arguments.of("               ", ValidationMessage.CITY_INPUT_TOO_LONG),
-				Arguments.of("               ", ValidationMessage.CITY_INPUT_TOO_LONG)
+				Arguments.of(generateCityName(170), ValidationMessage.CITY_INPUT_TOO_LONG),
+				Arguments.of(generateCityName(171), ValidationMessage.CITY_INPUT_TOO_LONG),
+				Arguments.of(generateCityName(220), ValidationMessage.CITY_INPUT_TOO_LONG)
 		);
 	}
 
@@ -62,7 +64,6 @@ class UserInputValidatorTests {
 	private static Stream<Arguments>
 	validateCityNameInput_WhenUserCityInput_ContainsNumbers_ShouldReturnInvalidInputValidationResult() {
 		return Stream.of(
-				// Use regex here
 				Arguments.of("0", ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS),
 				Arguments.of("123 San Francisco", ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS),
 				Arguments.of("San Francisco 345", ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS),
@@ -85,11 +86,10 @@ class UserInputValidatorTests {
 	private static Stream<Arguments>
 	validateCityNameInput_WhenUserCityInput_ContainsSpecialCharacters_ShouldReturnInvalidInputValidationResult() {
 		return Stream.of(
-				Arguments.of("! San Francisco", ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS),
-				Arguments.of("San Francisco @", ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS),
-				Arguments.of("San # Francisco", ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS),
-				Arguments.of("0123456789", ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS),
-				Arguments.of("", ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS)
+				Arguments.of("!@#$%^&*()_+=/*~<>?;:{}[]|\\", ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS),
+				Arguments.of("! San Francisco", ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS),
+				Arguments.of("San Francisco @", ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS),
+				Arguments.of("San # Francisco", ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS)
 		);
 	}
 
