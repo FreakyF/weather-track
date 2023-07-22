@@ -9,6 +9,8 @@ public class UserInputValidator implements InputValidator {
 	private static final int MAXIMUM_CITY_NAME_LENGTH = 170;
 
 	private static final Pattern NUMBERS_REGEX_PATTERN = Pattern.compile(".*\\d+.*");
+
+	// Match any string that contains at least one character that is not a letter, hyphen, apostrophe, digit, or whitespace.
 	private static final Pattern SPECIAL_CHARACTERS_REGEX_PATTERN = Pattern.compile(".*[^\\p{L}-'\\d\\s]+.*");
 
 	@Override
@@ -17,7 +19,7 @@ public class UserInputValidator implements InputValidator {
 			throw new IllegalArgumentException(InputValidationExceptionMessage.USER_INPUT_IS_NULL);
 		}
 		if (userCityInput.isBlank()) {
-			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_EMPTY);
+			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_BLANK);
 
 		}
 		if (userCityInput.length() > MAXIMUM_CITY_NAME_LENGTH) {
