@@ -33,7 +33,7 @@ public class UserInputValidator implements InputValidator {
 			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS);
 		}
 
-		return new InputValidationResult(true, null);
+		return new InputValidationResult(true);
 	}
 
 	@Override
@@ -41,6 +41,6 @@ public class UserInputValidator implements InputValidator {
 		if (userMenuEntry <= 0) {
 			return new InputValidationResult(false, ValidationMessage.MENU_ENTRY_IS_ZERO);
 		}
-		return new InputValidationResult(true, null);
+		return new InputValidationResult(true);
 	}
 }
