@@ -10,6 +10,7 @@ import org.weathertrack.service.validation.util.ValidationMessage;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserInputValidatorTests {
@@ -35,7 +36,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateCityNameInput(cityNameValue);
 
 		// Then
-		assertEquals(inputValidationResultValue, actualResult.validationMessage());
+		assertEquals(inputValidationResultValue, actualResult.getValidationMessage());
 	}
 
 	static String generateCityName(int length) {
@@ -58,7 +59,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateCityNameInput(cityNameValue);
 
 		// Then
-		assertEquals(inputValidationResultValue, actualResult.validationMessage());
+		assertEquals(inputValidationResultValue, actualResult.getValidationMessage());
 	}
 
 	private static Stream<Arguments>
@@ -80,7 +81,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateCityNameInput(cityNameValue);
 
 		// Then
-		assertEquals(inputValidationResultValue, actualResult.validationMessage());
+		assertEquals(inputValidationResultValue, actualResult.getValidationMessage());
 	}
 
 	private static Stream<Arguments>
@@ -100,7 +101,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateCityNameInput(cityNameValue);
 
 		// Then
-		assertEquals(inputValidationResultValue, actualResult.validationMessage());
+		assertEquals(inputValidationResultValue, actualResult.getValidationMessage());
 	}
 
 	@Test
@@ -111,5 +112,59 @@ class UserInputValidatorTests {
 
 		// Then
 		assertEquals(InputValidationExceptionMessage.USER_INPUT_IS_NULL, throwedException.getMessage());
+	}
+
+	private static Stream<Arguments>
+	validateCityNameInput_WhenUserCityInput_IsGood_ShouldReturnValidInputValidationResult() {
+		return Stream.of(
+				Arguments.of("Kielce"),
+				Arguments.of("San Francisco"),
+				Arguments.of("D'Lo"),
+				Arguments.of("Saint-Lô"),
+				Arguments.of("Winston-Salem")
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void validateCityNameInput_WhenUserCityInput_IsGood_ShouldReturnValidInputValidationResult(String cityNameValue) {
+		// Given
+		var actualResult = sut.validateCityNameInput(cityNameValue);
+
+		// Then
+		assertNull(actualResult.getValidationMessage());
+	}
+
+	@Test
+	void validateMenuEntryInput_WhenUserMenuEntry_IsZero_ShouldReturnInvalidInputValidationResult() {
+		// When
+		int userCityInputValue = 0;
+
+		// Given
+		var actualResult = sut.validateMenuEntryInput(userCityInputValue);
+
+		// Then
+		assertEquals(InputValidationExceptionMessage.USER_MENU_ENTRY_IS_ZERO, actualResult.getValidationMessage());
+	}
+
+	private static Stream<Arguments>
+	validateMenuEntryInput_WhenUserMenuEntry_IsGood_ShouldReturnValidInputValidationResult() {
+		return Stream.of(
+				Arguments.of(1),
+				Arguments.of(12),
+				Arguments.of(123),
+				Arguments.of(1234),
+				Arguments.of(12345)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void validateMenuEntryInput_WhenUserMenuEntry_IsGood_ShouldReturnValidInputValidationResult(int userCityInputValue) {
+		// Given
+		var actualResult = sut.validateMenuEntryInput(userCityInputValue);
+
+		// Then
+		assertNull(actualResult.getValidationMessage());
 	}
 }
