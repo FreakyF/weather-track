@@ -12,7 +12,7 @@ public class UserInputValidator implements InputValidator {
 	@Override
 	public InputValidationResult validateCityNameInput(String userCityInput) {
 		if (userCityInput == null) {
-			throw new IllegalStateException(InputValidationExceptionMessage.USER_INPUT_IS_NULL);
+			throw new IllegalArgumentException(InputValidationExceptionMessage.USER_INPUT_IS_NULL);
 		}
 		if (userCityInput.isBlank()) {
 			inputValidationResult = new InputValidationResult(
