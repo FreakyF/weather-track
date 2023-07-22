@@ -7,7 +7,9 @@ import java.util.regex.Pattern;
 
 public class UserInputValidator implements InputValidator {
 	private static final int MAXIMUM_CITY_NAME_LENGTH = 170;
-	private static final Pattern CITY_NAME_PATTERN = Pattern.compile("[\\p{L}'\\- ]+");
+
+	private static final Pattern CITY_NAME_PATTERN_NUMBERS = Pattern.compile(".*\\d+.*");
+	private static final Pattern CITY_NAME_PATTERN_SPECIAL_CHARACTERS = Pattern.compile(".*[^\\p{L}-'\\d\\s]+.*");
 
 	@Override
 	public InputValidationResult validateCityNameInput(String userCityInput) {
@@ -21,7 +23,10 @@ public class UserInputValidator implements InputValidator {
 		if (userCityInput.length() > MAXIMUM_CITY_NAME_LENGTH) {
 			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_TOO_LONG);
 		}
-		if (!CITY_NAME_PATTERN.matcher(userCityInput).matches()) {
+		if (CITY_NAME_PATTERN_NUMBERS.matcher(userCityInput).matches()) {
+			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS);
+		}
+		if (CITY_NAME_PATTERN_SPECIAL_CHARACTERS.matcher(userCityInput).matches()) {
 			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS);
 		}
 
