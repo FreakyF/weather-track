@@ -30,7 +30,7 @@ public class UserInputValidator implements InputValidator {
 
 	@Override
 	public InputValidationResult validateMenuEntryInput(int userMenuEntry) {
-		if (userMenuEntry > 0) {
+		if (userMenuEntry <= 0) {
 			return new InputValidationResult(false, ValidationMessage.MENU_ENTRY_IS_ZERO);
 		}
 		return new InputValidationResult(true, null);
