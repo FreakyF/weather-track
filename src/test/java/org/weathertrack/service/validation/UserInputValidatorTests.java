@@ -10,8 +10,10 @@ import org.weathertrack.service.validation.util.ValidationMessage;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserInputValidatorTests {
 	private InputValidator sut;
@@ -36,6 +38,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateCityNameInput(cityNameValue);
 
 		// Then
+		assertFalse(actualResult.isValid());
 		assertEquals(inputValidationResultValue, actualResult.getValidationMessage());
 	}
 
@@ -59,6 +62,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateCityNameInput(cityNameValue);
 
 		// Then
+		assertFalse(actualResult.isValid());
 		assertEquals(inputValidationResultValue, actualResult.getValidationMessage());
 	}
 
@@ -81,6 +85,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateCityNameInput(cityNameValue);
 
 		// Then
+		assertFalse(actualResult.isValid());
 		assertEquals(inputValidationResultValue, actualResult.getValidationMessage());
 	}
 
@@ -101,6 +106,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateCityNameInput(cityNameValue);
 
 		// Then
+		assertFalse(actualResult.isValid());
 		assertEquals(inputValidationResultValue, actualResult.getValidationMessage());
 	}
 
@@ -118,6 +124,7 @@ class UserInputValidatorTests {
 	validateCityNameInput_WhenUserCityInput_IsGood_ShouldReturnValidInputValidationResult() {
 		return Stream.of(
 				Arguments.of("Kielce"),
+				Arguments.of("Jastrzębie-Zdrój"),
 				Arguments.of("San Francisco"),
 				Arguments.of("D'Lo"),
 				Arguments.of("Saint-Lô"),
@@ -132,6 +139,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateCityNameInput(cityNameValue);
 
 		// Then
+		assertTrue(actualResult.isValid());
 		assertNull(actualResult.getValidationMessage());
 	}
 
@@ -144,6 +152,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateMenuEntryInput(userCityInputValue);
 
 		// Then
+		assertFalse(actualResult.isValid());
 		assertEquals(ValidationMessage.MENU_ENTRY_IS_ZERO, actualResult.getValidationMessage());
 	}
 
@@ -165,6 +174,7 @@ class UserInputValidatorTests {
 		var actualResult = sut.validateMenuEntryInput(userCityInputValue);
 
 		// Then
+		assertTrue(actualResult.isValid());
 		assertNull(actualResult.getValidationMessage());
 	}
 }
