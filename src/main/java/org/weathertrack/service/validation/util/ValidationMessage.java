@@ -22,18 +22,15 @@ public class ValidationMessage {
 	public static final String PLEASE_TRY_AGAIN
 			= properties.getProperty("PLEASE_TRY_AGAIN");
 	public static final String CITY_INPUT_EMPTY
-			= properties.getProperty("CITY_INPUT_EMPTY");
+			= properties.getProperty("CITY_INPUT_EMPTY") + PLEASE_TRY_AGAIN;
 	public static final String CITY_INPUT_TOO_LONG
-			= properties.getProperty("CITY_INPUT_TOO_LONG");
+			= properties.getProperty("CITY_INPUT_TOO_LONG") + PLEASE_TRY_AGAIN;
 	public static final String CITY_INPUT_CONTAINS_NUMBERS
-			= properties.getProperty("CITY_INPUT_CONTAINS_NUMBERS");
+			= properties.getProperty("CITY_INPUT_CONTAINS_NUMBERS") + PLEASE_TRY_AGAIN;
 	public static final String CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS
-			= properties.getProperty("CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS");
+			= properties.getProperty("CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS") + PLEASE_TRY_AGAIN;
 	public static final String MENU_ENTRY_IS_ZERO
-			= properties.getProperty("MENU_ENTRY_IS_ZERO");
-
-	public static final String MENU_ENTRY_IS_NOT_AN_INTEGER
-			= properties.getProperty("MENU_ENTRY_IS_NOT_AN_INTEGER");
+			= properties.getProperty("MENU_ENTRY_IS_ZERO") + PLEASE_TRY_AGAIN;
 
 	private ValidationMessage() {
 	}
