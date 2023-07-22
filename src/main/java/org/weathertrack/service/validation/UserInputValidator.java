@@ -8,10 +8,11 @@ import java.util.regex.Pattern;
 public class UserInputValidator implements InputValidator {
 	private static final int MAXIMUM_CITY_NAME_LENGTH = 170;
 
+	// Match any string that contains at least one character that is a digit.
 	private static final Pattern NUMBERS_REGEX_PATTERN = Pattern.compile(".*\\d+.*");
 
-	// Match any string that contains at least one character that is not a letter, hyphen, apostrophe, digit, or whitespace.
-	private static final Pattern SPECIAL_CHARACTERS_REGEX_PATTERN = Pattern.compile(".*[^\\p{L}-'\\d\\s]+.*");
+	// Match any string that contains at least one character that is a letter, hyphen, apostrophe, digit, or whitespace.
+	private static final Pattern SPECIAL_CHARACTERS_REGEX_PATTERN = Pattern.compile("^[\\p{L}-'\\d\\s]*$");
 
 	@Override
 	public InputValidationResult validateCityNameInput(String userCityInput) {
@@ -29,7 +30,7 @@ public class UserInputValidator implements InputValidator {
 			return new InputValidationResult(
 					false, ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS);
 		}
-		if (SPECIAL_CHARACTERS_REGEX_PATTERN.matcher(userCityInput).matches()) {
+		if (!SPECIAL_CHARACTERS_REGEX_PATTERN.matcher(userCityInput).matches()) {
 			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS);
 		}
 
