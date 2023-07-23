@@ -1,6 +1,6 @@
 package org.weathertrack.ui.model;
 
-public class ExceptionMessage {
+public class WeatherExceptionMessage {
 	public static final String WEATHER_CONDITION_IS_NULL
 			= "Tried to get weather condition but the weather condition is null!";
 	public static final String WEATHER_CONDITION_IS_EMPTY
@@ -26,6 +26,6 @@ public class ExceptionMessage {
 	public static final String CITIES_WITH_SAME_NAME_IS_EMPTY =
 			"Tried to print cities with the same name, when the list of cities is empty!";
 
-	private ExceptionMessage() {
+	private WeatherExceptionMessage() {
 	}
 }

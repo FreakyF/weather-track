@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.weathertrack.ui.model.ExceptionMessage;
+import org.weathertrack.ui.model.WeatherExceptionMessage;
 
 import java.util.stream.Stream;
 
@@ -17,9 +17,9 @@ class WeatherDataTests {
 
 	private static Stream<Arguments> WeatherCondition_ShouldThrowError_withAppropriateMessage() {
 		return Stream.of(
-				Arguments.of(null, ExceptionMessage.WEATHER_CONDITION_IS_NULL),
-				Arguments.of("", ExceptionMessage.WEATHER_CONDITION_IS_EMPTY),
-				Arguments.of(" ", ExceptionMessage.WEATHER_CONDITION_IS_EMPTY)
+				Arguments.of(null, WeatherExceptionMessage.WEATHER_CONDITION_IS_NULL),
+				Arguments.of("", WeatherExceptionMessage.WEATHER_CONDITION_IS_EMPTY),
+				Arguments.of(" ", WeatherExceptionMessage.WEATHER_CONDITION_IS_EMPTY)
 		);
 	}
 
@@ -76,7 +76,7 @@ class WeatherDataTests {
 		));
 
 		// Then
-		assertEquals(ExceptionMessage.TEMPERATURE_IS_BELOW_ABSOLUTE_ZERO, throwedException.getMessage());
+		assertEquals(WeatherExceptionMessage.TEMPERATURE_IS_BELOW_ABSOLUTE_ZERO, throwedException.getMessage());
 	}
 
 	@Test
@@ -144,8 +144,8 @@ class WeatherDataTests {
 
 	private static Stream<Arguments> Cloudiness_ShouldThrowError_withAppropriateMessage() {
 		return Stream.of(
-				Arguments.of(101, ExceptionMessage.CLOUDINESS_IS_ABOVE_100),
-				Arguments.of(-1, ExceptionMessage.CLOUDINESS_IS_BELOW_0)
+				Arguments.of(101, WeatherExceptionMessage.CLOUDINESS_IS_ABOVE_100),
+				Arguments.of(-1, WeatherExceptionMessage.CLOUDINESS_IS_BELOW_0)
 		);
 	}
 
@@ -190,8 +190,8 @@ class WeatherDataTests {
 
 	private static Stream<Arguments> RainChance_ShouldThrowError_WithAppropriateMessage() {
 		return Stream.of(
-				Arguments.of(101, ExceptionMessage.RAIN_CHANCE_IS_ABOVE_100),
-				Arguments.of(-1, ExceptionMessage.RAIN_CHANCE_IS_BELOW_0)
+				Arguments.of(101, WeatherExceptionMessage.RAIN_CHANCE_IS_ABOVE_100),
+				Arguments.of(-1, WeatherExceptionMessage.RAIN_CHANCE_IS_BELOW_0)
 		);
 	}
 
@@ -236,7 +236,7 @@ class WeatherDataTests {
 
 	private static Stream<Arguments> WindSpeed_ShouldThrowError_WithAppropriateMessage() {
 		return Stream.of(
-				Arguments.of(-32.5, ExceptionMessage.WIND_SPEED_IS_BELOW_0)
+				Arguments.of(-32.5, WeatherExceptionMessage.WIND_SPEED_IS_BELOW_0)
 		);
 	}
 
@@ -281,8 +281,8 @@ class WeatherDataTests {
 
 	private static Stream<Arguments> Humidity_ShouldThrowError_WithAppropriateMessag() {
 		return Stream.of(
-				Arguments.of(101, ExceptionMessage.HUMIDITY_IS_ABOVE_100),
-				Arguments.of(-1, ExceptionMessage.HUMIDITY_IS_BELOW_0)
+				Arguments.of(101, WeatherExceptionMessage.HUMIDITY_IS_ABOVE_100),
+				Arguments.of(-1, WeatherExceptionMessage.HUMIDITY_IS_BELOW_0)
 		);
 	}
 
@@ -327,7 +327,7 @@ class WeatherDataTests {
 
 	private static Stream<Arguments> Pressure_ShouldThrowError_WithAppropriateMessage() {
 		return Stream.of(
-				Arguments.of(-32, ExceptionMessage.PRESSURE_IS_BELOW_0)
+				Arguments.of(-32, WeatherExceptionMessage.PRESSURE_IS_BELOW_0)
 		);
 	}
 
