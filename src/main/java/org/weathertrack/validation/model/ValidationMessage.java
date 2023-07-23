@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ValidationMessage {
-	private static final String PROPERTIES_FILE = "ValidationMessage.properties";
+	private static final String PROPERTIES_FILE = "validation_message.properties";
 	private static Properties properties;
 
 	static {

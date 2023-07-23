@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class WeatherUIResources {
-	private static final String PROPERTIES_FILE = "UIConstants.properties";
+	private static final String PROPERTIES_FILE = "weather_display.properties";
 	private static Properties properties;
 
 	static {
