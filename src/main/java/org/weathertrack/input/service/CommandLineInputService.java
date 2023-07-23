@@ -1,30 +1,35 @@
-package org.weathertrack.ui.commandline;
+package org.weathertrack.input.service;
 
-import org.weathertrack.input.UserInputInterface;
-import org.weathertrack.input.UserInputService;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.weather.exception.WeatherExceptionMessage;
 import org.weathertrack.weather.model.WeatherData;
 import org.weathertrack.weather.resource.WeatherDisplayResource;
 
 import java.util.List;
+import java.util.Scanner;
 
 @SuppressWarnings("java:S106")
-public class CommandLineUserInputInterface implements UserInputInterface {
-	private final UserInputService userInputService;
+public class CommandLineInputService implements InputService {
+	private final Scanner scanner;
 
 	private final Logger logger;
 
-	public CommandLineUserInputInterface(UserInputService userInputService, Logger logger) {
-		this.userInputService = userInputService;
+	public CommandLineInputService(Logger logger, Scanner scanner) {
 		this.logger = logger;
+		this.scanner = scanner;
+	}
+
+	@Override
+	public String getUserInput(String message) {
+		System.out.print(message);
+		return scanner.nextLine().trim();
 	}
 
 	@Override
 	public String getCityNameFromUser() {
 		String cityName;
 		do {
-			cityName = userInputService.getUserInput("Enter the city name: ");
+			cityName = getUserInput("Enter the city name: ");
 		} while (cityName.isBlank());
 
 		return cityName;

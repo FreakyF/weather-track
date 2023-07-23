@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.weathertrack.input.service.CommandLineInputService;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.weather.exception.WeatherExceptionMessage;
 import org.weathertrack.weather.model.WeatherData;
@@ -12,16 +13,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-class CommandLineUserInputInterfaceTests {
+class CommandLineInputServiceTests {
+	private static final String EXPECTED_USER_MESSAGE = "User message";
+	private static final String EXPECTED_PROMPT_MESSAGE = "Prompt message";
 	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-	private CommandLineUserInputInterface commandLineUserInterface;
+	private CommandLineInputService commandLineUserInterface;
 	private Logger loggerCLI;
+	private Scanner mockScanner;
 	private static final WeatherData mockWeatherData = new WeatherData(
 			"Sunny",
 			25.0,
@@ -32,13 +38,39 @@ class CommandLineUserInputInterfaceTests {
 			1015
 	);
 
-	@SuppressWarnings("unchecked")
 	@BeforeEach
 	void setUp() {
 		System.setOut(new PrintStream(outputStream));
-		CommandLineUserInputService userInputService = mock(CommandLineUserInputService.class);
 		loggerCLI = mock(Logger.class);
-		commandLineUserInterface = new CommandLineUserInputInterface(userInputService, loggerCLI);
+		mockScanner = mock(Scanner.class);
+		commandLineUserInterface = new CommandLineInputService(loggerCLI, mockScanner);
+	}
+
+	@Test
+	void getUserInput_ShouldReturnUserInput() {
+		// When
+		when(mockScanner.nextLine()).thenReturn(EXPECTED_USER_MESSAGE);
+
+		// Given
+		var result = commandLineUserInterface.getUserInput(EXPECTED_PROMPT_MESSAGE);
+
+		// Then
+		assertEquals(EXPECTED_USER_MESSAGE, result);
+	}
+
+	@Test
+	void getUserInput_ShouldPromptMessage() {
+		// When
+		ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStreamCaptor));
+
+		when(mockScanner.nextLine()).thenReturn(EXPECTED_USER_MESSAGE);
+
+		// Given
+		commandLineUserInterface.getUserInput(EXPECTED_PROMPT_MESSAGE);
+
+		// Then
+		assertEquals(EXPECTED_PROMPT_MESSAGE, outputStreamCaptor.toString().trim());
 	}
 
 	@Test
