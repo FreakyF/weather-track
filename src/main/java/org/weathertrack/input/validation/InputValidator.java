@@ -1,6 +1,6 @@
-package org.weathertrack.validation;
+package org.weathertrack.input.validation;
 
-import org.weathertrack.validation.model.InputValidationResult;
+import org.weathertrack.input.validation.model.InputValidationResult;
 
 public interface InputValidator {
 	InputValidationResult validateCityNameInput(String userCityInput);

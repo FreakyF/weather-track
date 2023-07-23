@@ -1,6 +1,6 @@
 package org.weathertrack.weather.model;
 
-import org.weathertrack.weather.exception.WeatherExceptionMessage;
+import org.weathertrack.weather.resource.WeatherExceptionMessage;
 
 public record WeatherData(
 		String weatherCondition,

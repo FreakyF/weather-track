@@ -1,7 +1,7 @@
-package org.weathertrack.input.service;
+package org.weathertrack.input.service.userio;
 
+import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.logging.Logger;
-import org.weathertrack.weather.exception.WeatherExceptionMessage;
 import org.weathertrack.weather.model.WeatherData;
 import org.weathertrack.weather.resource.WeatherDisplayResource;
 
@@ -38,7 +38,7 @@ public class CommandLineUserIOService implements UserIOService {
 	@Override
 	public void printCitiesWithSameName(List<String> citiesWithSameName) {
 		if (citiesWithSameName.isEmpty()) {
-			logger.warn(WeatherExceptionMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
+			logger.warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
 			return;
 		}
 

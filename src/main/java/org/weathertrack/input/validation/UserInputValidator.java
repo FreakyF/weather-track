@@ -1,8 +1,8 @@
-package org.weathertrack.validation;
+package org.weathertrack.input.validation;
 
-import org.weathertrack.validation.exception.InputExceptionMessage;
-import org.weathertrack.validation.model.InputValidationResult;
-import org.weathertrack.validation.resource.ValidationMessageResource;
+import org.weathertrack.input.validation.exception.InputExceptionMessage;
+import org.weathertrack.input.validation.model.InputValidationResult;
+import org.weathertrack.input.validation.resource.ValidationMessageResource;
 
 import java.util.regex.Pattern;
 

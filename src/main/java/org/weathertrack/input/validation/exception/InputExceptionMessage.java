@@ -1,4 +1,4 @@
-package org.weathertrack.validation.exception;
+package org.weathertrack.input.validation.exception;
 
 public class InputExceptionMessage {
 	public static final String USER_INPUT_IS_NULL =

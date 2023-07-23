@@ -1,4 +1,4 @@
-package org.weathertrack.weather.exception;
+package org.weathertrack.weather.resource;
 
 public class WeatherExceptionMessage {
 	public static final String WEATHER_CONDITION_IS_NULL
@@ -23,8 +23,6 @@ public class WeatherExceptionMessage {
 			= "Tried to get humidity but humidity is below 0%";
 	public static final String PRESSURE_IS_BELOW_0
 			= "Tried to get pressure but pressure is below 0.";
-	public static final String CITIES_WITH_SAME_NAME_IS_EMPTY =
-			"Tried to print cities with the same name, when the list of cities is empty!";
 
 	private WeatherExceptionMessage() {
 	}

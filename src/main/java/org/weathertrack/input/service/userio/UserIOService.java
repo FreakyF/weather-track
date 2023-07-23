@@ -1,4 +1,4 @@
-package org.weathertrack.input.service;
+package org.weathertrack.input.service.userio;
 
 import org.weathertrack.weather.model.WeatherData;
 

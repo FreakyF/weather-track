@@ -1,4 +1,4 @@
-package org.weathertrack.validation.model;
+package org.weathertrack.input.validation.model;
 
 public class InputValidationResult {
 	private final boolean valid;
