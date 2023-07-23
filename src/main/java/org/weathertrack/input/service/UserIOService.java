@@ -4,7 +4,7 @@ import org.weathertrack.weather.model.WeatherData;
 
 import java.util.List;
 
-public interface InputService {
+public interface UserIOService {
 	String getUserInput(String message);
 
 	String getCityNameFromUser();

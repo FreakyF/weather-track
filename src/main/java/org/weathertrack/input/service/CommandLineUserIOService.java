@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Scanner;
 
 @SuppressWarnings("java:S106")
-public class CommandLineInputService implements InputService {
+public class CommandLineUserIOService implements UserIOService {
 	private final Scanner scanner;
 
 	private final Logger logger;
 
-	public CommandLineInputService(Logger logger, Scanner scanner) {
+	public CommandLineUserIOService(Logger logger, Scanner scanner) {
 		this.logger = logger;
 		this.scanner = scanner;
 	}

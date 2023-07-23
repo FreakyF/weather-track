@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.weathertrack.input.service.CommandLineInputService;
+import org.weathertrack.input.service.CommandLineUserIOService;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.weather.exception.WeatherExceptionMessage;
 import org.weathertrack.weather.model.WeatherData;
@@ -21,11 +21,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class CommandLineInputServiceTests {
+class CommandLineUserIOServiceTests {
 	private static final String EXPECTED_USER_MESSAGE = "User message";
 	private static final String EXPECTED_PROMPT_MESSAGE = "Prompt message";
 	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-	private CommandLineInputService commandLineUserInterface;
+	private CommandLineUserIOService commandLineUserInterface;
 	private Logger loggerCLI;
 	private Scanner mockScanner;
 	private static final WeatherData mockWeatherData = new WeatherData(
@@ -43,7 +43,7 @@ class CommandLineInputServiceTests {
 		System.setOut(new PrintStream(outputStream));
 		loggerCLI = mock(Logger.class);
 		mockScanner = mock(Scanner.class);
-		commandLineUserInterface = new CommandLineInputService(loggerCLI, mockScanner);
+		commandLineUserInterface = new CommandLineUserIOService(loggerCLI, mockScanner);
 	}
 
 	@Test
