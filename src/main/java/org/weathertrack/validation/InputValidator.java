@@ -1,4 +1,4 @@
-package org.weathertrack.validation.validator;
+package org.weathertrack.validation;
 
 import org.weathertrack.validation.model.InputValidationResult;
 
