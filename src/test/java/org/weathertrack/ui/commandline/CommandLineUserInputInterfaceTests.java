@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 class CommandLineUserInputInterfaceTests {
 	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	private CommandLineUserInputInterface commandLineUserInterface;
-	private Logger<CommandLineUserInputInterface> loggerCLI;
+	private Logger loggerCLI;
 	private static final WeatherData mockWeatherData = new WeatherData(
 			"Sunny",
 			25.0,

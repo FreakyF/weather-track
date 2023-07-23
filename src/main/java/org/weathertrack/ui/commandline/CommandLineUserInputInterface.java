@@ -13,9 +13,9 @@ import java.util.List;
 public class CommandLineUserInputInterface implements UserInputInterface {
 	private final UserInputService userInputService;
 
-	private final Logger<CommandLineUserInputInterface> logger;
+	private final Logger logger;
 
-	public CommandLineUserInputInterface(UserInputService userInputService, Logger<CommandLineUserInputInterface> logger) {
+	public CommandLineUserInputInterface(UserInputService userInputService, Logger logger) {
 		this.userInputService = userInputService;
 		this.logger = logger;
 	}
