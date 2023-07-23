@@ -3,8 +3,8 @@ package org.weathertrack.ui.view.cli;
 import org.weathertrack.input.model.UserInputService;
 import org.weathertrack.logger.model.Logger;
 import org.weathertrack.ui.model.UserInterface;
+import org.weathertrack.ui.model.WeatherDisplayResource;
 import org.weathertrack.ui.model.WeatherExceptionMessage;
-import org.weathertrack.ui.model.WeatherUIResources;
 import org.weathertrack.weather.model.WeatherData;
 
 import java.util.List;
@@ -51,44 +51,44 @@ public class CommandLineUserInterface implements UserInterface {
 	@Override
 	public void printWeather(WeatherData weatherData) {
 		var weatherConditionMessage = String.format(
-				WeatherUIResources.WEATHER_CONDITION,
+				WeatherDisplayResource.WEATHER_CONDITION,
 				weatherData.weatherCondition()
 		);
 		System.out.println(weatherConditionMessage);
 
 		var temperatureMessage = String.format(
-				WeatherUIResources.TEMPERATURE,
+				WeatherDisplayResource.TEMPERATURE,
 				weatherData.temperatureCelsius()
 		);
 		System.out.println(temperatureMessage);
 
 		var cloudinessMessage = String.format(
-				WeatherUIResources.CLOUDINESS,
+				WeatherDisplayResource.CLOUDINESS,
 				weatherData.cloudiness()
 		);
 		System.out.println(cloudinessMessage);
 
 		var rainChanceMessage = String.format(
-				WeatherUIResources.RAIN_CHANCE,
+				WeatherDisplayResource.RAIN_CHANCE,
 				weatherData.rainChance()
 		);
 
 		System.out.println(rainChanceMessage);
 
 		var windSpeedMessage = String.format(
-				WeatherUIResources.WIND_SPEED,
+				WeatherDisplayResource.WIND_SPEED,
 				weatherData.windSpeed()
 		);
 		System.out.println(windSpeedMessage);
 
 		var humidityMessage = String.format(
-				WeatherUIResources.HUMIDITY,
+				WeatherDisplayResource.HUMIDITY,
 				weatherData.humidity()
 		);
 		System.out.println(humidityMessage);
 
 		var pressureMessage = String.format(
-				WeatherUIResources.PRESSURE,
+				WeatherDisplayResource.PRESSURE,
 				weatherData.pressure()
 		);
 		System.out.println(pressureMessage);

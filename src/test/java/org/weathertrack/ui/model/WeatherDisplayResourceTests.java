@@ -5,7 +5,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class WeatherUIResourcesTests {
+class WeatherDisplayResourceTests {
 	@ParameterizedTest
 	@CsvSource({
 			"Weather Condition: %s, WEATHER_CONDITION",
@@ -26,13 +26,13 @@ class WeatherUIResourcesTests {
 
 	private String getProperty(String propertyName) {
 		return switch (propertyName) {
-			case "WEATHER_CONDITION" -> WeatherUIResources.WEATHER_CONDITION;
-			case "TEMPERATURE" -> WeatherUIResources.TEMPERATURE;
-			case "CLOUDINESS" -> WeatherUIResources.CLOUDINESS;
-			case "RAIN_CHANCE" -> WeatherUIResources.RAIN_CHANCE;
-			case "WIND_SPEED" -> WeatherUIResources.WIND_SPEED;
-			case "HUMIDITY" -> WeatherUIResources.HUMIDITY;
-			case "PRESSURE" -> WeatherUIResources.PRESSURE;
+			case "WEATHER_CONDITION" -> WeatherDisplayResource.WEATHER_CONDITION;
+			case "TEMPERATURE" -> WeatherDisplayResource.TEMPERATURE;
+			case "CLOUDINESS" -> WeatherDisplayResource.CLOUDINESS;
+			case "RAIN_CHANCE" -> WeatherDisplayResource.RAIN_CHANCE;
+			case "WIND_SPEED" -> WeatherDisplayResource.WIND_SPEED;
+			case "HUMIDITY" -> WeatherDisplayResource.HUMIDITY;
+			case "PRESSURE" -> WeatherDisplayResource.PRESSURE;
 			default -> throw new IllegalArgumentException("Invalid propertyName: " + propertyName);
 		};
 	}

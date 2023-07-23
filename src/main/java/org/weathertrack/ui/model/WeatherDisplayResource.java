@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class WeatherUIResources {
+public class WeatherDisplayResource {
 	private static final String PROPERTIES_FILE = "weather_display.properties";
 	private static Properties properties;
 
 	static {
-		try (InputStream inputStream = WeatherUIResources.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
+		try (InputStream inputStream = WeatherDisplayResource.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
 			properties = new Properties();
 			properties.load(inputStream);
 		} catch (IOException e) {
@@ -25,6 +25,6 @@ public class WeatherUIResources {
 	public static final String HUMIDITY = properties.getProperty("HUMIDITY");
 	public static final String PRESSURE = properties.getProperty("PRESSURE");
 
-	private WeatherUIResources() {
+	private WeatherDisplayResource() {
 	}
 }

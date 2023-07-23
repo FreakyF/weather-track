@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ValidationMessage {
+public class ValidationMessageResource {
 	private static final String PROPERTIES_FILE = "validation_message.properties";
 	private static Properties properties;
 
 	static {
-		try (InputStream inputStream = ValidationMessage.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
+		try (InputStream inputStream = ValidationMessageResource.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
 			properties = new Properties();
 			properties.load(inputStream);
 		} catch (IOException e) {
@@ -30,6 +30,6 @@ public class ValidationMessage {
 	public static final String MENU_ENTRY_IS_ZERO
 			= properties.getProperty("MENU_ENTRY_IS_ZERO") + PLEASE_TRY_AGAIN;
 
-	private ValidationMessage() {
+	private ValidationMessageResource() {
 	}
 }

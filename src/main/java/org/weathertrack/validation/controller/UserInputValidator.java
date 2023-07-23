@@ -1,9 +1,9 @@
 package org.weathertrack.validation.controller;
 
-import org.weathertrack.validation.model.InputValidationExceptionMessage;
+import org.weathertrack.validation.model.InputExceptionMessage;
 import org.weathertrack.validation.model.InputValidationResult;
 import org.weathertrack.validation.model.InputValidator;
-import org.weathertrack.validation.model.ValidationMessage;
+import org.weathertrack.validation.model.ValidationMessageResource;
 
 import java.util.regex.Pattern;
 
@@ -19,21 +19,21 @@ public class UserInputValidator implements InputValidator {
 	@Override
 	public InputValidationResult validateCityNameInput(String userCityInput) {
 		if (userCityInput == null) {
-			throw new IllegalArgumentException(InputValidationExceptionMessage.USER_INPUT_IS_NULL);
+			throw new IllegalArgumentException(InputExceptionMessage.USER_INPUT_IS_NULL);
 		}
 		if (userCityInput.isBlank()) {
-			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_BLANK);
+			return new InputValidationResult(false, ValidationMessageResource.CITY_INPUT_BLANK);
 
 		}
 		if (userCityInput.length() > MAXIMUM_CITY_NAME_LENGTH) {
-			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_TOO_LONG);
+			return new InputValidationResult(false, ValidationMessageResource.CITY_INPUT_TOO_LONG);
 		}
 		if (NUMBERS_REGEX_PATTERN.matcher(userCityInput).matches()) {
 			return new InputValidationResult(
-					false, ValidationMessage.CITY_INPUT_CONTAINS_NUMBERS);
+					false, ValidationMessageResource.CITY_INPUT_CONTAINS_NUMBERS);
 		}
 		if (!SPECIAL_CHARACTERS_REGEX_PATTERN.matcher(userCityInput).matches()) {
-			return new InputValidationResult(false, ValidationMessage.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS);
+			return new InputValidationResult(false, ValidationMessageResource.CITY_INPUT_CONTAINS_SPECIAL_CHARACTERS);
 		}
 
 		return new InputValidationResult(true);
@@ -42,7 +42,7 @@ public class UserInputValidator implements InputValidator {
 	@Override
 	public InputValidationResult validateMenuEntryInput(int userMenuEntry) {
 		if (userMenuEntry <= 0) {
-			return new InputValidationResult(false, ValidationMessage.MENU_ENTRY_IS_ZERO);
+			return new InputValidationResult(false, ValidationMessageResource.MENU_ENTRY_IS_ZERO);
 		}
 		return new InputValidationResult(true);
 	}
