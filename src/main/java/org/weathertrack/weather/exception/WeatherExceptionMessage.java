@@ -1,4 +1,4 @@
-package org.weathertrack.weather;
+package org.weathertrack.weather.exception;
 
 public class WeatherExceptionMessage {
 	public static final String WEATHER_CONDITION_IS_NULL

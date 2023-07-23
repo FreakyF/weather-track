@@ -1,6 +1,6 @@
 package org.weathertrack.input;
 
-import org.weathertrack.weather.WeatherData;
+import org.weathertrack.weather.model.WeatherData;
 
 import java.util.List;
 

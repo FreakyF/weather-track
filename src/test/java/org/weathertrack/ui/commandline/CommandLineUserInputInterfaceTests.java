@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.weathertrack.logging.Logger;
-import org.weathertrack.weather.WeatherData;
-import org.weathertrack.weather.WeatherExceptionMessage;
+import org.weathertrack.weather.exception.WeatherExceptionMessage;
+import org.weathertrack.weather.model.WeatherData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

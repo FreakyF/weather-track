@@ -1,9 +1,10 @@
-package org.weathertrack.weather;
+package org.weathertrack.weather.model;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.weathertrack.weather.exception.WeatherExceptionMessage;
 
 import java.util.stream.Stream;
 

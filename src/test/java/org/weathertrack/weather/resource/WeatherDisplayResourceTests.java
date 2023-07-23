@@ -1,4 +1,4 @@
-package org.weathertrack.weather;
+package org.weathertrack.weather.resource;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

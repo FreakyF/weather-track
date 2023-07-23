@@ -3,9 +3,9 @@ package org.weathertrack.ui.commandline;
 import org.weathertrack.input.UserInputInterface;
 import org.weathertrack.input.UserInputService;
 import org.weathertrack.logging.Logger;
-import org.weathertrack.weather.WeatherData;
-import org.weathertrack.weather.WeatherDisplayResource;
-import org.weathertrack.weather.WeatherExceptionMessage;
+import org.weathertrack.weather.exception.WeatherExceptionMessage;
+import org.weathertrack.weather.model.WeatherData;
+import org.weathertrack.weather.resource.WeatherDisplayResource;
 
 import java.util.List;
 
