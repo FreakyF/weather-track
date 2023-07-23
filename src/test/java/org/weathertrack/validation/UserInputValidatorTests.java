@@ -1,4 +1,4 @@
-package org.weathertrack.validation.validator;
+package org.weathertrack.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
