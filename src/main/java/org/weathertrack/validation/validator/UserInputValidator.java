@@ -22,7 +22,6 @@ public class UserInputValidator implements InputValidator {
 		}
 		if (userCityInput.isBlank()) {
 			return new InputValidationResult(false, ValidationMessageResource.CITY_INPUT_BLANK);
-
 		}
 		if (userCityInput.length() > MAXIMUM_CITY_NAME_LENGTH) {
 			return new InputValidationResult(false, ValidationMessageResource.CITY_INPUT_TOO_LONG);
