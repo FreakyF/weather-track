@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.weathertrack.input.controller.CommandLineUserInputService;
-import org.weathertrack.logger.model.LoggerInterface;
+import org.weathertrack.logger.model.Logger;
 import org.weathertrack.ui.model.ExceptionMessage;
 import org.weathertrack.weather.model.WeatherData;
 
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 class CommandLineUserInterfaceTests {
 	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	private CommandLineUserInterface commandLineUserInterface;
-	private LoggerInterface<CommandLineUserInterface> loggerCLI;
+	private Logger<CommandLineUserInterface> loggerCLI;
 	private static final WeatherData mockWeatherData = new WeatherData(
 			"Sunny",
 			25.0,
@@ -38,7 +38,7 @@ class CommandLineUserInterfaceTests {
 	void setUp() {
 		System.setOut(new PrintStream(outputStream));
 		CommandLineUserInputService userInputService = mock(CommandLineUserInputService.class);
-		loggerCLI = mock(LoggerInterface.class);
+		loggerCLI = mock(Logger.class);
 		commandLineUserInterface = new CommandLineUserInterface(userInputService, loggerCLI);
 	}
 

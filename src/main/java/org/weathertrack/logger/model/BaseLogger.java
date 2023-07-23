@@ -1,6 +1,6 @@
 package org.weathertrack.logger.model;
 
-public abstract class BaseLogger<T> implements LoggerInterface<T> {
+public abstract class BaseLogger<T> implements Logger<T> {
 	protected final String className;
 
 	protected BaseLogger(Class<T> className) {

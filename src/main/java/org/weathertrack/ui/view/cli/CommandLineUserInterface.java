@@ -1,7 +1,7 @@
 package org.weathertrack.ui.view.cli;
 
 import org.weathertrack.input.model.UserInputService;
-import org.weathertrack.logger.model.LoggerInterface;
+import org.weathertrack.logger.model.Logger;
 import org.weathertrack.ui.model.ExceptionMessage;
 import org.weathertrack.ui.model.UserInterface;
 import org.weathertrack.ui.model.WeatherUIResources;
@@ -13,9 +13,9 @@ import java.util.List;
 public class CommandLineUserInterface implements UserInterface {
 	private final UserInputService userInputService;
 
-	private final LoggerInterface<CommandLineUserInterface> logger;
+	private final Logger<CommandLineUserInterface> logger;
 
-	public CommandLineUserInterface(UserInputService userInputService, LoggerInterface<CommandLineUserInterface> logger) {
+	public CommandLineUserInterface(UserInputService userInputService, Logger<CommandLineUserInterface> logger) {
 		this.userInputService = userInputService;
 		this.logger = logger;
 	}
