@@ -1,6 +1,6 @@
-package org.weathertrack.input.controller;
+package org.weathertrack.ui.commandline;
 
-import org.weathertrack.input.model.UserInputService;
+import org.weathertrack.input.UserInputService;
 
 import java.util.Scanner;
 

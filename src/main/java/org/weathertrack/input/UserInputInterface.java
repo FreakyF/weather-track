@@ -1,10 +1,10 @@
-package org.weathertrack.ui.model;
+package org.weathertrack.input;
 
-import org.weathertrack.weather.model.WeatherData;
+import org.weathertrack.weather.WeatherData;
 
 import java.util.List;
 
-public interface UserInterface {
+public interface UserInputInterface {
 	String getCityNameFromUser();
 
 	void printCitiesWithSameName(List<String> citiesWithSameName);

@@ -1,4 +1,4 @@
-package org.weathertrack.input.controller;
+package org.weathertrack.ui.commandline;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

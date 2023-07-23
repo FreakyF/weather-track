@@ -1,13 +1,10 @@
-package org.weathertrack.validation.controller;
+package org.weathertrack.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.weathertrack.validation.model.InputExceptionMessage;
-import org.weathertrack.validation.model.InputValidator;
-import org.weathertrack.validation.model.ValidationMessageResource;
 
 import java.util.stream.Stream;
 

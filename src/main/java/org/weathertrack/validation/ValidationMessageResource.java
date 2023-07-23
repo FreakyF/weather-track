@@ -1,4 +1,4 @@
-package org.weathertrack.validation.model;
+package org.weathertrack.validation;
 
 import java.io.IOException;
 import java.io.InputStream;

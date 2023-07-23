@@ -1,9 +1,4 @@
-package org.weathertrack.validation.controller;
-
-import org.weathertrack.validation.model.InputExceptionMessage;
-import org.weathertrack.validation.model.InputValidationResult;
-import org.weathertrack.validation.model.InputValidator;
-import org.weathertrack.validation.model.ValidationMessageResource;
+package org.weathertrack.validation;
 
 import java.util.regex.Pattern;
 

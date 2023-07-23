@@ -1,4 +1,4 @@
-package org.weathertrack.logger.model;
+package org.weathertrack.logging;
 
 public interface Logger<T> {
 	void info(String message);

@@ -1,4 +1,4 @@
-package org.weathertrack.logger.model;
+package org.weathertrack.logging;
 
 public abstract class BaseLogger<T> implements Logger<T> {
 	protected final String className;

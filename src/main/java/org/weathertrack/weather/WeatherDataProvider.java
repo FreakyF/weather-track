@@ -1,4 +1,4 @@
-package org.weathertrack.weather.model;
+package org.weathertrack.weather;
 
 public interface WeatherDataProvider {
 	WeatherData getWeatherData(String city);

@@ -1,21 +1,21 @@
-package org.weathertrack.ui.view.cli;
+package org.weathertrack.ui.commandline;
 
-import org.weathertrack.input.model.UserInputService;
-import org.weathertrack.logger.model.Logger;
-import org.weathertrack.ui.model.UserInterface;
-import org.weathertrack.ui.model.WeatherDisplayResource;
-import org.weathertrack.ui.model.WeatherExceptionMessage;
-import org.weathertrack.weather.model.WeatherData;
+import org.weathertrack.input.UserInputInterface;
+import org.weathertrack.input.UserInputService;
+import org.weathertrack.logging.Logger;
+import org.weathertrack.weather.WeatherData;
+import org.weathertrack.weather.WeatherDisplayResource;
+import org.weathertrack.weather.WeatherExceptionMessage;
 
 import java.util.List;
 
 @SuppressWarnings("java:S106")
-public class CommandLineUserInterface implements UserInterface {
+public class CommandLineUserInputInterface implements UserInputInterface {
 	private final UserInputService userInputService;
 
-	private final Logger<CommandLineUserInterface> logger;
+	private final Logger<CommandLineUserInputInterface> logger;
 
-	public CommandLineUserInterface(UserInputService userInputService, Logger<CommandLineUserInterface> logger) {
+	public CommandLineUserInputInterface(UserInputService userInputService, Logger<CommandLineUserInputInterface> logger) {
 		this.userInputService = userInputService;
 		this.logger = logger;
 	}

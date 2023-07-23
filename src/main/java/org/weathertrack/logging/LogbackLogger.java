@@ -1,8 +1,7 @@
-package org.weathertrack.logger.controller;
+package org.weathertrack.logging;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.weathertrack.logger.model.BaseLogger;
 
 public class LogbackLogger<T> extends BaseLogger<T> {
 	private final Logger logger;

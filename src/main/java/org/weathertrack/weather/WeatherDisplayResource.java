@@ -1,4 +1,4 @@
-package org.weathertrack.ui.model;
+package org.weathertrack.weather;
 
 import java.io.IOException;
 import java.io.InputStream;

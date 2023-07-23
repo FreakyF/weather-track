@@ -1,4 +1,4 @@
-package org.weathertrack.input.model;
+package org.weathertrack.input;
 
 public interface UserInputService {
 	String getUserInput(String message);
