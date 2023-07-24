@@ -10,6 +10,6 @@ public class Main {
 	public static void main(String[] args) {
 		Injector injector = Guice.createInjector(new LoggerModule(), new UserIOModule());
 		var userIOService = injector.getInstance(UserIOService.class);
-		userIOService.getUserInput("KSIENCIUNIU DEJ NO DWA ZŁOTE");
+		userIOService.getUserInput("Test: ");
 	}
 }
