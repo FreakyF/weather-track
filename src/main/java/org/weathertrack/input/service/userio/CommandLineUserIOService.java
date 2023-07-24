@@ -15,7 +15,7 @@ public class CommandLineUserIOService implements UserIOService {
 	private final Logger logger;
 
 	@Inject
-	public CommandLineUserIOService(Logger logger, Scanner scanner) {
+	public CommandLineUserIOService(Logger<CommandLineUserIOService> logger, Scanner scanner) {
 		this.logger = logger;
 		this.scanner = scanner;
 	}

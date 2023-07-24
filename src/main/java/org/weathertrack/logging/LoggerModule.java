@@ -1,16 +1,12 @@
 package org.weathertrack.logging;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
+import org.weathertrack.input.service.userio.CommandLineUserIOService;
 
-public class LoggerModule<T> extends AbstractModule {
-	private final Class<T> type;
-
-	public LoggerModule(Class<T> type) {
-		this.type = type;
-	}
-
+public class LoggerModule extends AbstractModule {
 	@Override
 	protected void configure() {
-		bind(Logger.class).toProvider(new LoggerProvider<>(type));
+		bind(new TypeLiteral<Logger<CommandLineUserIOService>>() {}).toProvider(() -> new LogbackLogger<>(CommandLineUserIOService.class));
 	}
 }
