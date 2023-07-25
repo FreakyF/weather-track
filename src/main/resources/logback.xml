@@ -8,7 +8,8 @@
     <property name="LOG_DIR" value="logs/"/>
     <property name="LOG_ARCHIVE" value="${LOG_DIR}/archive/"/>
 
-    <property name="LOG_PATTERN" value="%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%d{HH:mm:ss} [%thread] %-5level - %msg%n"/>
+    <property name="FILE_LOG_PATTERN" value="%d{YYYY-MM-dd HH:mm:ss} [%thread] %-5level - %msg%n"/>
     <property name="ARCHIVE_PATTERN" value="${LOG_ARCHIVE}/%i-${APP_NAME}-%d{YYYY-MM-dd}.gz"/>
 
     <property name="MAX_HISTORY" value="30"/> <!-- Number of days -->
@@ -17,7 +18,7 @@
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
@@ -30,7 +31,7 @@
             <maxHistory>${MAX_HISTORY}</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>WARN</level>
