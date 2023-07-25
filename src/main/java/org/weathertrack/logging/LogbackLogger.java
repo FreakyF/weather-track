@@ -1,6 +1,7 @@
 package org.weathertrack.logging;
 
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,7 +9,7 @@ public class LogbackLogger<T> extends BaseLogger<T> {
 	private final Logger logger;
 
 	@Inject
-	public LogbackLogger(Class<T> tClass) {
+	public LogbackLogger(@Assisted Class<T> tClass) {
 		super(tClass);
 		logger = LoggerFactory.getLogger(tClass);
 	}
