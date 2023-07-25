@@ -2,8 +2,8 @@ package org.weathertrack.input.service.userio;
 
 import com.google.inject.Inject;
 import org.weathertrack.input.resource.InputLogMessage;
-import org.weathertrack.logging.LogbackLoggerFactory;
 import org.weathertrack.logging.Logger;
+import org.weathertrack.logging.factory.LoggerFactory;
 import org.weathertrack.weather.model.WeatherData;
 import org.weathertrack.weather.resource.WeatherDisplayResource;
 
@@ -16,8 +16,8 @@ public class CommandLineUserIOService implements UserIOService {
 	private final Logger<CommandLineUserIOService> logger;
 
 	@Inject
-	public CommandLineUserIOService(LogbackLoggerFactory logbackLoggerFactory, Scanner scanner) {
-		this.logger = logbackLoggerFactory.create(CommandLineUserIOService.class);
+	public CommandLineUserIOService(LoggerFactory loggerFactory, Scanner scanner) {
+		this.logger = loggerFactory.create(CommandLineUserIOService.class);
 		this.scanner = scanner;
 	}
 

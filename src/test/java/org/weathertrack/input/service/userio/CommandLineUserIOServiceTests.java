@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.logging.Logger;
+import org.weathertrack.logging.factory.LoggerFactory;
 import org.weathertrack.weather.model.WeatherData;
 
 import java.io.ByteArrayOutputStream;
@@ -24,8 +25,8 @@ class CommandLineUserIOServiceTests {
 	private static final String EXPECTED_USER_MESSAGE = "User message";
 	private static final String EXPECTED_PROMPT_MESSAGE = "Prompt message";
 	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-	private CommandLineUserIOService commandLineUserInterface;
-	private Logger loggerCLI;
+	private UserIOService commandLineUserInterface;
+	private Logger<CommandLineUserIOService> logger;
 	private Scanner mockScanner;
 	private static final WeatherData mockWeatherData = new WeatherData(
 			"Sunny",
@@ -40,9 +41,11 @@ class CommandLineUserIOServiceTests {
 	@BeforeEach
 	void setUp() {
 		System.setOut(new PrintStream(outputStream));
-		loggerCLI = mock(Logger.class);
+		var loggerFactory = mock(LoggerFactory.class);
+		logger = mock(Logger.class);
+		when(loggerFactory.create(CommandLineUserIOService.class)).thenReturn(logger);
 		mockScanner = mock(Scanner.class);
-		commandLineUserInterface = new CommandLineUserIOService(loggerCLI, mockScanner);
+		commandLineUserInterface = new CommandLineUserIOService(loggerFactory, mockScanner);
 	}
 
 	@Test
@@ -94,7 +97,7 @@ class CommandLineUserIOServiceTests {
 		commandLineUserInterface.printCitiesWithSameName(cities);
 
 		// Then
-		verify(loggerCLI).warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
+		verify(logger).warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
 	}
 
 	@Test

@@ -8,6 +8,6 @@ public abstract class BaseLogger<T> implements Logger<T> {
 	}
 
 	protected String formatMessage(String message) {
-		return String.format("[%s] %s", className, message);
+		return String.format("[%s]: %s", className, message);
 	}
 }
