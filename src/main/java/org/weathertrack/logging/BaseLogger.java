@@ -1,6 +1,6 @@
 package org.weathertrack.logging;
 
-public abstract class BaseLogger<T> implements Logger {
+public abstract class BaseLogger<T> implements Logger<T> {
 	protected final String className;
 
 	protected BaseLogger(Class<T> className) {
@@ -8,6 +8,6 @@ public abstract class BaseLogger<T> implements Logger {
 	}
 
 	protected String formatMessage(String message) {
-		return String.format("[%s] %s", className, message);
+		return String.format("[%s]: %s", className, message);
 	}
 }

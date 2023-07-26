@@ -1,7 +1,9 @@
 package org.weathertrack.input.service.userio;
 
+import com.google.inject.Inject;
 import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.logging.Logger;
+import org.weathertrack.logging.factory.LoggerFactory;
 import org.weathertrack.weather.model.WeatherData;
 import org.weathertrack.weather.resource.WeatherDisplayResource;
 
@@ -11,11 +13,11 @@ import java.util.Scanner;
 @SuppressWarnings("java:S106")
 public class CommandLineUserIOService implements UserIOService {
 	private final Scanner scanner;
+	private final Logger<CommandLineUserIOService> logger;
 
-	private final Logger logger;
-
-	public CommandLineUserIOService(Logger logger, Scanner scanner) {
-		this.logger = logger;
+	@Inject
+	public CommandLineUserIOService(LoggerFactory loggerFactory, Scanner scanner) {
+		this.logger = loggerFactory.create(CommandLineUserIOService.class);
 		this.scanner = scanner;
 	}
 
