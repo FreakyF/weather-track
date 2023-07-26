@@ -17,13 +17,6 @@ public class Main {
 		APIService apiService = new OpenMeteoAPIService();
 		var coordinatesFromCityName = apiService.fetchCoordinatesFromCityName(cityName);
 		var weatherDataFromCoordinates = apiService.fetchWeatherFromCoordinates(coordinatesFromCityName);
-
-		System.out.println("Weather condition: " + weatherDataFromCoordinates.weatherCondition());
-		System.out.println("Temperature: " + weatherDataFromCoordinates.temperatureCelsius());
-		System.out.println("Cloudiness: " + weatherDataFromCoordinates.cloudiness());
-		System.out.println("Rain chance: " + weatherDataFromCoordinates.rainChance());
-		System.out.println("Wind speed: " + weatherDataFromCoordinates.windSpeed());
-		System.out.println("Humidity: " + weatherDataFromCoordinates.humidity());
-		System.out.println("Pressure: " + weatherDataFromCoordinates.pressure());
+		userIOService.printWeather(weatherDataFromCoordinates);
 	}
 }
