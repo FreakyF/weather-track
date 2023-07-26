@@ -16,16 +16,17 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Optional;
 
+import static org.weathertrack.api.model.WeatherInterpretation.interpretWeatherCode;
+
 public class OpenMeteoAPIService implements APIService {
 	private static final String GEOCODING_API_ENDPOINT = "https://geocoding-api.open-meteo.com/v1/search";
-
 	private static final String WEATHER_API_ENDPOINT = "https://api.open-meteo.com/v1/forecast";
 	private static final String RESULTS_KEY = "results";
 	private static final String HOURLY_KEY = "hourly";
 
 	@Override
 	public WeatherData fetchWeatherFromCoordinates(Coordinates coordinates) {
-		String requestUrl = WEATHER_API_ENDPOINT + "?latitude=" + coordinates.latitude() + "&longitude=" + coordinates.longitude() + "&hourly=temperature_2m";
+		String requestUrl = WEATHER_API_ENDPOINT + "?latitude=" + coordinates.latitude() + "&longitude=" + coordinates.longitude() + "&hourly=temperature_2m,relativehumidity_2m,rain,weathercode,surface_pressure,cloudcover,windspeed_10m";
 		try {
 			HttpClient httpClient = HttpClient.newHttpClient();
 			HttpRequest httpRequest = HttpRequest.newBuilder()
@@ -75,11 +76,24 @@ public class OpenMeteoAPIService implements APIService {
 
 			if (responseJson.has(HOURLY_KEY) && responseJson.get(HOURLY_KEY).isJsonObject()) {
 				JsonObject hourlyData = responseJson.getAsJsonObject(HOURLY_KEY);
+				JsonArray weatherCodeArray = hourlyData.getAsJsonArray("weathercode");
 				JsonArray temperatureArray = hourlyData.getAsJsonArray("temperature_2m");
+				JsonArray cloudinessArray = hourlyData.getAsJsonArray("cloudcover");
+				JsonArray rainChanceArray = hourlyData.getAsJsonArray("rain");
+				JsonArray windSpeedArray = hourlyData.getAsJsonArray("windspeed_10m");
+				JsonArray humidityArray = hourlyData.getAsJsonArray("relativehumidity_2m");
+				JsonArray pressureArray = hourlyData.getAsJsonArray("surface_pressure");
 
 				if (temperatureArray.size() > 0) {
+					int weatherCode = weatherCodeArray.get(0).getAsInt();
+					String weatherCodeInterpreted = interpretWeatherCode(weatherCode);
 					double temperature = temperatureArray.get(0).getAsDouble();
-					return new WeatherData("N/A", temperature, 0, 0, 0, 0, 0);
+					int cloudiness = cloudinessArray.get(0).getAsInt();
+					int rainChance = rainChanceArray.get(0).getAsInt();
+					double windSpeed = windSpeedArray.get(0).getAsDouble();
+					int humidity = humidityArray.get(0).getAsInt();
+					int pressure = pressureArray.get(0).getAsInt();
+					return new WeatherData(weatherCodeInterpreted, temperature, cloudiness, rainChance, windSpeed, humidity, pressure);
 				}
 			}
 		} catch (IOException e) {
