@@ -18,10 +18,30 @@ import java.util.Optional;
 
 public class OpenMeteoAPIService implements APIService {
 	private static final String GEOCODING_API_ENDPOINT = "https://geocoding-api.open-meteo.com/v1/search";
+
+	private static final String WEATHER_API_ENDPOINT = "https://api.open-meteo.com/v1/forecast";
 	private static final String RESULTS_KEY = "results";
+	private static final String HOURLY_KEY = "hourly";
 
 	@Override
 	public WeatherData fetchWeatherFromCoordinates(Coordinates coordinates) {
+		String requestUrl = WEATHER_API_ENDPOINT + "?latitude=" + coordinates.latitude() + "&longitude=" + coordinates.longitude() + "&hourly=temperature_2m";
+		try {
+			HttpClient httpClient = HttpClient.newHttpClient();
+			HttpRequest httpRequest = HttpRequest.newBuilder()
+					.uri(URI.create(requestUrl))
+					.GET()
+					.build();
+
+			HttpResponse<InputStream> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
+			if (response.statusCode() == 200) {
+				return parseWeatherDataFromResponse(response.body());
+			}
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -43,6 +63,26 @@ public class OpenMeteoAPIService implements APIService {
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private WeatherData parseWeatherDataFromResponse(InputStream responseBody) {
+		try (InputStreamReader inputStreamReader = new InputStreamReader(responseBody)) {
+			Gson gson = new Gson();
+			JsonObject responseJson = gson.fromJson(inputStreamReader, JsonObject.class);
+
+			if (responseJson.has(HOURLY_KEY) && responseJson.get(HOURLY_KEY).isJsonObject()) {
+				JsonObject hourlyData = responseJson.getAsJsonObject(HOURLY_KEY);
+				JsonArray temperatureArray = hourlyData.getAsJsonArray("temperature_2m");
+
+				if (temperatureArray.size() > 0) {
+					double temperature = temperatureArray.get(0).getAsDouble();
+					return new WeatherData("N/A", temperature, 0, 0, 0, 0, 0);
+				}
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
