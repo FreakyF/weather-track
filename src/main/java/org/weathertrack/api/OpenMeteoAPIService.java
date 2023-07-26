@@ -26,7 +26,10 @@ public class OpenMeteoAPIService implements APIService {
 
 	@Override
 	public WeatherData fetchWeatherFromCoordinates(Coordinates coordinates) {
-		String requestUrl = WEATHER_API_ENDPOINT + "?latitude=" + coordinates.latitude() + "&longitude=" + coordinates.longitude() + "&hourly=temperature_2m,relativehumidity_2m,rain,weathercode,surface_pressure,cloudcover,windspeed_10m";
+		String requestUrl = WEATHER_API_ENDPOINT +
+				"?latitude=" + coordinates.latitude() +
+				"&longitude=" + coordinates.longitude() +
+				"&hourly=temperature_2m,relativehumidity_2m,rain,weathercode,surface_pressure,cloudcover,windspeed_10m";
 		try {
 			HttpClient httpClient = HttpClient.newHttpClient();
 			HttpRequest httpRequest = HttpRequest.newBuilder()
@@ -48,7 +51,9 @@ public class OpenMeteoAPIService implements APIService {
 
 	@Override
 	public Coordinates fetchCoordinatesFromCityName(String cityName) {
-		String requestUrl = GEOCODING_API_ENDPOINT + "?name=" + cityName;
+		String requestUrl = GEOCODING_API_ENDPOINT +
+				"?name=" +
+				cityName;
 		try {
 			HttpClient httpClient = HttpClient.newHttpClient();
 			HttpRequest httpRequest = HttpRequest.newBuilder()
