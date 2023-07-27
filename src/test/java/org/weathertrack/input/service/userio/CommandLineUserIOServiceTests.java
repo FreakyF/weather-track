@@ -8,10 +8,10 @@ import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
 import org.weathertrack.weather.model.WeatherData;
+import org.weathertrack.weather.provider.openmeteo.model.CityData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -76,40 +76,111 @@ class CommandLineUserIOServiceTests {
 	}
 
 	@Test
-	void printCitiesWithSameName_shouldPrintCities() {
+	void printCityDataWithSameCityName_shouldPrintCityData() {
 		// When
-		List<String> cities = Arrays.asList("New York", "London", "Paris");
+		long[] postCodes = {43438, 21312, 55122};
+		List<CityData> cityData = List.of(
+				new CityData(0,
+						"Kielce",
+						12.2,
+						53.3,
+						4,
+						"FeatueCode",
+						"PL",
+						7,
+						8,
+						9,
+						0,
+						"Warsaw",
+						"1200",
+						postCodes,
+						13,
+						"Poland",
+						"Swiętokrzyskie",
+						"Kielce",
+						"Something",
+						"Something4"),
+				new CityData(
+						0,
+						"Brenna",
+						12.1,
+						12.3,
+						5,
+						"FeatueCode",
+						"PL",
+						10,
+						12,
+						11,
+						4,
+						"Warsaw",
+						"11200",
+						postCodes,
+						15,
+						"Poland",
+						"Śląskie",
+						"Brenna",
+						"Something",
+						"Something4"
+				)
+		);
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(cities);
+		commandLineUserInterface.printCityDataWithSameCityName(cityData);
 
 		// Then
-		var expectedOutput = "1. New York\n2. London\n3. Paris";
+		var expectedOutput = """
+				1. Kielce, Swiętokrzyskie, Poland
+				2. Brenna, Śląskie, Poland
+				""";
 		assertEquals(expectedOutput, outputStream.toString());
 	}
 
 	@Test
-	void printCitiesWithSameName_emptyList() {
+	void printCityDataWithSameCityName_emptyList() {
 		// When
-		List<String> cities = List.of();
+		List<CityData> cityData = List.of();
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(cities);
+		commandLineUserInterface.printCityDataWithSameCityName(cityData);
 
 		// Then
-		verify(logger).warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
+		verify(logger).warn(InputLogMessage.CITY_DATA_WITH_SAME_CITY_NAME_IS_EMPTY);
 	}
 
 	@Test
-	void printCitiesWithSameName_singleCity() {
+	void printCityDataWithSameCityName_singleCity() {
 		// When
-		List<String> cities = List.of("New York");
+		long[] postCodes = {43438, 21312, 55122};
+		List<CityData> cityData = List.of(
+				new CityData(0,
+						"Kielce",
+						12.2,
+						53.3,
+						4,
+						"IDK",
+						"PL",
+						7,
+						8,
+						9,
+						0,
+						"Warsaw",
+						"1200",
+						postCodes,
+						13,
+						"Poland",
+						"Swiętokrzyskie",
+						"Kielce",
+						"Something",
+						"Idk")
+		);
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(cities);
+		commandLineUserInterface.printCityDataWithSameCityName(cityData);
 
 		// Then
-		var expectedOutput = "1. New York";
+		var expectedOutput = """
+				1. Kielce, Swiętokrzyskie, Poland
+				""";
 		assertEquals(expectedOutput, outputStream.toString());
 	}
 

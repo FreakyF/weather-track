@@ -5,6 +5,7 @@ import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
 import org.weathertrack.weather.model.WeatherData;
+import org.weathertrack.weather.provider.openmeteo.model.CityData;
 import org.weathertrack.weather.resource.WeatherDisplayResource;
 
 import java.util.List;
@@ -38,19 +39,22 @@ public class CommandLineUserIOService implements UserIOService {
 	}
 
 	@Override
-	public void printCitiesWithSameName(List<String> citiesWithSameName) {
+	public void printCityDataWithSameCityName(List<CityData> citiesWithSameName) {
 		if (citiesWithSameName.isEmpty()) {
-			logger.warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
+			logger.warn(InputLogMessage.CITY_DATA_WITH_SAME_CITY_NAME_IS_EMPTY);
 			return;
 		}
 
 		StringBuilder message = new StringBuilder();
 		for (int i = 0; i < citiesWithSameName.size(); i++) {
-			message.append(i + 1).append(". ").append(citiesWithSameName.get(i));
-			var isLastCity = i == citiesWithSameName.size() - 1;
-			if (!isLastCity) {
-				message.append("\n");
-			}
+			message.append(i + 1)
+					.append(". ")
+					.append(citiesWithSameName.get(i).getName())
+					.append(", ")
+					.append(citiesWithSameName.get(i).getAdmin1())
+					.append(", ")
+					.append(citiesWithSameName.get(i).getCountry())
+					.append("\n");
 		}
 		System.out.print(message);
 	}
