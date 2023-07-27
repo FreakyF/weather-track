@@ -1,5 +1,8 @@
 name: Java CI with Maven
 
+env:
+    LOG_LEVEL: 'warn'
+
 on:
     pull_request:
         branches:
@@ -15,6 +18,6 @@ jobs:
                     java-version: '17'
                     distribution: 'adopt'
             -   name: Build with Maven
-                run: mvn -B -Dorg.slf4j.simpleLogger.defaultLogLevel=warn package -DskipTests --file pom.xml
+                run: mvn -B -Dorg.slf4j.simpleLogger.defaultLogLevel=${{ env.LOG_LEVEL }} package -DskipTests --file pom.xml
             -   name: Test with Maven
                 run: mvn test
