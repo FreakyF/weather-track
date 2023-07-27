@@ -1,5 +1,8 @@
 package org.weathertrack.weather.provider.openmeteo.model.city;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class CityData {
 	private final long id;
 	private final String name;
@@ -13,9 +16,9 @@ public class CityData {
 	private final long admin3_id;
 	private final long admin4_id;
 	private final String timezone;
-	private final String population;
+	private final Long population;
 	private final long[] postcodes;
-	private final int country_id;
+	private final long country_id;
 	private final String country;
 	private final String admin1;
 	private final String admin2;
@@ -34,9 +37,9 @@ public class CityData {
 	                long admin3_id,
 	                long admin4_id,
 	                String timezone,
-	                String population,
+	                Long population,
 	                long[] postcodes,
-	                int country_id,
+	                long country_id,
 	                String country,
 	                String admin1,
 	                String admin2,
@@ -112,7 +115,7 @@ public class CityData {
 		return timezone;
 	}
 
-	public String getPopulation() {
+	public Long getPopulation() {
 		return population;
 	}
 
@@ -120,7 +123,7 @@ public class CityData {
 		return postcodes;
 	}
 
-	public int getCountry_id() {
+	public long getCountry_id() {
 		return country_id;
 	}
 
@@ -142,5 +145,19 @@ public class CityData {
 
 	public String getAdmin4() {
 		return admin4;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof CityData cityData)) return false;
+		return getId() == cityData.getId() && Double.compare(cityData.getLatitude(), getLatitude()) == 0 && Double.compare(cityData.getLongitude(), getLongitude()) == 0 && Double.compare(cityData.getElevation(), getElevation()) == 0 && getAdmin1_id() == cityData.getAdmin1_id() && getAdmin2_id() == cityData.getAdmin2_id() && getAdmin3_id() == cityData.getAdmin3_id() && getAdmin4_id() == cityData.getAdmin4_id() && getCountry_id() == cityData.getCountry_id() && Objects.equals(getName(), cityData.getName()) && Objects.equals(getFeature_code(), cityData.getFeature_code()) && Objects.equals(getCountry_code(), cityData.getCountry_code()) && Objects.equals(getTimezone(), cityData.getTimezone()) && Objects.equals(getPopulation(), cityData.getPopulation()) && Arrays.equals(getPostcodes(), cityData.getPostcodes()) && Objects.equals(getCountry(), cityData.getCountry()) && Objects.equals(getAdmin1(), cityData.getAdmin1()) && Objects.equals(getAdmin2(), cityData.getAdmin2()) && Objects.equals(getAdmin3(), cityData.getAdmin3()) && Objects.equals(getAdmin4(), cityData.getAdmin4());
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Objects.hash(getId(), getName(), getLatitude(), getLongitude(), getElevation(), getFeature_code(), getCountry_code(), getAdmin1_id(), getAdmin2_id(), getAdmin3_id(), getAdmin4_id(), getTimezone(), getPopulation(), getCountry_id(), getCountry(), getAdmin1(), getAdmin2(), getAdmin3(), getAdmin4());
+		result = 31 * result + Arrays.hashCode(getPostcodes());
+		return result;
 	}
 }
