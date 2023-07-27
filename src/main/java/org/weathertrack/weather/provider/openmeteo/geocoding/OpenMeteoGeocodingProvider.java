@@ -22,7 +22,7 @@ public class OpenMeteoGeocodingProvider implements GeocodingProvider {
 
 	@Override
 	public List<CityData> fetchCityDataFromCityName(String cityName) {
-		URIBuilder uriBuilder = new URIBuilder()
+		var uriBuilder = new URIBuilder()
 				.setScheme(GEOCODING_API_SCHEME)
 				.setHost(GEOCODING_API_HOST)
 				.setPath(GEOCODING_API_PATH)
