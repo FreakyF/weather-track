@@ -49,7 +49,7 @@ class CommandLineUserIOServiceTest {
 	}
 
 	@Test
-	void getUserInput_ShouldReturnUserInput() {
+	void testgetUserInput_ShouldReturnUserInput() {
 		// When
 		when(mockScanner.nextLine()).thenReturn(EXPECTED_USER_MESSAGE);
 
@@ -57,7 +57,7 @@ class CommandLineUserIOServiceTest {
 		var result = commandLineUserInterface.getUserInput(EXPECTED_PROMPT_MESSAGE);
 
 		// Then
-		assertEquals(EXPECTED_USER_MESSAGE, "XD");
+		assertEquals(EXPECTED_USER_MESSAGE, result);
 	}
 
 	@Test
