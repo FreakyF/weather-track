@@ -15,6 +15,6 @@ jobs:
                     java-version: '17'
                     distribution: 'adopt'
             -   name: Build with Maven
-                run: mvn -B package --file pom.xml
+                run: mvn -q -B package -DskipTests --file pom.xml
             -   name: Test with Maven
                 run: mvn test
