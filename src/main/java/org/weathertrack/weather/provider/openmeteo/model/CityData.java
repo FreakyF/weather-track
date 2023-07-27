@@ -15,6 +15,12 @@ public class CityData {
 	private final String timezone;
 	private final String population;
 	private final long[] postcodes;
+	private final int country_id;
+	private final String country;
+	private final String admin1;
+	private final String admin2;
+	private final String admin3;
+	private final String admin4;
 
 	public CityData(long id,
 	                String name,
@@ -29,7 +35,13 @@ public class CityData {
 	                long admin4_id,
 	                String timezone,
 	                String population,
-	                long[] postcodes) {
+	                long[] postcodes,
+	                int country_id,
+	                String country,
+	                String admin1,
+	                String admin2,
+	                String admin3,
+	                String admin4) {
 		this.id = id;
 		this.name = name;
 		this.latitude = latitude;
@@ -44,6 +56,12 @@ public class CityData {
 		this.timezone = timezone;
 		this.population = population;
 		this.postcodes = postcodes;
+		this.country_id = country_id;
+		this.country = country;
+		this.admin1 = admin1;
+		this.admin2 = admin2;
+		this.admin3 = admin3;
+		this.admin4 = admin4;
 	}
 
 	public long getId() {
@@ -100,5 +118,29 @@ public class CityData {
 
 	public long[] getPostcodes() {
 		return postcodes;
+	}
+
+	public int getCountry_id() {
+		return country_id;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public String getAdmin1() {
+		return admin1;
+	}
+
+	public String getAdmin2() {
+		return admin2;
+	}
+
+	public String getAdmin3() {
+		return admin3;
+	}
+
+	public String getAdmin4() {
+		return admin4;
 	}
 }
