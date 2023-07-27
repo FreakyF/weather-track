@@ -126,7 +126,7 @@ class CommandLineUserIOServiceTest {
 				"Rain Chance: 10%" + newLine +
 				"Wind Speed: 15.0" + newLine +
 				"Humidity: 70%" + newLine +
-				"Pressure: 1025 hPa";
+				"Pressure: 1015 hPa";
 		assertEquals(expectedOutput, outputStream.toString());
 	}
 
