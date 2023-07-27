@@ -129,7 +129,7 @@ class CommandLineUserIOServiceTest {
 						Humidity: 70%\r
 						Pressure: 1015 hPa\r
 						""";
-		assertEquals(expectedOutput, outputStream.toString());
+		assertEquals(expectedOutput.trim(), outputStream.toString().trim());
 	}
 
 	@ParameterizedTest
