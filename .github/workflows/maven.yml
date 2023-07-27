@@ -3,7 +3,7 @@ name: Java CI with Maven
 on:
     pull_request:
         branches:
-            - issue/#*
+            - 'issue/#*'
 jobs:
     build:
         runs-on: ubuntu-latest
