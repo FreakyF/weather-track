@@ -1,7 +1,8 @@
 package org.weathertrack.weather.provider;
 
 import org.weathertrack.weather.model.WeatherData;
+import org.weathertrack.weather.provider.openmeteo.model.CityData;
 
 public interface WeatherDataProvider {
-	WeatherData getWeatherData(String city);
+	WeatherData getWeatherData(CityData city);
 }
