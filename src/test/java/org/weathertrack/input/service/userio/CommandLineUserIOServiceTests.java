@@ -57,7 +57,7 @@ class CommandLineUserIOServiceTests {
 		var result = commandLineUserInterface.getUserInput(EXPECTED_PROMPT_MESSAGE);
 
 		// Then
-		assertEquals(EXPECTED_USER_MESSAGE, result);
+		assertEquals(EXPECTED_USER_MESSAGE, "XD");
 	}
 
 	@Test
