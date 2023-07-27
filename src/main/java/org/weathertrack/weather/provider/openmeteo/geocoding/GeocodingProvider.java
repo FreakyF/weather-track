@@ -2,6 +2,8 @@ package org.weathertrack.weather.provider.openmeteo.geocoding;
 
 import org.weathertrack.weather.provider.openmeteo.model.CityData;
 
+import java.util.List;
+
 public interface GeocodingProvider {
-	CityData fetchCityDataFromCityName(String cityName);
+	List<CityData> fetchCityDataFromCityName(String cityName);
 }

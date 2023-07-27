@@ -3,11 +3,16 @@ package org.weathertrack.weather.provider.openmeteo.geocoding;
 import org.apache.http.client.utils.URIBuilder;
 import org.weathertrack.weather.provider.HttpJsonHandler;
 import org.weathertrack.weather.provider.openmeteo.model.CityData;
+import org.weathertrack.weather.provider.openmeteo.model.CityDataResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class OpenMeteoGeocodingProvider implements GeocodingProvider {
 	private static final String GEOCODING_API_SCHEME = "https";
@@ -16,7 +21,7 @@ public class OpenMeteoGeocodingProvider implements GeocodingProvider {
 	HttpJsonHandler httpJsonHandler = new HttpJsonHandler();
 
 	@Override
-	public CityData fetchCityDataFromCityName(String cityName) {
+	public List<CityData> fetchCityDataFromCityName(String cityName) {
 		URIBuilder uriBuilder = new URIBuilder()
 				.setScheme(GEOCODING_API_SCHEME)
 				.setHost(GEOCODING_API_HOST)
@@ -33,10 +38,10 @@ public class OpenMeteoGeocodingProvider implements GeocodingProvider {
 			Thread.currentThread().interrupt();
 			e.printStackTrace();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
-	private CityData fetchCityDataFromAPI(URI requestUrl) throws InterruptedException {
+	private List<CityData> fetchCityDataFromAPI(URI requestUrl) throws InterruptedException {
 		try {
 			var response = httpJsonHandler.sendHttpGetRequest(requestUrl);
 			// TODO: Handle all status code responses;
@@ -46,16 +51,16 @@ public class OpenMeteoGeocodingProvider implements GeocodingProvider {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
-	private CityData parseCityDataFromResponse(InputStream response) {
-		CityData responseJson = httpJsonHandler.parseJsonResponse(response, CityData.class);
+	private List<CityData> parseCityDataFromResponse(InputStream response) {
+		CityDataResponse responseJson = httpJsonHandler.parseJsonResponse(response, CityDataResponse.class);
 
-		var name = responseJson.getCityName();
-		var latitude = responseJson.getLatitude();
-		var longitude = responseJson.getLongitude();
-
-		return new CityData(name, latitude, longitude);
+		if (responseJson != null && responseJson.getResults() != null) {
+			return Arrays.asList(responseJson.getResults());
+		} else {
+			return new ArrayList<>();
+		}
 	}
 }
