@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class CommandLineUserIOServiceTests {
+class CommandLineUserIOServiceTest {
 	private static final String EXPECTED_USER_MESSAGE = "User message";
 	private static final String EXPECTED_PROMPT_MESSAGE = "Prompt message";
 	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
