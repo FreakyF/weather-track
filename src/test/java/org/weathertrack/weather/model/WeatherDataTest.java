@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class WeatherDataTests {
+class WeatherDataTest {
 
 	private WeatherData weatherData;
 

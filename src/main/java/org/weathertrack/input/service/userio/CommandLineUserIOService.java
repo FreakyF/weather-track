@@ -102,6 +102,6 @@ public class CommandLineUserIOService implements UserIOService {
 				WeatherDisplayResource.PRESSURE,
 				weatherData.pressure()
 		);
-		System.out.println(pressureMessage);
+		System.out.print(pressureMessage);
 	}
 }
