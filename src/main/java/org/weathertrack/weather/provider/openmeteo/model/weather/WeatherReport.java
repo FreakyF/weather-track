@@ -1,4 +1,4 @@
-package org.weathertrack.weather.provider.openmeteo.model;
+package org.weathertrack.weather.provider.openmeteo.model.weather;
 
 public class WeatherReport {
 	private double latitude;

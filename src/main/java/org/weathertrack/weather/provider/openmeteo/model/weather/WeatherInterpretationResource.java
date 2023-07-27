@@ -1,4 +1,4 @@
-package org.weathertrack.weather.provider.openmeteo.model;
+package org.weathertrack.weather.provider.openmeteo.model.weather;
 
 import org.weathertrack.weather.resource.WeatherDisplayResource;
 

@@ -2,8 +2,8 @@ package org.weathertrack.weather.provider.openmeteo.geocoding;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.weathertrack.weather.provider.HttpJsonHandler;
-import org.weathertrack.weather.provider.openmeteo.model.CityData;
-import org.weathertrack.weather.provider.openmeteo.model.CityDataResponse;
+import org.weathertrack.weather.provider.openmeteo.model.city.CityData;
+import org.weathertrack.weather.provider.openmeteo.model.city.CityDataResponse;
 
 import java.io.IOException;
 import java.io.InputStream;

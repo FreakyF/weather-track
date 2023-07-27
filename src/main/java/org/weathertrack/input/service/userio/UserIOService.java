@@ -1,7 +1,7 @@
 package org.weathertrack.input.service.userio;
 
 import org.weathertrack.weather.model.WeatherData;
-import org.weathertrack.weather.provider.openmeteo.model.CityData;
+import org.weathertrack.weather.provider.openmeteo.model.city.CityData;
 
 import java.util.List;
 

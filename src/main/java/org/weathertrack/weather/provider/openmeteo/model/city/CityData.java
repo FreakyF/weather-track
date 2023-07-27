@@ -1,4 +1,4 @@
-package org.weathertrack.weather.provider.openmeteo.model;
+package org.weathertrack.weather.provider.openmeteo.model.city;
 
 public class CityData {
 	private final long id;
