@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class CommandLineUserIOServiceTests {
+class CommandLineUserIOServiceTest {
 	private static final String EXPECTED_USER_MESSAGE = "User message";
 	private static final String EXPECTED_PROMPT_MESSAGE = "Prompt message";
 	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -49,7 +49,7 @@ class CommandLineUserIOServiceTests {
 	}
 
 	@Test
-	void getUserInput_ShouldReturnUserInput() {
+	void testGetUserInput_ShouldReturnUserInput() {
 		// When
 		when(mockScanner.nextLine()).thenReturn(EXPECTED_USER_MESSAGE);
 
@@ -119,16 +119,14 @@ class CommandLineUserIOServiceTests {
 		commandLineUserInterface.printWeather(mockWeatherData);
 
 		// Then
-		var expectedOutput =
-				"""
-						Weather Condition: Sunny\r
-						Temperature: 25.0\r
-						Cloudiness: 30%\r
-						Rain Chance: 10%\r
-						Wind Speed: 15.0\r
-						Humidity: 70%\r
-						Pressure: 1015 hPa\r
-						""";
+		var newLine = System.lineSeparator();
+		var expectedOutput = "Weather Condition: Sunny" + newLine +
+				"Temperature: 25.0" + newLine +
+				"Cloudiness: 30%" + newLine +
+				"Rain Chance: 10%" + newLine +
+				"Wind Speed: 15.0" + newLine +
+				"Humidity: 70%" + newLine +
+				"Pressure: 1015 hPa";
 		assertEquals(expectedOutput, outputStream.toString());
 	}
 
