@@ -49,7 +49,7 @@ class CommandLineUserIOServiceTest {
 	}
 
 	@Test
-	void testgetUserInput_ShouldReturnUserInput() {
+	void testGetUserInput_ShouldReturnUserInput() {
 		// When
 		when(mockScanner.nextLine()).thenReturn(EXPECTED_USER_MESSAGE);
 
