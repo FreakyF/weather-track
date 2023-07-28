@@ -11,7 +11,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class HttpJsonHandler {
+public class JsonHttpService implements HttpService {
+	@Override
 	public HttpResponse<InputStream> sendHttpGetRequest(URI requestUrl) throws IOException, InterruptedException {
 		HttpClient httpClient = HttpClient.newHttpClient();
 		HttpRequest httpRequest = HttpRequest.newBuilder()
@@ -22,6 +23,7 @@ public class HttpJsonHandler {
 		return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
 	}
 
+	@Override
 	public <T> T parseJsonResponse(InputStream responseBody, Type targetType) {
 		try (InputStreamReader inputStreamReader = new InputStreamReader(responseBody)) {
 			Gson gson = new Gson();
