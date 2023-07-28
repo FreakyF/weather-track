@@ -41,7 +41,7 @@ public class CommandLineUserIOService implements UserIOService {
 	@Override
 	public void printCitiesWithSameName(List<CityData> citiesWithSameName) {
 		if (citiesWithSameName.isEmpty()) {
-			logger.warn(InputLogMessage.CITY_DATA_WITH_SAME_CITY_NAME_IS_EMPTY);
+			logger.warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
 			return;
 		}
 

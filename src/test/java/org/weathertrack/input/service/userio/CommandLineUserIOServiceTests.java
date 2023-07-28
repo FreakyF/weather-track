@@ -144,7 +144,7 @@ class CommandLineUserIOServiceTests {
 		commandLineUserInterface.printCitiesWithSameName(cityData);
 
 		// Then
-		verify(logger).warn(InputLogMessage.CITY_DATA_WITH_SAME_CITY_NAME_IS_EMPTY);
+		verify(logger).warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
 	}
 
 	@Test
