@@ -1,12 +1,12 @@
 package org.weathertrack.input.service.userio;
 
 import com.google.inject.Inject;
+import org.weathertrack.api.geocoding.openmeteo.model.city.CityData;
+import org.weathertrack.api.model.WeatherData;
+import org.weathertrack.api.resource.WeatherDisplayResource;
 import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
-import org.weathertrack.weather.model.WeatherData;
-import org.weathertrack.weather.provider.openmeteo.model.city.CityData;
-import org.weathertrack.weather.resource.WeatherDisplayResource;
 
 import java.util.List;
 import java.util.Scanner;

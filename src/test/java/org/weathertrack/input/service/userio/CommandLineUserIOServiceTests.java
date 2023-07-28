@@ -4,11 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.weathertrack.api.geocoding.openmeteo.model.city.CityData;
+import org.weathertrack.api.model.WeatherData;
 import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
-import org.weathertrack.weather.model.WeatherData;
-import org.weathertrack.weather.provider.openmeteo.model.city.CityData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
