@@ -1,4 +1,4 @@
-package org.weathertrack.api.resource;
+package org.weathertrack.api.weather.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
