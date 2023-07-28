@@ -136,7 +136,7 @@ class CommandLineUserIOServiceTests {
 	}
 
 	@Test
-	void printCityDataWithSameCityName_emptyList() {
+	void printCityDataWithSameCityName_WhenCityData_isEmpty_ShouldLogWarn() {
 		// When
 		List<CityData> cityData = List.of();
 
