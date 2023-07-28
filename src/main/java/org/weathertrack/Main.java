@@ -21,6 +21,6 @@ public class Main {
 		GeocodingProvider geocodingProvider = new OpenMeteoGeocodingProvider();
 		List<CityData> cityDataList = geocodingProvider.fetchCityDataFromCityName(cityName);
 
-		userIOService.printCityDataWithSameCityName(cityDataList);
+		userIOService.printCitiesWithSameName(cityDataList);
 	}
 }

@@ -10,7 +10,7 @@ public interface UserIOService {
 
 	String getCityNameFromUser();
 
-	void printCityDataWithSameCityName(List<CityData> citiesWithSameName);
+	void printCitiesWithSameName(List<CityData> citiesWithSameName);
 
 	void printWeather(WeatherData weatherData);
 }

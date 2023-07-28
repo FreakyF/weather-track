@@ -16,8 +16,6 @@ class OpenMeteoGeocodingProviderTests {
 		geocodingProvider = new OpenMeteoGeocodingProvider();
 	}
 
-	// fetchCityDataFromCityName
-	// CorrectData
 	@Test
 	void fetchCityDataFromCityName_WhenIsCorrect_ShouldReturnCityData() {
 		// When
@@ -109,9 +107,23 @@ class OpenMeteoGeocodingProviderTests {
 			assertEquals(expectedResponse.get(i).getName(), result.get(i).getName());
 		}
 	}
+
 	// NoData
+	@Test
+	void fetchCityDataFromCityName_WhenNameIsCorrectButNoData_ShouldThrowException() {
+		throw new UnsupportedOperationException();
+	}
+
 	// emptyCityName
-	// URISyntaxException
-	// InterruptedException
-	// generalException
+	@Test
+	void fetchCityDataFromCityName_WhenNameIsEmpty_ShouldThrowException() {
+		throw new UnsupportedOperationException();
+
+	}
+
+	@Test
+	void fetchCityDataFromCityName_WhenURISyntaxIsIncorrect_ShouldThrowException() {
+		throw new UnsupportedOperationException();
+
+	}
 }
