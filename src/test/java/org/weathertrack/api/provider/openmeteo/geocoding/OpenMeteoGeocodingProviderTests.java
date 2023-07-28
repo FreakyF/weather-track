@@ -2,13 +2,25 @@ package org.weathertrack.api.provider.openmeteo.geocoding;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.weathertrack.api.geocoding.GeocodingProvider;
 import org.weathertrack.api.geocoding.openmeteo.OpenMeteoGeocodingProvider;
 import org.weathertrack.api.geocoding.openmeteo.model.city.CityData;
+import org.weathertrack.api.geocoding.openmeteo.resource.OpenMeteoExceptionMessage;
 
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 class OpenMeteoGeocodingProviderTests {
 	GeocodingProvider geocodingProvider;
@@ -19,7 +31,7 @@ class OpenMeteoGeocodingProviderTests {
 	}
 
 	@Test
-	void fetchCityDataFromCityName_WhenIsCorrect_ShouldReturnCityData() {
+	void fetchCityData_WhenIsValid_ShouldReturnCityData() {
 		// When
 		var cityName = "Kielce";
 
@@ -68,14 +80,14 @@ class OpenMeteoGeocodingProviderTests {
 		);
 
 		// Given
-		var result = geocodingProvider.fetchCityDataFromCityName(cityName);
+		var result = geocodingProvider.fetchCityData(cityName);
 
 		// Then
 		assertEquals(expectedResponse, result);
 	}
 
 	@Test
-	void fetchCityDataFromCityName_WhenNameIsCorrect_ShouldReturnCityData() {
+	void fetchCityData_WhenNameIsValid_ShouldReturnCityData() {
 		// When
 		var cityName = "Kielce";
 
@@ -102,7 +114,7 @@ class OpenMeteoGeocodingProviderTests {
 						null));
 
 		// Given
-		var result = geocodingProvider.fetchCityDataFromCityName(cityName);
+		var result = geocodingProvider.fetchCityData(cityName);
 
 		// Then
 		for (int i = 0; i < expectedResponse.size(); i++) {
@@ -110,22 +122,61 @@ class OpenMeteoGeocodingProviderTests {
 		}
 	}
 
-	// NoData
 	@Test
-	void fetchCityDataFromCityName_WhenNameIsCorrectButNoData_ShouldThrowException() {
-		throw new UnsupportedOperationException();
+	void fetchCityData_WhenNameIsValidButNoData_ShouldThrowNullPointerException_WithAppropriateMessage() {
+		// Given
+		var cityName = "Kielce";
+		var geocodingProvider = mock(OpenMeteoGeocodingProvider.class);
+
+		when(geocodingProvider.fetchCityData(cityName)).thenThrow(new NullPointerException(OpenMeteoExceptionMessage.CITY_DATA_IS_NULL));
+
+		// When
+		var throwedException = assertThrows(NullPointerException.class, () -> {
+			geocodingProvider.fetchCityData(cityName);
+		});
+
+		// Then
+		assertEquals(OpenMeteoExceptionMessage.CITY_DATA_IS_NULL, throwedException.getMessage());
 	}
 
-	// emptyCityName
-	@Test
-	void fetchCityDataFromCityName_WhenNameIsEmpty_ShouldThrowException() {
-		throw new UnsupportedOperationException();
+	private static Stream<Arguments> fetchCityData_WhenCityNameIsInvalid_ShouldThrowIllegalStateException_WithAppropriateMessage() {
+		return Stream.of(
+				Arguments.of("", OpenMeteoExceptionMessage.CITY_NAME_IS_BLANK),
+				Arguments.of(" ", OpenMeteoExceptionMessage.CITY_NAME_IS_BLANK),
+				Arguments.of(null, OpenMeteoExceptionMessage.CITY_NAME_IS_NULL)
+		);
+	}
 
+	@ParameterizedTest
+	@MethodSource
+	void fetchCityData_WhenCityNameIsInvalid_ShouldThrowIllegalStateException_WithAppropriateMessage(String cityNameValue, String expectedException) {
+		// Given
+		var geocodingProvider = new OpenMeteoGeocodingProvider();
+
+		// When
+		var throwedException = assertThrows(IllegalStateException.class, () -> {
+			geocodingProvider.fetchCityData(cityNameValue);
+		});
+
+		// Then
+		assertEquals(expectedException, throwedException.getMessage());
 	}
 
 	@Test
-	void fetchCityDataFromCityName_WhenURISyntaxIsIncorrect_ShouldThrowException() {
-		throw new UnsupportedOperationException();
+	void fetchCityData_WhenURISyntaxIsIncorrect_ShouldThrowURISyntaxException_WithAppropriateMessage() {
+		// Given
+		var cityName = "Kielce";
+		var geocodingProvider = new OpenMeteoGeocodingProvider();
 
+		// When
+		var mockedGeocodingProvider = spy(geocodingProvider);
+		doThrow(URISyntaxException.class).when(mockedGeocodingProvider).fetchCityData(any());
+
+		var throwedException = assertThrows(URISyntaxException.class, () -> {
+			geocodingProvider.fetchCityData(cityName);
+		});
+
+		// Then
+		assertEquals(OpenMeteoExceptionMessage.URI_IS_INVALID, throwedException.getMessage());
 	}
 }

@@ -19,7 +19,7 @@ public class Main {
 		var cityName = userIOService.getCityNameFromUser();
 
 		GeocodingProvider geocodingProvider = new OpenMeteoGeocodingProvider();
-		List<CityData> cityDataList = geocodingProvider.fetchCityDataFromCityName(cityName);
+		List<CityData> cityDataList = geocodingProvider.fetchCityData(cityName);
 
 		userIOService.printCitiesWithSameName(cityDataList);
 	}
