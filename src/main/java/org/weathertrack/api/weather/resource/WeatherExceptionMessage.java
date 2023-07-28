@@ -1,10 +1,10 @@
-package org.weathertrack.api.resource;
+package org.weathertrack.api.weather.resource;
 
 public class WeatherExceptionMessage {
 	public static final String WEATHER_CONDITION_IS_NULL
-			= "Tried to get api condition but the api condition is null!";
+			= "Tried to get weather condition but the weather condition is null!";
 	public static final String WEATHER_CONDITION_IS_EMPTY
-			= "Tried to get api condition but the api condition is empty!";
+			= "Tried to get weather condition but the weather condition is empty!";
 	public static final String TEMPERATURE_IS_BELOW_ABSOLUTE_ZERO
 			= "Tried to get temperature but the temperature is below the absolute zero!";
 	public static final String CLOUDINESS_IS_ABOVE_100
