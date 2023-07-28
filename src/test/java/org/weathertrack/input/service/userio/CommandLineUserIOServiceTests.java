@@ -148,7 +148,7 @@ class CommandLineUserIOServiceTests {
 	}
 
 	@Test
-	void printCityDataWithSameCityName_singleCity() {
+	void printCityDataWithSameCityName_WhenSingleCity_ShouldReturnCityData() {
 		// When
 		long[] postCodes = {43438, 21312, 55122};
 		List<CityData> cityData = List.of(
