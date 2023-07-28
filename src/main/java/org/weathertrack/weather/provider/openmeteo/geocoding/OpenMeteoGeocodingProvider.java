@@ -16,7 +16,7 @@ import java.util.List;
 
 public class OpenMeteoGeocodingProvider implements GeocodingProvider {
 	private static final String GEOCODING_API_SCHEME = "https";
-	private static final String GEOCODING_API_HOST = "https://geocoding-api.open-meteo.com";
+	private static final String GEOCODING_API_HOST = "geocoding-api.open-meteo.com";
 	private static final String GEOCODING_API_PATH = "/v1/search";
 	HttpJsonHandler httpJsonHandler = new HttpJsonHandler();
 
