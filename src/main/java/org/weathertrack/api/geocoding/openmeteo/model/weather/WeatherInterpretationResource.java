@@ -1,6 +1,6 @@
 package org.weathertrack.api.geocoding.openmeteo.model.weather;
 
-import org.weathertrack.api.resource.WeatherDisplayResource;
+import org.weathertrack.api.weather.resource.WeatherDisplayResource;
 
 import java.io.IOException;
 import java.io.InputStream;
