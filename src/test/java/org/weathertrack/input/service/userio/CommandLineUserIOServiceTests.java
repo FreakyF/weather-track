@@ -125,7 +125,7 @@ class CommandLineUserIOServiceTests {
 		);
 
 		// Given
-		commandLineUserInterface.printCityDataWithSameCityName(cityData);
+		commandLineUserInterface.printCitiesWithSameName(cityData);
 
 		// Then
 		var expectedOutput = """
@@ -141,7 +141,7 @@ class CommandLineUserIOServiceTests {
 		List<CityData> cityData = List.of();
 
 		// Given
-		commandLineUserInterface.printCityDataWithSameCityName(cityData);
+		commandLineUserInterface.printCitiesWithSameName(cityData);
 
 		// Then
 		verify(logger).warn(InputLogMessage.CITY_DATA_WITH_SAME_CITY_NAME_IS_EMPTY);
@@ -175,7 +175,7 @@ class CommandLineUserIOServiceTests {
 		);
 
 		// Given
-		commandLineUserInterface.printCityDataWithSameCityName(cityData);
+		commandLineUserInterface.printCitiesWithSameName(cityData);
 
 		// Then
 		var expectedOutput = """
