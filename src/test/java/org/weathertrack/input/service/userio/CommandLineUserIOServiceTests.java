@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class CommandLineUserIOServiceTest {
+class CommandLineUserIOServiceTests {
 	private static final String EXPECTED_USER_MESSAGE = "User message";
 	private static final String EXPECTED_PROMPT_MESSAGE = "Prompt message";
 	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -49,7 +49,7 @@ class CommandLineUserIOServiceTest {
 	}
 
 	@Test
-	void testGetUserInput_ShouldReturnUserInput() {
+	void getUserInput_ShouldReturnUserInput() {
 		// When
 		when(mockScanner.nextLine()).thenReturn(EXPECTED_USER_MESSAGE);
 

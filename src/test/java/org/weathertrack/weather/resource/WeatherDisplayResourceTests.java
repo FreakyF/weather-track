@@ -5,7 +5,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class WeatherDisplayResourceTest {
+class WeatherDisplayResourceTests {
 	@ParameterizedTest
 	@CsvSource({
 			"Weather Condition: %s, WEATHER_CONDITION",
