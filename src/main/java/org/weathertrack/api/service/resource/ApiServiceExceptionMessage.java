@@ -10,7 +10,9 @@ public class ApiServiceExceptionMessage {
 	public static final String URI_SYNTAX_IS_INVALID
 			= "Tried to build URI but the URI syntax is invalid!";
 	public static final String STATUS_CODE_400
-			= "Tried to access an invalid resource!";
+			= "Bad Request!";
+	public static final String STATUS_CODE_500
+			= "Internal server errror!";
 
 	private ApiServiceExceptionMessage() {
 	}
