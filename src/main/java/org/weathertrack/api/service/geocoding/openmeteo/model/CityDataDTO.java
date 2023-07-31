@@ -1,9 +1,9 @@
-package org.weathertrack.api.geocoding.openmeteo.model.city;
+package org.weathertrack.api.service.geocoding.openmeteo.model;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-public class CityData {
+public class CityDataDTO {
 	private final long id;
 	private final String name;
 	private final double latitude;
@@ -25,26 +25,26 @@ public class CityData {
 	private final String admin3;
 	private final String admin4;
 
-	public CityData(long id,
-	                String name,
-	                double latitude,
-	                double longitude,
-	                double elevation,
-	                String feature_code,
-	                String country_code,
-	                long admin1_id,
-	                long admin2_id,
-	                long admin3_id,
-	                long admin4_id,
-	                String timezone,
-	                Long population,
-	                long[] postcodes,
-	                long country_id,
-	                String country,
-	                String admin1,
-	                String admin2,
-	                String admin3,
-	                String admin4) {
+	public CityDataDTO(long id,
+	                   String name,
+	                   double latitude,
+	                   double longitude,
+	                   double elevation,
+	                   String feature_code,
+	                   String country_code,
+	                   long admin1_id,
+	                   long admin2_id,
+	                   long admin3_id,
+	                   long admin4_id,
+	                   String timezone,
+	                   Long population,
+	                   long[] postcodes,
+	                   long country_id,
+	                   String country,
+	                   String admin1,
+	                   String admin2,
+	                   String admin3,
+	                   String admin4) {
 		this.id = id;
 		this.name = name;
 		this.latitude = latitude;
@@ -150,8 +150,8 @@ public class CityData {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof CityData cityData)) return false;
-		return getId() == cityData.getId() && Double.compare(cityData.getLatitude(), getLatitude()) == 0 && Double.compare(cityData.getLongitude(), getLongitude()) == 0 && Double.compare(cityData.getElevation(), getElevation()) == 0 && getAdmin1_id() == cityData.getAdmin1_id() && getAdmin2_id() == cityData.getAdmin2_id() && getAdmin3_id() == cityData.getAdmin3_id() && getAdmin4_id() == cityData.getAdmin4_id() && getCountry_id() == cityData.getCountry_id() && Objects.equals(getName(), cityData.getName()) && Objects.equals(getFeature_code(), cityData.getFeature_code()) && Objects.equals(getCountry_code(), cityData.getCountry_code()) && Objects.equals(getTimezone(), cityData.getTimezone()) && Objects.equals(getPopulation(), cityData.getPopulation()) && Arrays.equals(getPostcodes(), cityData.getPostcodes()) && Objects.equals(getCountry(), cityData.getCountry()) && Objects.equals(getAdmin1(), cityData.getAdmin1()) && Objects.equals(getAdmin2(), cityData.getAdmin2()) && Objects.equals(getAdmin3(), cityData.getAdmin3()) && Objects.equals(getAdmin4(), cityData.getAdmin4());
+		if (!(o instanceof CityDataDTO cityDataDTO)) return false;
+		return getId() == cityDataDTO.getId() && Double.compare(cityDataDTO.getLatitude(), getLatitude()) == 0 && Double.compare(cityDataDTO.getLongitude(), getLongitude()) == 0 && Double.compare(cityDataDTO.getElevation(), getElevation()) == 0 && getAdmin1_id() == cityDataDTO.getAdmin1_id() && getAdmin2_id() == cityDataDTO.getAdmin2_id() && getAdmin3_id() == cityDataDTO.getAdmin3_id() && getAdmin4_id() == cityDataDTO.getAdmin4_id() && getCountry_id() == cityDataDTO.getCountry_id() && Objects.equals(getName(), cityDataDTO.getName()) && Objects.equals(getFeature_code(), cityDataDTO.getFeature_code()) && Objects.equals(getCountry_code(), cityDataDTO.getCountry_code()) && Objects.equals(getTimezone(), cityDataDTO.getTimezone()) && Objects.equals(getPopulation(), cityDataDTO.getPopulation()) && Arrays.equals(getPostcodes(), cityDataDTO.getPostcodes()) && Objects.equals(getCountry(), cityDataDTO.getCountry()) && Objects.equals(getAdmin1(), cityDataDTO.getAdmin1()) && Objects.equals(getAdmin2(), cityDataDTO.getAdmin2()) && Objects.equals(getAdmin3(), cityDataDTO.getAdmin3()) && Objects.equals(getAdmin4(), cityDataDTO.getAdmin4());
 	}
 
 	@Override

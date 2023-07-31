@@ -1,8 +1,8 @@
 package org.weathertrack.api.service.geocoding.openmeteo;
 
 import org.weathertrack.api.service.geocoding.GeocodingApiService;
-import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
-import org.weathertrack.api.service.geocoding.model.GeocodingData;
+import org.weathertrack.geocoding.model.GeocodingCityData;
+import org.weathertrack.geocoding.model.GeocodingData;
 
 import java.net.URI;
 import java.util.List;

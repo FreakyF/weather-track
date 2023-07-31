@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.http.json.JsonHttpService;
-import org.weathertrack.api.service.resource.ApiServiceExceptionMessage;
+import org.weathertrack.geocoding.model.GeocodingCityData;
 
 import java.io.IOException;
 import java.io.InputStream;

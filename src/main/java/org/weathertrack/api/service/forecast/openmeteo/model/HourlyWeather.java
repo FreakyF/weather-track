@@ -1,4 +1,4 @@
-package org.weathertrack.api.geocoding.openmeteo.model.weather;
+package org.weathertrack.api.service.forecast.openmeteo.model;
 
 import java.time.LocalDateTime;
 

@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.weathertrack.api.geocoding.openmeteo.model.city.CityData;
-import org.weathertrack.api.weather.model.WeatherData;
+import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
+import org.weathertrack.forecast.model.WeatherData;
 import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
@@ -79,8 +79,8 @@ class CommandLineUserIOServiceTests {
 	void printCityDataWithSameCityName_shouldPrintCityData() {
 		// When
 		long[] postCodes = {43438, 21312, 55122};
-		List<CityData> cityData = List.of(
-				new CityData(0,
+		List<CityDataDTO> cityDatumDTOS = List.of(
+				new CityDataDTO(0,
 						"Kielce",
 						12.2,
 						53.3,
@@ -100,7 +100,7 @@ class CommandLineUserIOServiceTests {
 						"Kielce",
 						"Something",
 						"Something4"),
-				new CityData(
+				new CityDataDTO(
 						0,
 						"Brenna",
 						12.1,
@@ -125,7 +125,7 @@ class CommandLineUserIOServiceTests {
 		);
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(cityData);
+		commandLineUserInterface.printCitiesWithSameName(cityDatumDTOS);
 
 		// Then
 		var expectedOutput = """
@@ -138,10 +138,10 @@ class CommandLineUserIOServiceTests {
 	@Test
 	void printCityDataWithSameCityName_WhenCityData_isEmpty_ShouldLogWarn() {
 		// When
-		List<CityData> cityData = List.of();
+		List<CityDataDTO> cityDatumDTOS = List.of();
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(cityData);
+		commandLineUserInterface.printCitiesWithSameName(cityDatumDTOS);
 
 		// Then
 		verify(logger).warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
@@ -151,8 +151,8 @@ class CommandLineUserIOServiceTests {
 	void printCityDataWithSameCityName_WhenSingleCity_ShouldReturnCityData() {
 		// When
 		long[] postCodes = {43438, 21312, 55122};
-		List<CityData> cityData = List.of(
-				new CityData(0,
+		List<CityDataDTO> cityDatumDTOS = List.of(
+				new CityDataDTO(0,
 						"Kielce",
 						12.2,
 						53.3,
@@ -175,7 +175,7 @@ class CommandLineUserIOServiceTests {
 		);
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(cityData);
+		commandLineUserInterface.printCitiesWithSameName(cityDatumDTOS);
 
 		// Then
 		var expectedOutput = """

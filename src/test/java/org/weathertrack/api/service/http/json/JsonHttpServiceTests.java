@@ -2,6 +2,7 @@ package org.weathertrack.api.service.http.json;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.weathertrack.api.service.http.HttpService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,24 +17,25 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class JsonHttpServiceTests {
-	private JsonHttpService sut;
+	private HttpService sut;
+	private HttpClient httpClient;
 
 	@BeforeEach
 	void setUp() {
-		sut = new JsonHttpService();
+		httpClient = mock(HttpClient.class);
+		sut = new JsonHttpService(httpClient);
 	}
 
 	@Test
 	void sendHttpGetRequest_WhenUriIsValid_ShouldReturnRequest() throws IOException, InterruptedException {
 		// When
-		var mockHttpClient = mock(HttpClient.class);
 		var mockHttpResponse = mock(HttpResponse.class);
 
 		var expectedUri = URI.create("https://geocoding-api.open-meteo.com/v1/search");
 		var expectedResponse = "Mocked expected response";
 
 		when(mockHttpResponse.body()).thenReturn(expectedResponse);
-		when(mockHttpClient.send(any(), any())).thenReturn(mockHttpResponse);
+		when(httpClient.send(any(), any())).thenReturn(mockHttpResponse);
 
 		// Given
 		var result = sut.sendHttpGetRequest(expectedUri);

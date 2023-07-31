@@ -1,11 +1,11 @@
-package org.weathertrack.api.weather.resource;
+package org.weathertrack.input.service.userio.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class WeatherDisplayResource {
-	private static final String PROPERTIES_FILE = "weather_display.properties";
+	private static final String PROPERTIES_FILE = "forecast_display.properties";
 	private static Properties properties;
 
 	static {

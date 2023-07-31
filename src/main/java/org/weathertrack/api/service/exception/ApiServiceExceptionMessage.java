@@ -1,4 +1,4 @@
-package org.weathertrack.api.service.resource;
+package org.weathertrack.api.service.exception;
 
 public class ApiServiceExceptionMessage {
 	public static final String CITY_NAME_IS_NULL

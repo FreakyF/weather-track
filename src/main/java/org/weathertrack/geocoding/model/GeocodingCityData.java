@@ -1,4 +1,4 @@
-package org.weathertrack.api.service.geocoding.model;
+package org.weathertrack.geocoding.model;
 
 public class GeocodingCityData {
 	private final String name;

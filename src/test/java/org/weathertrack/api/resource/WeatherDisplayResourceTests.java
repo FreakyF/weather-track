@@ -2,7 +2,7 @@ package org.weathertrack.api.resource;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.weathertrack.api.weather.resource.WeatherDisplayResource;
+import org.weathertrack.input.service.userio.resource.WeatherDisplayResource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

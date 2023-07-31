@@ -1,16 +1,16 @@
-package org.weathertrack.api.geocoding.openmeteo.model.weather;
+package org.weathertrack.api.service.forecast.openmeteo.resource;
 
-import org.weathertrack.api.weather.resource.WeatherDisplayResource;
+import org.weathertrack.input.service.userio.resource.WeatherDisplayResource;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class WeatherInterpretationResource {
-	private static final String PROPERTIES_FILE = "weather_descriptions.properties";
+public class ForecastInterpreter {
+	private static final String PROPERTIES_FILE = "forecast_descriptions.properties";
 	private static Properties properties;
 
-	private WeatherInterpretationResource() {
+	private ForecastInterpreter() {
 	}
 
 	static {
@@ -24,6 +24,6 @@ public class WeatherInterpretationResource {
 
 	public static String interpretWeatherCode(int code) {
 		String codeString = String.valueOf(code);
-		return properties.getProperty(codeString, "Unknown api code");
+		return properties.getProperty(codeString, "Unknown weather code");
 	}
 }

@@ -1,7 +1,7 @@
 package org.weathertrack.input.service.userio;
 
-import org.weathertrack.api.geocoding.openmeteo.model.city.CityData;
-import org.weathertrack.api.weather.model.WeatherData;
+import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
+import org.weathertrack.forecast.model.WeatherData;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public interface UserIOService {
 
 	String getCityNameFromUser();
 
-	void printCitiesWithSameName(List<CityData> citiesWithSameName);
+	void printCitiesWithSameName(List<CityDataDTO> citiesWithSameName);
 
 	void printWeather(WeatherData weatherData);
 }
