@@ -8,6 +8,9 @@ public class ApiServiceExceptionMessage {
 	public static final String GEOCODING_CITY_DATA_IS_NULL
 			= "Tried to get geocoding city data but the geocoding city data is null!";
 
+	public static final String URI_SYNTAX_IS_INVALID
+			= "Tried to build URI but the URI syntax is invalid!";
+
 	private ApiServiceExceptionMessage() {
 	}
 }
