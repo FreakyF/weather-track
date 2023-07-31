@@ -19,6 +19,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 class OpenMeteoGeocodingApiServiceTests {
+
+	private static final String CITY_NAME_VALUE = "Kielce";
 	private GeocodingApiService sut;
 
 	@BeforeEach
@@ -77,14 +79,27 @@ class OpenMeteoGeocodingApiServiceTests {
 	@Test
 	void fetchCitiesForCityName_WhenGeocodingCityDataIsNull_ShouldThrowException_WithAppropriateMessage() {
 		// When
-		var cityName = "Kielce";
 		List<GeocodingCityData> mockResponse = new ArrayList<>();
 		mockResponse.add(null);
 
 		when(sut.fetchCitiesForCityName(anyString())).thenReturn(mockResponse);
 
 		// Then
-		var exception = assertThrows(NullPointerException.class, () -> sut.fetchCitiesForCityName(cityName));
+		var exception = assertThrows(NullPointerException.class, () -> sut.fetchCitiesForCityName(CITY_NAME_VALUE));
 		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, exception.getMessage());
+	}
+
+	@Test
+	void fetchCitiesForCityName_WhenGeocodingCityDataIsEmpty_ShouldReturnGeocodingCityData() {
+		// When
+		List<GeocodingCityData> mockResponse = new ArrayList<>();
+
+		when(sut.fetchCitiesForCityName(anyString())).thenReturn(mockResponse);
+
+		// Given
+		var result = sut.fetchCitiesForCityName(CITY_NAME_VALUE);
+
+		// Then
+		assertEquals(mockResponse, result);
 	}
 }
