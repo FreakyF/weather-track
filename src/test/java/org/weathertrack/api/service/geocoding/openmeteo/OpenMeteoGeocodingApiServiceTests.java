@@ -6,12 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.weathertrack.api.service.geocoding.GeocodingApiService;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.http.json.JsonHttpService;
 import org.weathertrack.api.service.resource.ApiServiceExceptionMessage;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -25,7 +28,7 @@ import static org.mockito.Mockito.when;
 class OpenMeteoGeocodingApiServiceTests {
 
 	private static final String CITY_NAME_VALUE = "Kielce";
-	private GeocodingApiService sut;
+	private OpenMeteoGeocodingApiService sut;
 
 	@BeforeEach
 	void beforeEach() {
@@ -136,5 +139,39 @@ class OpenMeteoGeocodingApiServiceTests {
 
 		// Then
 		assertEquals(mockResponse, result);
+	}
+
+	@Test
+	void fetchGeocodingCityDataFromApi_WhenStatusCodeIs200_ShouldReturnResponseBody() throws IOException, InterruptedException {
+		// When
+		var requestUrl = URI.create("https://geocoding-api.open-meteo.com/v1/search?name=" + CITY_NAME_VALUE);
+		HttpResponse<InputStream> mockStatusCode = mock(HttpResponse.class);
+		when(mockStatusCode.statusCode()).thenReturn(200);
+
+		List<GeocodingCityData> mockResponse = new ArrayList<>();
+		mockResponse.add(new GeocodingCityData("Kielce", "Świętokrzyskie", "Poland"));
+
+		JsonHttpService jsonHttpService = mock(JsonHttpService.class);
+		when(jsonHttpService.sendHttpGetRequest(requestUrl)).thenReturn(mockStatusCode);
+
+		// Given
+		var result = sut.fetchGeocodingCityDataFromApi(requestUrl);
+
+		// Then
+		assertEquals(mockResponse, result);
+	}
+
+	@Test
+	void fetchGeocodingCityDataFromApi_WhenStatusCodeIs400_ShouldThrowException_WithAppropriateMessage() throws IOException, InterruptedException {
+		// When
+		var requestUrl = URI.create("https://geocoding-api.open-meteo.com/v1/search?name=" + CITY_NAME_VALUE);
+		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
+		when(mockResponse.statusCode()).thenReturn(400);
+		JsonHttpService jsonHttpService = mock(JsonHttpService.class);
+		when(jsonHttpService.sendHttpGetRequest(requestUrl)).thenReturn(mockResponse);
+
+		// Then
+		var exception = assertThrows(IllegalArgumentException.class, () -> sut.fetchGeocodingCityDataFromApi(requestUrl));
+		assertEquals(ApiServiceExceptionMessage.STATUS_CODE_400, exception.getMessage());
 	}
 }
