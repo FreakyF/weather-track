@@ -1,5 +1,6 @@
 package org.weathertrack.api.service.geocoding.openmeteo;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,6 +10,8 @@ import org.weathertrack.api.service.geocoding.GeocodingApiService;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.resource.ApiServiceExceptionMessage;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -16,6 +19,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class OpenMeteoGeocodingApiServiceTests {
@@ -28,7 +32,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		sut = new OpenMeteoGeocodingApiService();
 	}
 
-	private static Stream<Arguments> fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage() {
+	private static Stream<Arguments> validateCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage() {
 		return Stream.of(
 				Arguments.of(null, ApiServiceExceptionMessage.CITY_NAME_IS_NULL, NullPointerException.class),
 				Arguments.of("", ApiServiceExceptionMessage.CITY_NAME_IS_BLANK, IllegalArgumentException.class),
@@ -38,14 +42,45 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage(
+	void validateCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage(
 			String cityNameValue, String expectedExceptionMessage, Class<? extends Throwable> exceptionClass) {
 		// Then
-		var exception = assertThrows(exceptionClass, () -> sut.fetchCitiesForCityName(cityNameValue));
+		var exception = assertThrows(exceptionClass, () -> sut.validateCityName(cityNameValue));
 		assertEquals(expectedExceptionMessage, exception.getMessage());
 	}
 
-	private static Stream<Arguments> fetchCitiesForCityName_WhenCityNameIsValid_ShouldReturnGeocodingCityData() {
+	@Test
+	void buildGeocodingApiUri_WhenUriSyntaxIsValid_ShouldReturnBuilttUri() throws URISyntaxException {
+		// When
+		var mockUriBuilder = mock(URIBuilder.class);
+		var expectedUri = URI.create("https://geocoding-api.open-meteo.com/v1/search?name=" + CITY_NAME_VALUE);
+
+		when(mockUriBuilder.build()).thenReturn(expectedUri);
+
+		// Given
+		var result = sut.buildGeocodingApiUri(CITY_NAME_VALUE);
+
+		// Then
+		assertEquals(expectedUri, result);
+	}
+
+	@Test
+	void buildGeocodingApiUri_WhenUriSyntaxIsInvalid_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException {
+		// When
+		var mockUriBuilder = mock(URIBuilder.class);
+		var expectedUri = URI.create("https://geocoding-api.open-meteo.com/v1/search?name=" + CITY_NAME_VALUE);
+
+		when(mockUriBuilder.build()).thenReturn(expectedUri);
+
+		// Given
+		var result = sut.buildGeocodingApiUri(CITY_NAME_VALUE);
+
+		// Then
+		var exception = assertThrows(URISyntaxException.class, () -> sut.buildGeocodingApiUri(CITY_NAME_VALUE));
+		assertEquals(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID, exception.getMessage());
+	}
+
+	private static Stream<Arguments> fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnGeocodingCityData() {
 		return Stream.of(
 				Arguments.of("Kielce"),
 				Arguments.of("Jastrzębie-Zdrój"),
@@ -58,7 +93,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void fetchCitiesForCityName_WhenCityNameIsValid_ShouldReturnGeocodingCityData(String cityNameValue) {
+	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnGeocodingCityData(String cityNameValue) {
 		// When
 		List<GeocodingCityData> mockResponse = new ArrayList<>();
 		mockResponse.add(new GeocodingCityData("Kielce", "Świętokrzyskie", "Poland"));
