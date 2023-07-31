@@ -174,4 +174,18 @@ class OpenMeteoGeocodingApiServiceTests {
 		var exception = assertThrows(IllegalArgumentException.class, () -> sut.fetchGeocodingCityDataFromApi(requestUrl));
 		assertEquals(ApiServiceExceptionMessage.STATUS_CODE_400, exception.getMessage());
 	}
+
+	@Test
+	void fetchGeocodingCityDataFromApi_WhenStatusCodeIs500_ShouldThrowException_WithAppropriateMessage() throws IOException, InterruptedException {
+		// When
+		var requestUrl = URI.create("https://geocoding-api.open-meteo.com/v1/search?name=" + CITY_NAME_VALUE);
+		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
+		when(mockResponse.statusCode()).thenReturn(500);
+		JsonHttpService jsonHttpService = mock(JsonHttpService.class);
+		when(jsonHttpService.sendHttpGetRequest(requestUrl)).thenReturn(mockResponse);
+
+		// Then
+		var exception = assertThrows(IllegalArgumentException.class, () -> sut.fetchGeocodingCityDataFromApi(requestUrl));
+		assertEquals(ApiServiceExceptionMessage.STATUS_CODE_500, exception.getMessage());
+	}
 }
