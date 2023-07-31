@@ -1,6 +1,7 @@
 package org.weathertrack.api.service.geocoding.openmeteo;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -71,5 +72,19 @@ class OpenMeteoGeocodingApiServiceTests {
 
 		// Then
 		assertEquals(mockResponse, result);
+	}
+
+	@Test
+	void fetchCitiesForCityName_WhenGeocodingCityDataIsNull_ShouldThrowException_WithAppropriateMessage() {
+		// When
+		var cityName = "Kielce";
+		List<GeocodingCityData> mockResponse = new ArrayList<>();
+		mockResponse.add(null);
+
+		when(sut.fetchCitiesForCityName(anyString())).thenReturn(mockResponse);
+
+		// Then
+		var exception = assertThrows(NullPointerException.class, () -> sut.fetchCitiesForCityName(cityName));
+		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, exception.getMessage());
 	}
 }
