@@ -1,104 +1,49 @@
 package org.weathertrack.api.service.geocoding.openmeteo;
 
+import com.google.inject.name.Named;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.utils.URIBuilder;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
+import org.weathertrack.api.service.geocoding.GeocodingApiModule;
 import org.weathertrack.api.service.geocoding.GeocodingApiService;
-import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
+import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
 import org.weathertrack.api.service.http.HttpService;
-import org.weathertrack.api.service.http.json.JsonHttpService;
-import org.weathertrack.geocoding.model.GeocodingCityData;
-import org.weathertrack.geocoding.model.GeocodingData;
+import org.weathertrack.model.ResponseData;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class OpenMeteoGeocodingApiService implements GeocodingApiService {
-	private static final String GEOCODING_API_SCHEME = "https";
-	private static final String GEOCODING_API_HOST = "geocoding-api.open-meteo.com";
-	private static final String GEOCODING_API_PATH = "/v1/search";
+	private final URIBuilder uriBuilder;
+	private final HttpClient httpClient;
+	private final HttpService httpService;
 
-	HttpClient httpClient = HttpClient.newHttpClient();
-	private final HttpService httpService = new JsonHttpService(httpClient);
+	public OpenMeteoGeocodingApiService(@Named(GeocodingApiModule.ANNOTATION_GEOCODING_API) URIBuilder uriBuilder, HttpClient httpClient, HttpService httpService) {
+		this.uriBuilder = uriBuilder;
+		this.httpClient = httpClient;
+		this.httpService = httpService;
+	}
 
 	@Override
-	public List<GeocodingCityData> fetchCitiesForCityName(String cityName) {
+	public ResponseData<List<CityDataResponseDTO>> fetchCitiesForCityName(String cityName) {
 		validateCityName(cityName);
 		var requestUrl = buildGeocodingApiUri(cityName);
-
-		var response = fetchGeocodingCityDataFromApi(requestUrl);
-		if (response == null) {
-			throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
-		}
-
-		return response;
+		throw new UnsupportedOperationException("Not implemented");
+//		return Response.<List<CityDataResponseDTO>>ok(response);
 	}
 
-	public List<GeocodingCityData> fetchGeocodingCityDataFromApi(URI requestUrl) {
-		try {
-			var response = httpService.sendHttpGetRequest(requestUrl);
-			if (checkApiStatus(response)) {
-				return parseCityDataFromResponse(response.body());
-			}
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
-		return Collections.emptyList();
-	}
-
-	private List<GeocodingCityData> parseCityDataFromResponse(InputStream response) {
-		CityDataResponseDTO responseJson = httpService.parseJsonResponse(response, CityDataResponseDTO.class);
-
-		if (responseJson != null && responseJson.getResults() != null) {
-			List<GeocodingCityData> geocodingCityDataList = new ArrayList<>();
-			convertToGeocodingCityData(responseJson, geocodingCityDataList);
-			return geocodingCityDataList;
-		} else {
-			return new ArrayList<>();
-		}
-	}
-
-	private static void convertToGeocodingCityData(CityDataResponseDTO responseJson, List<GeocodingCityData> geocodingCityDataList) {
-		for (CityDataDTO cityDataDTO : responseJson.getResults()) {
-			var name = cityDataDTO.getName();
-			var administration = cityDataDTO.getAdmin1();
-			var country = cityDataDTO.getCountry();
-			GeocodingCityData geocodingCityData = new GeocodingCityData(name, administration, country);
-			geocodingCityDataList.add(geocodingCityData);
-
-		}
-	}
-
-	private static boolean checkApiStatus(HttpResponse<InputStream> response) {
-		if (response.statusCode() == 200) {
-			return true;
-		}
-		if (response.statusCode() == 500) {
-			throw new UnsupportedOperationException("Not Implemented");
-		}
-		if (response.statusCode() == 404) {
-			throw new UnsupportedOperationException("Not Implemented");
-		}
-		return false;
+	@Override
+	public ResponseData<CityDataResponseDTO> fetchGeocodingDataForCity(GetCityDataRequest request) {
+		throw new UnsupportedOperationException("Not Implemented");
 	}
 
 	private URI buildGeocodingApiUri(String cityName) {
 		try {
-			return new URIBuilder()
-					.setScheme(GEOCODING_API_SCHEME)
-					.setHost(GEOCODING_API_HOST)
-					.setPath(GEOCODING_API_PATH)
-					.setParameter("name", cityName)
-					.build();
+			return uriBuilder.setParameter("name", cityName).build();
 		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
+			throw new IllegalArgumentException(e);
 		}
 	}
 
@@ -109,10 +54,5 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		if (cityName.isBlank()) {
 			throw new IllegalArgumentException(ApiServiceExceptionMessage.CITY_NAME_IS_BLANK);
 		}
-	}
-
-	@Override
-	public GeocodingData fetchGeocodingDataForCity(GeocodingCityData geocodingCityData) {
-		throw new UnsupportedOperationException("Not Implemented");
 	}
 }

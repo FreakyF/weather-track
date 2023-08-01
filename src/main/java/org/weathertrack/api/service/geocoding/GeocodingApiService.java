@@ -1,12 +1,13 @@
 package org.weathertrack.api.service.geocoding;
 
-import org.weathertrack.geocoding.model.GeocodingCityData;
-import org.weathertrack.geocoding.model.GeocodingData;
+import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
+import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
+import org.weathertrack.model.ResponseData;
 
 import java.util.List;
 
 public interface GeocodingApiService {
-	List<GeocodingCityData> fetchCitiesForCityName(String cityName);
+	ResponseData<List<CityDataResponseDTO>> fetchCitiesForCityName(String cityName);
 
-	GeocodingData fetchGeocodingDataForCity(GeocodingCityData geocodingCityData);
+	ResponseData<CityDataResponseDTO> fetchGeocodingDataForCity(GetCityDataRequest request);
 }
