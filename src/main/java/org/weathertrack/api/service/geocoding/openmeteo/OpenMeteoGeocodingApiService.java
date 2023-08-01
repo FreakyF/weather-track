@@ -58,17 +58,21 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 
 		if (responseJson != null && responseJson.getResults() != null) {
 			List<GeocodingCityData> geocodingCityDataList = new ArrayList<>();
-			for (CityDataDTO cityDataDTO : responseJson.getResults()) {
-				var name = cityDataDTO.getName();
-				var administration = cityDataDTO.getAdmin1();
-				var country = cityDataDTO.getCountry();
-				GeocodingCityData geocodingCityData = new GeocodingCityData(name, administration, country);
-				geocodingCityDataList.add(geocodingCityData);
-
-			}
+			convertToGeocodingCityData(responseJson, geocodingCityDataList);
 			return geocodingCityDataList;
 		} else {
 			return new ArrayList<>();
+		}
+	}
+
+	private static void convertToGeocodingCityData(CityDataResponseDTO responseJson, List<GeocodingCityData> geocodingCityDataList) {
+		for (CityDataDTO cityDataDTO : responseJson.getResults()) {
+			var name = cityDataDTO.getName();
+			var administration = cityDataDTO.getAdmin1();
+			var country = cityDataDTO.getCountry();
+			GeocodingCityData geocodingCityData = new GeocodingCityData(name, administration, country);
+			geocodingCityDataList.add(geocodingCityData);
+
 		}
 	}
 
