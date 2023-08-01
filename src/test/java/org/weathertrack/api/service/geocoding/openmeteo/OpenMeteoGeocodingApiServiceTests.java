@@ -35,7 +35,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		sut = new OpenMeteoGeocodingApiService();
 	}
 
-	private static Stream<Arguments> validateCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage() {
+	private static Stream<Arguments> fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage() {
 		return Stream.of(
 				Arguments.of(null, ApiServiceExceptionMessage.CITY_NAME_IS_NULL, NullPointerException.class),
 				Arguments.of("", ApiServiceExceptionMessage.CITY_NAME_IS_BLANK, IllegalArgumentException.class),
