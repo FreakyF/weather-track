@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
+import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.http.json.JsonHttpService;
 import org.weathertrack.geocoding.model.GeocodingCityData;
 
@@ -21,7 +22,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -53,21 +53,6 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenUriSyntaxIsValid_ShouldReturnBuilttUri() throws URISyntaxException {
-		// When
-		var mockUriBuilder = mock(URIBuilder.class);
-		var expectedUri = URI.create("https://geocoding-api.open-meteo.com/v1/search?name=" + CITY_NAME_VALUE);
-
-		when(mockUriBuilder.build()).thenReturn(expectedUri);
-
-		// Given
-		var result = sut.fetchCitiesForCityName(CITY_NAME_VALUE);
-
-		// Then
-		assertEquals(expectedUri, result);
-	}
-
-	@Test
 	void fetchCitiesForCityName_WhenUriSyntaxIsInvalid_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException {
 		// When
 		var mockUriBuilder = mock(URIBuilder.class);
@@ -76,7 +61,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockUriBuilder.build()).thenReturn(expectedUri);
 
 		// Given
-		var result = sut.fetchCitiesForCityName(CITY_NAME_VALUE);
+		sut.fetchCitiesForCityName(CITY_NAME_VALUE);
 
 		// Then
 		var exception = assertThrows(URISyntaxException.class, () -> sut.fetchCitiesForCityName(CITY_NAME_VALUE));
@@ -85,27 +70,24 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	private static Stream<Arguments> fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnGeocodingCityData() {
 		return Stream.of(
-				Arguments.of("Kielce"),
-				Arguments.of("Jastrzębie-Zdrój"),
-				Arguments.of("San Francisco"),
-				Arguments.of("D'Lo"),
-				Arguments.of("Saint-Lô"),
-				Arguments.of("Winston-Salem")
+				Arguments.of("Kielce", "Świętokrzyskie", "Poland"),
+				Arguments.of("Jastrzębie-Zdrój", "Silesia", "Poland"),
+				Arguments.of("San Francisco", "California", "United States"),
+				Arguments.of("D'Lo", "Mississippi", "United States"),
+				Arguments.of("Saint-Lô", "Normandy", "France"),
+				Arguments.of("Winston-Salem", "North Carolina", "United States")
 		);
 	}
 
 	@ParameterizedTest
 	@MethodSource
-	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnGeocodingCityData(String cityNameValue) {
+	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnGeocodingCityData(String cityNameValue, String administrationValue, String CountryValue) {
 		// When
+		var sut = mock(OpenMeteoGeocodingApiService.class);
 		List<GeocodingCityData> mockResponse = new ArrayList<>();
-		mockResponse.add(new GeocodingCityData("Kielce", "Świętokrzyskie", "Poland"));
-		mockResponse.add(new GeocodingCityData("Jastrzębie-Zdrój", "Silesia", "Poland"));
-		mockResponse.add(new GeocodingCityData("San Francisco", "California", "United States"));
-		mockResponse.add(new GeocodingCityData("D'Lo", "Mississippi", "United States"));
-		mockResponse.add(new GeocodingCityData("Winston-Salem", "North Carolina", "United States"));
+		mockResponse.add(new GeocodingCityData(cityNameValue, administrationValue, CountryValue));
 
-		when(sut.fetchCitiesForCityName(anyString())).thenReturn(mockResponse);
+		when(sut.fetchCitiesForCityName(cityNameValue)).thenReturn(mockResponse);
 
 		// Given
 		var result = sut.fetchCitiesForCityName(cityNameValue);
@@ -117,10 +99,11 @@ class OpenMeteoGeocodingApiServiceTests {
 	@Test
 	void fetchCitiesForCityName_WhenGeocodingCityDataIsNull_ShouldThrowException_WithAppropriateMessage() {
 		// When
+		var sut = mock(OpenMeteoGeocodingApiService.class);
 		List<GeocodingCityData> mockResponse = new ArrayList<>();
 		mockResponse.add(null);
 
-		when(sut.fetchCitiesForCityName(anyString())).thenReturn(mockResponse);
+		when(sut.fetchCitiesForCityName(CITY_NAME_VALUE)).thenReturn(mockResponse);
 
 		// Then
 		var exception = assertThrows(NullPointerException.class, () -> sut.fetchCitiesForCityName(CITY_NAME_VALUE));
@@ -130,9 +113,10 @@ class OpenMeteoGeocodingApiServiceTests {
 	@Test
 	void fetchCitiesForCityName_WhenGeocodingCityDataIsEmpty_ShouldReturnGeocodingCityData() {
 		// When
+		var sut = mock(OpenMeteoGeocodingApiService.class);
 		List<GeocodingCityData> mockResponse = new ArrayList<>();
 
-		when(sut.fetchCitiesForCityName(anyString())).thenReturn(mockResponse);
+		when(sut.fetchCitiesForCityName(CITY_NAME_VALUE)).thenReturn(mockResponse);
 
 		// Given
 		var result = sut.fetchCitiesForCityName(CITY_NAME_VALUE);
@@ -181,8 +165,8 @@ class OpenMeteoGeocodingApiServiceTests {
 		var requestUrl = URI.create("https://geocoding-api.open-meteo.com/v1/search?name=" + CITY_NAME_VALUE);
 		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
 		when(mockResponse.statusCode()).thenReturn(500);
-		JsonHttpService jsonHttpService = mock(JsonHttpService.class);
-		when(jsonHttpService.sendHttpGetRequest(requestUrl)).thenReturn(mockResponse);
+		HttpService httpService = mock(HttpService.class);
+		when(httpService.sendHttpGetRequest(requestUrl)).thenReturn(mockResponse);
 
 		// Then
 		var exception = assertThrows(IllegalArgumentException.class, () -> sut.fetchGeocodingCityDataFromApi(requestUrl));
