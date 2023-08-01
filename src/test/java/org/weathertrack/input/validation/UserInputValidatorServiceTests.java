@@ -1,12 +1,10 @@
-package org.weathertrack.validation;
+package org.weathertrack.input.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.weathertrack.input.validation.InputValidator;
-import org.weathertrack.input.validation.UserInputValidator;
 import org.weathertrack.input.validation.exception.InputExceptionMessage;
 import org.weathertrack.input.validation.resource.ValidationMessageResource;
 
@@ -18,12 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class UserInputValidatorTests {
-	private InputValidator sut;
+class UserInputValidatorServiceTests {
+	private InputValidatorService sut;
 
 	@BeforeEach
 	void setUp() {
-		sut = new UserInputValidator();
+		sut = new UserInputValidatorService();
 	}
 
 	private static Stream<Arguments>

@@ -6,7 +6,7 @@ import org.weathertrack.input.validation.resource.ValidationMessageResource;
 
 import java.util.regex.Pattern;
 
-public class UserInputValidator implements InputValidator {
+public class UserInputValidatorService implements InputValidatorService {
 	private static final int MAXIMUM_CITY_NAME_LENGTH = 170;
 
 	// Match any string that contains at least one character that is a digit.
