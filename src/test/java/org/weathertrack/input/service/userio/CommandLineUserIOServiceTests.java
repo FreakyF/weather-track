@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.forecast.model.WeatherData;
+import org.weathertrack.geocoding.model.GeocodingCityData;
 import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
@@ -78,54 +78,19 @@ class CommandLineUserIOServiceTests {
 	@Test
 	void printCityDataWithSameCityName_shouldPrintCityData() {
 		// When
-		long[] postCodes = {43438, 21312, 55122};
-		List<CityDataDTO> cityDatumDTOS = List.of(
-				new CityDataDTO(0,
+		List<GeocodingCityData> GeocodingCityDataList = List.of(
+				new GeocodingCityData(
 						"Kielce",
-						12.2,
-						53.3,
-						4,
-						"FeatueCode",
-						"PL",
-						7,
-						8,
-						9,
-						0,
-						"Warsaw",
-						1200L,
-						postCodes,
-						13,
-						"Poland",
-						"Swiętokrzyskie",
-						"Kielce",
-						"Something",
-						"Something4"),
-				new CityDataDTO(
-						0,
+						"Świętokrzyskie",
+						"Poland"),
+				new GeocodingCityData(
 						"Brenna",
-						12.1,
-						12.3,
-						5,
-						"FeatueCode",
-						"PL",
-						10,
-						12,
-						11,
-						4,
-						"Warsaw",
-						11200L,
-						postCodes,
-						15,
-						"Poland",
-						"Śląskie",
-						"Brenna",
-						"Something",
-						"Something4"
-				)
+						"Silesia",
+						"Poland")
 		);
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(cityDatumDTOS);
+		commandLineUserInterface.printCitiesWithSameName(GeocodingCityDataList);
 
 		// Then
 		var expectedOutput = """
@@ -138,10 +103,10 @@ class CommandLineUserIOServiceTests {
 	@Test
 	void printCityDataWithSameCityName_WhenCityData_isEmpty_ShouldLogWarn() {
 		// When
-		List<CityDataDTO> cityDatumDTOS = List.of();
+		List<GeocodingCityData> GeocodingCityDataList = List.of();
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(cityDatumDTOS);
+		commandLineUserInterface.printCitiesWithSameName(GeocodingCityDataList);
 
 		// Then
 		verify(logger).warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
@@ -150,32 +115,15 @@ class CommandLineUserIOServiceTests {
 	@Test
 	void printCityDataWithSameCityName_WhenSingleCity_ShouldReturnCityData() {
 		// When
-		long[] postCodes = {43438, 21312, 55122};
-		List<CityDataDTO> cityDatumDTOS = List.of(
-				new CityDataDTO(0,
+		List<GeocodingCityData> GeocodingCityDataList = List.of(
+				new GeocodingCityData(
 						"Kielce",
-						12.2,
-						53.3,
-						4,
-						"IDK",
-						"PL",
-						7,
-						8,
-						9,
-						0,
-						"Warsaw",
-						1200L,
-						postCodes,
-						13,
-						"Poland",
-						"Swiętokrzyskie",
-						"Kielce",
-						"Something",
-						"Idk")
+						"Świętokrzyskie",
+						"Poland")
 		);
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(cityDatumDTOS);
+		commandLineUserInterface.printCitiesWithSameName(GeocodingCityDataList);
 
 		// Then
 		var expectedOutput = """

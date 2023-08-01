@@ -1,8 +1,8 @@
 package org.weathertrack.input.service.userio;
 
 import com.google.inject.Inject;
-import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.forecast.model.WeatherData;
+import org.weathertrack.geocoding.model.GeocodingCityData;
 import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.input.service.userio.resource.WeatherDisplayResource;
 import org.weathertrack.logging.Logger;
@@ -39,7 +39,7 @@ public class CommandLineUserIOService implements UserIOService {
 	}
 
 	@Override
-	public void printCitiesWithSameName(List<CityDataDTO> citiesWithSameName) {
+	public void printCitiesWithSameName(List<GeocodingCityData> citiesWithSameName) {
 		if (citiesWithSameName.isEmpty()) {
 			logger.warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
 			return;
@@ -51,7 +51,7 @@ public class CommandLineUserIOService implements UserIOService {
 					.append(". ")
 					.append(citiesWithSameName.get(i).getName())
 					.append(", ")
-					.append(citiesWithSameName.get(i).getAdmin1())
+					.append(citiesWithSameName.get(i).getAdministration())
 					.append(", ")
 					.append(citiesWithSameName.get(i).getCountry())
 					.append("\n");
