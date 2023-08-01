@@ -94,8 +94,8 @@ class CommandLineUserIOServiceTests {
 
 		// Then
 		var expectedOutput = """
-				1. Kielce, Swiętokrzyskie, Poland
-				2. Brenna, Śląskie, Poland
+				1. Kielce, Świętokrzyskie, Poland
+				2. Brenna, Silesia, Poland
 				""";
 		assertEquals(expectedOutput, outputStream.toString());
 	}
@@ -127,7 +127,7 @@ class CommandLineUserIOServiceTests {
 
 		// Then
 		var expectedOutput = """
-				1. Kielce, Swiętokrzyskie, Poland
+				1. Kielce, Świętokrzyskie, Poland
 				""";
 		assertEquals(expectedOutput, outputStream.toString());
 	}
