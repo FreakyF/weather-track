@@ -45,15 +45,15 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void validateCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage(
+	void fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage(
 			String cityNameValue, String expectedExceptionMessage, Class<? extends Throwable> exceptionClass) {
 		// Then
-		var exception = assertThrows(exceptionClass, () -> sut.validateCityName(cityNameValue));
+		var exception = assertThrows(exceptionClass, () -> sut.fetchCitiesForCityName(cityNameValue));
 		assertEquals(expectedExceptionMessage, exception.getMessage());
 	}
 
 	@Test
-	void buildGeocodingApiUri_WhenUriSyntaxIsValid_ShouldReturnBuilttUri() throws URISyntaxException {
+	void fetchCitiesForCityName_WhenUriSyntaxIsValid_ShouldReturnBuilttUri() throws URISyntaxException {
 		// When
 		var mockUriBuilder = mock(URIBuilder.class);
 		var expectedUri = URI.create("https://geocoding-api.open-meteo.com/v1/search?name=" + CITY_NAME_VALUE);
@@ -61,14 +61,14 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockUriBuilder.build()).thenReturn(expectedUri);
 
 		// Given
-		var result = sut.buildGeocodingApiUri(CITY_NAME_VALUE);
+		var result = sut.fetchCitiesForCityName(CITY_NAME_VALUE);
 
 		// Then
 		assertEquals(expectedUri, result);
 	}
 
 	@Test
-	void buildGeocodingApiUri_WhenUriSyntaxIsInvalid_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException {
+	void fetchCitiesForCityName_WhenUriSyntaxIsInvalid_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException {
 		// When
 		var mockUriBuilder = mock(URIBuilder.class);
 		var expectedUri = URI.create("https://geocoding-api.open-meteo.com/v1/search?name=" + CITY_NAME_VALUE);
@@ -76,10 +76,10 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockUriBuilder.build()).thenReturn(expectedUri);
 
 		// Given
-		var result = sut.buildGeocodingApiUri(CITY_NAME_VALUE);
+		var result = sut.fetchCitiesForCityName(CITY_NAME_VALUE);
 
 		// Then
-		var exception = assertThrows(URISyntaxException.class, () -> sut.buildGeocodingApiUri(CITY_NAME_VALUE));
+		var exception = assertThrows(URISyntaxException.class, () -> sut.fetchCitiesForCityName(CITY_NAME_VALUE));
 		assertEquals(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID, exception.getMessage());
 	}
 
