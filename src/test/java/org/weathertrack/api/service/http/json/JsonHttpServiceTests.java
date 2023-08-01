@@ -5,11 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.weathertrack.api.service.http.HttpService;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,12 +38,7 @@ class JsonHttpServiceTests {
 		// Given
 		var result = sut.sendHttpGetRequest(expectedUri);
 
-		String responseBody;
-		try (InputStream inputStream = result.body()) {
-			responseBody = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-		}
-
 		// Then
-		assertEquals(expectedResponse, responseBody);
+		assertEquals(expectedResponse, result.body());
 	}
 }
