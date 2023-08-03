@@ -9,10 +9,13 @@ import org.weathertrack.api.service.geocoding.GeocodingApiService;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
 import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.model.Response;
 import org.weathertrack.model.ResponseData;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 public class OpenMeteoGeocodingApiService implements GeocodingApiService {
@@ -30,8 +33,13 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	public ResponseData<List<CityDataDTO>> fetchCitiesForCityName(String cityName) {
 		validateCityName(cityName);
 		var requestUrl = buildGeocodingApiUri(cityName);
-		throw new UnsupportedOperationException("Not implemented");
-//		return Response.<List<CityDataResponseDTO>>ok(response);
+
+		var response = fetchCityDataFromApi(requestUrl);
+		if (response == null) {
+			throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
+		}
+
+		return Response.ok(response);
 	}
 
 	@Override
@@ -57,6 +65,10 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	}
 
 	List<CityDataDTO> fetchCityDataFromApi(URI requestUrl) {
+		throw new UnsupportedOperationException("Not Implemented");
+	}
+
+	void validateHttpStatus(HttpResponse<InputStream> response) {
 		throw new UnsupportedOperationException("Not Implemented");
 	}
 }
