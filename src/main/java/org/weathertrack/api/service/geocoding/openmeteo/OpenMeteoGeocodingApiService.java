@@ -30,14 +30,14 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	}
 
 	@Override
-	public ResponseData<List<CityDataDTO>> fetchCitiesForCityName(String cityName) {
-		validateCityName(cityName);
+	public ResponseData<List<CityDataDTO>> fetchCitiesForCityName(String cityName) throws IllegalArgumentException {
+		var validationResult = validateCityName(cityName);
+		if (!validationResult.isSuccess()) {
+			throw new IllegalArgumentException(validationResult.getMessage());
+		}
 		var requestUrl = buildGeocodingApiUri(cityName);
 
-		var response = fetchCityDataFromApi(requestUrl);
-		if (response == null) {
-			throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
-		}
+		var response = fetchCityDataFromApiResponse(requestUrl);
 
 		return Response.ok(response);
 	}
@@ -47,13 +47,14 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		throw new UnsupportedOperationException("Not Implemented");
 	}
 
-	private void validateCityName(String cityName) {
+	private ResponseData<?> validateCityName(String cityName) {
 		if (cityName == null) {
-			throw new NullPointerException(ApiServiceExceptionMessage.CITY_NAME_IS_NULL);
+			return Response.fail(ApiServiceExceptionMessage.CITY_NAME_IS_NULL);
 		}
 		if (cityName.isBlank()) {
-			throw new IllegalArgumentException(ApiServiceExceptionMessage.CITY_NAME_IS_BLANK);
+			return Response.fail(ApiServiceExceptionMessage.CITY_NAME_IS_BLANK);
 		}
+		return Response.ok();
 	}
 
 	private URI buildGeocodingApiUri(String cityName) {
@@ -64,11 +65,11 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		}
 	}
 
-	List<CityDataDTO> fetchCityDataFromApi(URI requestUrl) {
+	List<CityDataDTO> fetchCityDataFromApiResponse(URI requestUrl) {
 		throw new UnsupportedOperationException("Not Implemented");
 	}
 
-	void validateHttpStatus(HttpResponse<InputStream> response) {
+	String HandleStatusCode(HttpResponse<InputStream> response) {
 		throw new UnsupportedOperationException("Not Implemented");
 	}
 }
