@@ -4,11 +4,11 @@ public class Response {
 	private Response() {
 	}
 
-	public static <V> ResponseData ok(V value) {
-		return new ResponseData<V>(true, null, value);
+	public static <V> ResponseData<V> ok(V value) {
+		return new ResponseData<>(true, null, value);
 	}
 
-	public static <V> ResponseData error(String message) {
-		return new ResponseData<V>(true, message, null);
+	public static <V> ResponseData<V> error(String message) {
+		return new ResponseData<>(true, message, null);
 	}
 }
