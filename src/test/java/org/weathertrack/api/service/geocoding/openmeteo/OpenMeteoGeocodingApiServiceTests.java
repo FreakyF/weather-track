@@ -9,11 +9,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
-import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.model.ResponseData;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -112,7 +110,7 @@ class OpenMeteoGeocodingApiServiceTests {
 				)
 		);
 
-		ResponseData<List<CityDataDTO>> expectedResult = new ResponseData<>(true, null,
+		ResponseData<List<CityDataDTO>> expectedResult = new ResponseData<>(false, null,
 				expectedCityDataResponse
 		);
 
@@ -135,7 +133,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockUriBuilder.setParameter("name", cityName)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.build()).thenReturn(validUrl);
 
-		doReturn(null).when(sut.fetchGeocodingCityDataFromApi(validUrl));
+		doReturn(null).when(sut.fetchCityDataFromApi(validUrl));
 
 		// Given
 		var thrown = assertThrows(
@@ -155,12 +153,14 @@ class OpenMeteoGeocodingApiServiceTests {
 		// When
 		var cityName = "Kielce";
 		var validUrl = URI.create("https://geocoding-api.open-meteo.com/v1/search");
-		var expectedResult = new ArrayList<CityDataResponseDTO>();
+
+		var expectedCityData = new ArrayList<CityDataDTO>();
+		var expectedResult = new ResponseData<>(false, "No cities found!", expectedCityData);
 
 		when(mockUriBuilder.setParameter("name", cityName)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.build()).thenReturn(validUrl);
 
-		doReturn(expectedResult).when(sut.fetchGeocodingCityDataFromApi(validUrl));
+		doReturn(expectedCityData).when(sut.fetchCityDataFromApi(validUrl));
 
 		// Given
 		var result = sut.fetchCitiesForCityName(cityName);
@@ -170,7 +170,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenStatusCodeIs200_ShouldReturnResponseBody() throws IOException, InterruptedException {
+	void fetchCitiesForCityName_WhenStatusCodeIs200_ShouldReturnResponseBody() {
 		// When
 
 		// Given
@@ -179,7 +179,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenStatusCodeIs400_ShouldThrowException_WithAppropriateMessage() throws IOException, InterruptedException {
+	void fetchCitiesForCityName_WhenStatusCodeIs400_ShouldThrowException_WithAppropriateMessage() {
 		// When
 
 		// Given
@@ -188,7 +188,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenStatusCodeIs500_ShouldThrowException_WithAppropriateMessage() throws IOException, InterruptedException {
+	void fetchCitiesForCityName_WhenStatusCodeIs500_ShouldThrowException_WithAppropriateMessage() {
 		// When
 
 		// Given
