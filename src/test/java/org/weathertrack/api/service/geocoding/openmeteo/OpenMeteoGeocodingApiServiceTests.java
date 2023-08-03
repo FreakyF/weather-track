@@ -54,8 +54,8 @@ class OpenMeteoGeocodingApiServiceTests {
 	@Test
 	void fetchCitiesForCityName_WhenUriSyntaxIsInvalid_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException {
 		// Arrange
-		var cityName = "New York";
-		var syntaxException = new URISyntaxException(cityName, "Invalid URI syntax");
+		var cityName = "Kielce";
+		var syntaxException = new URISyntaxException(cityName, ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
 
 		when(mockUriBuilder.setParameter("name", cityName)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.build()).thenThrow(syntaxException);
@@ -69,8 +69,8 @@ class OpenMeteoGeocodingApiServiceTests {
 
 		// Assert
 		assertTrue(thrown instanceof RuntimeException, "Expected IllegalArgumentException");
-		assertEquals(RuntimeException.class, thrown.getClass());
-		assertEquals("Invalid URI syntax: New York", thrown.getCause().getMessage());
+		assertEquals(IllegalArgumentException.class, thrown.getClass());
+		assertEquals(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID, thrown.getMessage());
 	}
 
 	private static Stream<Arguments> fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnGeocodingCityData() {

@@ -43,7 +43,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		try {
 			return uriBuilder.setParameter("name", cityName).build();
 		} catch (URISyntaxException e) {
-			throw new IllegalArgumentException(e);
+			throw new IllegalArgumentException(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
 		}
 	}
 
