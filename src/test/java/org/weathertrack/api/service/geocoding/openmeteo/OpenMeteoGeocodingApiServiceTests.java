@@ -135,7 +135,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockUriBuilder.setParameter("name", cityName)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.build()).thenReturn(validUrl);
 
-		doReturn(null).when(sut).fetchGeocodingCityDataFromApi(validUrl);
+		doReturn(null).when(sut.fetchGeocodingCityDataFromApi(validUrl));
 
 		// Given
 		var thrown = assertThrows(
@@ -160,10 +160,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockUriBuilder.setParameter("name", cityName)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.build()).thenReturn(validUrl);
 
-		doReturn(expectedResult).when(sut).fetchGeocodingCityDataFromApi(validUrl);
-
-		when(mockUriBuilder.setParameter("name", cityName)).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.build()).thenReturn(validUrl);
+		doReturn(expectedResult).when(sut.fetchGeocodingCityDataFromApi(validUrl));
 
 		// Given
 		var result = sut.fetchCitiesForCityName(cityName);
