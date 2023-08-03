@@ -2,11 +2,13 @@ package org.weathertrack.api.service.geocoding.openmeteo;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.utils.URIBuilder;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.weathertrack.TestData;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.http.HttpService;
@@ -26,38 +28,21 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class OpenMeteoGeocodingApiServiceTests {
+	private final static String SCHEME = "https";
+	private final static String HOST = "www.testhost.com";
+	private final static String PATH = "/v1/search";
+	private final static String CITY_NAME = "Kielce";
+	private static CityDataDTO MOCKED_CITY_DATA_DTO;
 	private OpenMeteoGeocodingApiService sut;
 	private URIBuilder mockUriBuilder;
 	private HttpClient mockHttpClient;
 	private HttpService mockHttpService;
-
 	private HttpResponse<InputStream> mockHttpResponse;
 
-	private final static String CITY_NAME = "Kielce";
-
-	private final static CityDataDTO VALID_CITY_DATA_DTO =
-			new CityDataDTO(
-					769250L,
-					"Kielce",
-					50.87033,
-					20.62752,
-					267.0,
-					"PPLA",
-					"PL",
-					858790L,
-					7530962L,
-					7531642L,
-					0,
-					"Europe/Warsaw",
-					208598L,
-					null,
-					798544,
-					"Poland",
-					"Świętokrzyskie",
-					"Kielce",
-					"Kielce",
-					null
-			);
+	@BeforeAll
+	static void beforeAll() {
+		MOCKED_CITY_DATA_DTO = TestData.Provider.createCityDataDTO();
+	}
 
 	@BeforeEach
 	void beforeEach() {
@@ -110,15 +95,15 @@ class OpenMeteoGeocodingApiServiceTests {
 	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnResponseData() throws URISyntaxException {
 		// When
 		var expectedCityDataResponse = new ArrayList<>();
-		expectedCityDataResponse.add(VALID_CITY_DATA_DTO);
+		expectedCityDataResponse.add(MOCKED_CITY_DATA_DTO);
 
 		var expectedResult = new ResponseData<>(true, null,
 				expectedCityDataResponse
 		);
 
-		when(mockUriBuilder.setScheme("https")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setHost("geocoding-api.open-meteo.com")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setPath("/v1/search")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 		mockUriBuilder.build();
 
@@ -132,13 +117,13 @@ class OpenMeteoGeocodingApiServiceTests {
 	@Test
 	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException {
 		// When
-		when(mockUriBuilder.setScheme("https")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setHost("geocoding-api.open-meteo.com")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setPath("/v1/search")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 		var validUrl = mockUriBuilder.build();
 
-		when(sut.fetchCityDataFromApi(validUrl)).thenReturn(null);
+		when(sut.fetchCityDataFromApiResponse(validUrl)).thenReturn(null);
 
 		// Given
 		var thrown = assertThrows(
@@ -159,13 +144,13 @@ class OpenMeteoGeocodingApiServiceTests {
 		var expectedCityData = new ArrayList<CityDataDTO>();
 		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, expectedCityData);
 
-		when(mockUriBuilder.setScheme("https")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setHost("geocoding-api.open-meteo.com")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setPath("/v1/search")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 		var validUrl = mockUriBuilder.build();
 
-		when(sut.fetchCityDataFromApi(validUrl)).thenReturn(expectedCityData);
+		when(sut.fetchCityDataFromApiResponse(validUrl)).thenReturn(expectedCityData);
 
 		// Given
 		var result = sut.fetchCitiesForCityName(CITY_NAME);
@@ -178,19 +163,19 @@ class OpenMeteoGeocodingApiServiceTests {
 	void fetchCitiesForCityName_WhenStatusCodeIs200_ShouldReturnResponseData() throws URISyntaxException {
 		// When
 		var expectedCityDataResponse = new ArrayList<>();
-		expectedCityDataResponse.add(VALID_CITY_DATA_DTO);
+		expectedCityDataResponse.add(MOCKED_CITY_DATA_DTO);
 
 		var expectedResult = new ResponseData<>(true, null,
 				expectedCityDataResponse
 		);
 
-		when(mockUriBuilder.setScheme("https")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setHost("geocoding-api.open-meteo.com")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setPath("/v1/search")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 		mockUriBuilder.build();
 
-		when(sut.validateHttpStatus(mockHttpResponse)).thenReturn(null);
+		when(sut.HandleStatusCode(mockHttpResponse)).thenReturn(null);
 
 		// Given
 		var result = sut.fetchCitiesForCityName(CITY_NAME);
@@ -206,13 +191,13 @@ class OpenMeteoGeocodingApiServiceTests {
 				null
 		);
 
-		when(mockUriBuilder.setScheme("https")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setHost("geocoding-api.open-meteo.com")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setPath("/v1/search")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 		mockUriBuilder.build();
 
-		when(sut.validateHttpStatus(mockHttpResponse)).thenReturn(null);
+		when(sut.HandleStatusCode(mockHttpResponse)).thenReturn(null);
 
 		// Given
 		var result = sut.fetchCitiesForCityName(CITY_NAME);
@@ -228,13 +213,13 @@ class OpenMeteoGeocodingApiServiceTests {
 				null
 		);
 
-		when(mockUriBuilder.setScheme("https")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setHost("geocoding-api.open-meteo.com")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setPath("/v1/search")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 		mockUriBuilder.build();
 
-		when(sut.validateHttpStatus(mockHttpResponse)).thenReturn(null);
+		when(sut.HandleStatusCode(mockHttpResponse)).thenReturn(null);
 
 		// Given
 		var result = sut.fetchCitiesForCityName(CITY_NAME);
