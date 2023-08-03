@@ -39,6 +39,15 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		throw new UnsupportedOperationException("Not Implemented");
 	}
 
+	private void validateCityName(String cityName) {
+		if (cityName == null) {
+			throw new NullPointerException(ApiServiceExceptionMessage.CITY_NAME_IS_NULL);
+		}
+		if (cityName.isBlank()) {
+			throw new IllegalArgumentException(ApiServiceExceptionMessage.CITY_NAME_IS_BLANK);
+		}
+	}
+
 	private URI buildGeocodingApiUri(String cityName) {
 		try {
 			return uriBuilder.setParameter("name", cityName).build();
@@ -47,12 +56,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		}
 	}
 
-	private void validateCityName(String cityName) {
-		if (cityName == null) {
-			throw new NullPointerException(ApiServiceExceptionMessage.CITY_NAME_IS_NULL);
-		}
-		if (cityName.isBlank()) {
-			throw new IllegalArgumentException(ApiServiceExceptionMessage.CITY_NAME_IS_BLANK);
-		}
+	List<CityDataResponseDTO> fetchGeocodingCityDataFromApi(URI requestUrl) {
+		throw new UnsupportedOperationException("Not Implemented");
 	}
 }
