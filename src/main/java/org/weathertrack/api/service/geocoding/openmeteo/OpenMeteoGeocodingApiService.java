@@ -1,7 +1,7 @@
 package org.weathertrack.api.service.geocoding.openmeteo;
 
+import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.utils.URIBuilder;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.geocoding.GeocodingApiModule;
@@ -15,6 +15,7 @@ import org.weathertrack.model.ResponseData;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	private final HttpClient httpClient;
 	private final HttpService httpService;
 
+	@Inject
 	public OpenMeteoGeocodingApiService(@Named(GeocodingApiModule.ANNOTATION_GEOCODING_API) URIBuilder uriBuilder, HttpClient httpClient, HttpService httpService) {
 		this.uriBuilder = uriBuilder;
 		this.httpClient = httpClient;
@@ -35,11 +37,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		if (!validationResult.isSuccess()) {
 			throw new IllegalArgumentException(validationResult.getMessage());
 		}
-		var requestUrl = buildGeocodingApiUri(cityName);
-
-		var response = fetchCityDataFromApiResponse(requestUrl);
-
-		return Response.ok(response);
+		throw new UnsupportedOperationException("Not Implemented");
 	}
 
 	@Override

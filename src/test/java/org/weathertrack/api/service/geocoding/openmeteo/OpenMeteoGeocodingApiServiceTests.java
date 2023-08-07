@@ -1,6 +1,5 @@
 package org.weathertrack.api.service.geocoding.openmeteo;
 
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +16,7 @@ import org.weathertrack.model.ResponseData;
 
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.stream.Stream;
