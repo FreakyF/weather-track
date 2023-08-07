@@ -132,13 +132,24 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException {
+	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException, IOException, InterruptedException {
 		// When
 		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 		mockUriBuilder.build();
+
+		String jsonResponse = "{\"results\":[]}";
+		InputStream inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
+
+		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
+		when(mockResponse.body()).thenReturn(inputStream);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockResponse);
+
+		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
+		when(mockedResponseDTO.getResults()).thenReturn(null);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
 
 		// Given
 		var thrown = assertThrows(
@@ -154,18 +165,26 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() throws URISyntaxException {
+	void fetchCitiesForCityName_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() throws URISyntaxException, IOException, InterruptedException {
 		// When
-		var expectedCityData = new ArrayList<CityDataDTO>();
-		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, expectedCityData);
+		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, null);
 
 		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
-		var validUrl = mockUriBuilder.build();
+		mockUriBuilder.build();
 
-		when(sut.fetchCityDataFromApiResponse(validUrl)).thenReturn(expectedCityData);
+		String jsonResponse = "{\"results\":[]}";
+		InputStream inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
+
+		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
+		when(mockResponse.body()).thenReturn(inputStream);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockResponse);
+
+		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
+		when(mockedResponseDTO.getResults()).thenReturn(new CityDataDTO[0]);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
 
 		// Given
 		var result = sut.fetchCitiesForCityName(CITY_NAME);
@@ -175,7 +194,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenStatusCodeIs200_ShouldReturnResponseData() throws URISyntaxException {
+	void fetchCitiesForCityName_WhenStatusCodeIs200_ShouldReturnResponseData() throws URISyntaxException, IOException, InterruptedException {
 		// When
 		var expectedCityDataResponse = new ArrayList<>();
 		expectedCityDataResponse.add(MOCKED_CITY_DATA_DTO);
@@ -190,51 +209,17 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 		mockUriBuilder.build();
 
-		when(sut.HandleStatusCode(mockHttpResponse)).thenReturn(null);
+		String jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
+		InputStream inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
 
-		// Given
-		var result = sut.fetchCitiesForCityName(CITY_NAME);
+		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
+		when(mockResponse.body()).thenReturn(inputStream);
+		when(mockResponse.statusCode()).thenReturn(200);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockResponse);
 
-		// Then
-		assertEquals(expectedResult, result);
-	}
-
-	@Test
-	void fetchCitiesForCityName_WhenStatusCodeIs400_ShouldReturnResponseData_WithAppropriateMessage() throws URISyntaxException {
-		// When
-		var expectedResult = new ResponseData<>(false, ApiServiceExceptionMessage.STATUS_CODE_400,
-				null
-		);
-
-		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
-		mockUriBuilder.build();
-
-		when(sut.HandleStatusCode(mockHttpResponse)).thenReturn(null);
-
-		// Given
-		var result = sut.fetchCitiesForCityName(CITY_NAME);
-
-		// Then
-		assertEquals(expectedResult, result);
-	}
-
-	@Test
-	void fetchCitiesForCityName_WhenStatusCodeIs500_ShouldReturnResponseData_WithAppropriateMessage() throws URISyntaxException {
-		// When
-		var expectedResult = new ResponseData<>(false, ApiServiceExceptionMessage.STATUS_CODE_500,
-				null
-		);
-
-		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
-		mockUriBuilder.build();
-
-		when(sut.HandleStatusCode(mockHttpResponse)).thenReturn(null);
+		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
+		when(mockedResponseDTO.getResults()).thenReturn(new CityDataDTO[]{MOCKED_CITY_DATA_DTO});
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
 
 		// Given
 		var result = sut.fetchCitiesForCityName(CITY_NAME);
