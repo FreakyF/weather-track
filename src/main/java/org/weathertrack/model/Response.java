@@ -13,6 +13,6 @@ public class Response {
 	}
 
 	public static <V> ResponseData<V> fail(String message) {
-		return new ResponseData<>(true, message, null);
+		return new ResponseData<>(false, message, null);
 	}
 }
