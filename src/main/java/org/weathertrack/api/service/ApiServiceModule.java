@@ -2,12 +2,12 @@ package org.weathertrack.api.service;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import org.weathertrack.api.service.forecast.ForecastApiService;
+import org.weathertrack.api.service.forecast.openmeteo.OpenMeteoForecastApiService;
 import org.weathertrack.api.service.geocoding.GeocodingApiService;
 import org.weathertrack.api.service.geocoding.openmeteo.OpenMeteoGeocodingApiService;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.http.json.JsonHttpService;
-import org.weathertrack.api.service.forecast.ForecastApiService;
-import org.weathertrack.api.service.forecast.openmeteo.OpenMeteoForecastApiService;
 
 import java.net.http.HttpClient;
 
@@ -20,7 +20,7 @@ public class ApiServiceModule extends AbstractModule {
 	}
 
 	@Provides
-	private HttpClient provideHttpClient() {
+	protected HttpClient provideHttpClient() {
 		return HttpClient.newHttpClient();
 	}
 }
