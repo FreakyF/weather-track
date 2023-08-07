@@ -10,20 +10,26 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.weathertrack.TestData;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
+import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.model.ResponseData;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -92,7 +98,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnResponseData() throws URISyntaxException {
+	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnResponseData() throws URISyntaxException, IOException, InterruptedException {
 		// When
 		var expectedCityDataResponse = new ArrayList<>();
 		expectedCityDataResponse.add(MOCKED_CITY_DATA_DTO);
@@ -106,6 +112,19 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 		mockUriBuilder.build();
+
+		// mockResponse
+		String jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
+		InputStream inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
+
+		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
+		when(mockResponse.body()).thenReturn(inputStream);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockResponse);
+
+		// Mock the JSON parsing
+		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
+		when(mockedResponseDTO.getResults()).thenReturn(new CityDataDTO[]{MOCKED_CITY_DATA_DTO});
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
 
 		// Given
 		var result = sut.fetchCitiesForCityName(CITY_NAME);
@@ -121,9 +140,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
-		var validUrl = mockUriBuilder.build();
-
-		when(sut.fetchCityDataFromApiResponse(validUrl)).thenReturn(null);
+		mockUriBuilder.build();
 
 		// Given
 		var thrown = assertThrows(
