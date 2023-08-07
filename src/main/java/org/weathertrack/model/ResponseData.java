@@ -1,5 +1,7 @@
 package org.weathertrack.model;
 
+import java.util.Objects;
+
 public class ResponseData<V> {
 	private final boolean success;
 	private final String message;
@@ -21,5 +23,17 @@ public class ResponseData<V> {
 
 	public V getValue() {
 		return value;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ResponseData<?> that)) return false;
+		return isSuccess() == that.isSuccess() && Objects.equals(getMessage(), that.getMessage()) && Objects.equals(getValue(), that.getValue());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(isSuccess(), getMessage(), getValue());
 	}
 }
