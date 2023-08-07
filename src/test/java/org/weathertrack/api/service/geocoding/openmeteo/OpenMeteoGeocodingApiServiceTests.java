@@ -193,13 +193,24 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(expectedResult, result);
 	}
 
-	@Test
-	void fetchCitiesForCityName_WhenStatusCodeIs200_ShouldReturnResponseData() throws URISyntaxException, IOException, InterruptedException {
-		// When
-		var expectedCityDataResponse = new ArrayList<>();
-		expectedCityDataResponse.add(MOCKED_CITY_DATA_DTO);
+	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage() {
+		var cityDataResponse = new ArrayList<>();
+		cityDataResponse.add(MOCKED_CITY_DATA_DTO);
+		return Stream.of(
+				Arguments.of(200, true, null, cityDataResponse),
+				Arguments.of(400, false, ApiServiceExceptionMessage.STATUS_CODE_400, null),
+				Arguments.of(500, false, ApiServiceExceptionMessage.STATUS_CODE_500, null)
 
-		var expectedResult = new ResponseData<>(true, null,
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage(
+			int statusCodeValue, boolean success, String responseMessage, ArrayList<CityDataDTO> expectedCityDataResponse) throws URISyntaxException, IOException, InterruptedException {
+		// When
+
+		var expectedResult = new ResponseData<>(success, responseMessage,
 				expectedCityDataResponse
 		);
 
@@ -214,7 +225,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
 		when(mockResponse.body()).thenReturn(inputStream);
-		when(mockResponse.statusCode()).thenReturn(200);
+		when(mockResponse.statusCode()).thenReturn(statusCodeValue);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockResponse);
 
 		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
