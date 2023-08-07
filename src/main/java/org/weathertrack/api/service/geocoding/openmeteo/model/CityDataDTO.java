@@ -160,4 +160,30 @@ public class CityDataDTO {
 		result = 31 * result + Arrays.hashCode(getPostcodes());
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "CityDataDTO{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", latitude=" + latitude +
+				", longitude=" + longitude +
+				", elevation=" + elevation +
+				", feature_code='" + feature_code + '\'' +
+				", country_code='" + country_code + '\'' +
+				", admin1_id=" + admin1_id +
+				", admin2_id=" + admin2_id +
+				", admin3_id=" + admin3_id +
+				", admin4_id=" + admin4_id +
+				", timezone='" + timezone + '\'' +
+				", population=" + population +
+				", postcodes=" + Arrays.toString(postcodes) +
+				", country_id=" + country_id +
+				", country='" + country + '\'' +
+				", admin1='" + admin1 + '\'' +
+				", admin2='" + admin2 + '\'' +
+				", admin3='" + admin3 + '\'' +
+				", admin4='" + admin4 + '\'' +
+				'}';
+	}
 }
