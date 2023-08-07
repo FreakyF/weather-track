@@ -113,7 +113,6 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 		mockUriBuilder.build();
 
-		// mockResponse
 		String jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
 		InputStream inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
 
@@ -121,7 +120,6 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockResponse.body()).thenReturn(inputStream);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockResponse);
 
-		// Mock the JSON parsing
 		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
 		when(mockedResponseDTO.getResults()).thenReturn(new CityDataDTO[]{MOCKED_CITY_DATA_DTO});
 		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
