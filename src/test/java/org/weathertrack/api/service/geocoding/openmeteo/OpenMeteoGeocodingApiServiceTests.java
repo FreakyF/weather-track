@@ -13,6 +13,7 @@ import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
+import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.ResponseData;
 
 import java.io.ByteArrayInputStream;
@@ -198,9 +199,11 @@ class OpenMeteoGeocodingApiServiceTests {
 		cityDataResponse.add(MOCKED_CITY_DATA_DTO);
 		return Stream.of(
 				Arguments.of(200, true, null, cityDataResponse),
-				Arguments.of(400, false, ApiServiceExceptionMessage.STATUS_CODE_400, null),
-				Arguments.of(500, false, ApiServiceExceptionMessage.STATUS_CODE_500, null)
-
+				Arguments.of(301, true, null, cityDataResponse),
+				Arguments.of(302, true, null, cityDataResponse),
+				Arguments.of(500, false, StatusCodesResource.STATUS_CODE_500, null),
+				Arguments.of(503, false, StatusCodesResource.STATUS_CODE_503, null),
+				Arguments.of(504, false, StatusCodesResource.STATUS_CODE_504, null)
 		);
 	}
 
@@ -237,5 +240,49 @@ class OpenMeteoGeocodingApiServiceTests {
 
 		// Then
 		assertEquals(expectedResult, result);
+	}
+
+	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage() {
+		return Stream.of(
+				Arguments.of(400, ApiServiceExceptionMessage.STATUS_CODE_400),
+				Arguments.of(404, ApiServiceExceptionMessage.STATUS_CODE_404)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage(
+			int statusCodeValue, String exceptionMessage) throws URISyntaxException, IOException, InterruptedException {
+		// When
+
+		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
+		mockUriBuilder.build();
+
+		String jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
+		InputStream inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
+
+		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
+		when(mockResponse.body()).thenReturn(inputStream);
+		when(mockResponse.statusCode()).thenReturn(statusCodeValue);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockResponse);
+
+		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
+		when(mockedResponseDTO.getResults()).thenReturn(new CityDataDTO[]{MOCKED_CITY_DATA_DTO});
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
+
+		// Given
+		var thrown = assertThrows(
+				Exception.class,
+				() -> sut.fetchCitiesForCityName(CITY_NAME),
+				"Expected fetchCitiesForCityName to throw Exception, but it didn't"
+		);
+
+		// Then
+		assertTrue(thrown instanceof RuntimeException, "Expected IllegalArgumentException");
+		assertEquals(IllegalArgumentException.class, thrown.getClass());
+		assertEquals(exceptionMessage, thrown.getMessage());
 	}
 }
