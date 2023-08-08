@@ -2,21 +2,27 @@ package org.weathertrack.api.service.geocoding.openmeteo;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.utils.URIBuilder;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.geocoding.GeocodingApiModule;
 import org.weathertrack.api.service.geocoding.GeocodingApiService;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
+import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
 import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.api.service.resource.ApiMessageResource;
+import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.Response;
 import org.weathertrack.model.ResponseData;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
 import java.util.List;
 
 public class OpenMeteoGeocodingApiService implements GeocodingApiService {
@@ -37,7 +43,42 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		if (!validationResult.isSuccess()) {
 			throw new IllegalArgumentException(validationResult.getMessage());
 		}
-		throw new UnsupportedOperationException("Not Implemented");
+		var requestUrl = buildGeocodingApiUri(cityName);
+		try {
+			var response = httpService.sendHttpGetRequest(requestUrl);
+			if (response.statusCode() == HttpStatus.SC_OK) {
+				CityDataResponseDTO responseDTO = httpService.parseJsonResponse(response.body(), CityDataResponseDTO.class);
+				if (responseDTO.getResults() == null) {
+					throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
+				}
+				if (responseDTO.getResults().length == 0) {
+					return Response.fail(ApiMessageResource.NO_CITIES_FOUND);
+				}
+				var responseFinal = Arrays.asList(responseDTO.getResults());
+				return Response.ok(responseFinal);
+			}
+			if (response.statusCode() == HttpStatus.SC_BAD_REQUEST) {
+				return Response.fail(StatusCodesResource.STATUS_CODE_400);
+			}
+			if (response.statusCode() == HttpStatus.SC_NOT_FOUND) {
+				return Response.fail(StatusCodesResource.STATUS_CODE_404);
+			}
+			if (response.statusCode() == HttpStatus.SC_TOO_MANY_REQUESTS) {
+				return Response.fail(StatusCodesResource.STATUS_CODE_429);
+			}
+			if (response.statusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+				return Response.fail(StatusCodesResource.STATUS_CODE_500);
+			}
+			if (response.statusCode() == HttpStatus.SC_SERVICE_UNAVAILABLE) {
+				return Response.fail(StatusCodesResource.STATUS_CODE_503);
+			}
+			if (response.statusCode() == HttpStatus.SC_GATEWAY_TIMEOUT) {
+				return Response.fail(StatusCodesResource.STATUS_CODE_504);
+			}
+			return null;
+		} catch (IOException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
