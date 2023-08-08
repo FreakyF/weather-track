@@ -57,11 +57,17 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 				var responseFinal = Arrays.asList(responseDTO.getResults());
 				return Response.ok(responseFinal);
 			}
+			if (response.statusCode() == HttpStatus.SC_MOVED_TEMPORARILY) {
+				return Response.ok();
+			}
+			if (response.statusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
+				return Response.ok();
+			}
 			if (response.statusCode() == HttpStatus.SC_BAD_REQUEST) {
-				return Response.fail(StatusCodesResource.STATUS_CODE_400);
+				throw new IllegalArgumentException(ApiServiceExceptionMessage.STATUS_CODE_400);
 			}
 			if (response.statusCode() == HttpStatus.SC_NOT_FOUND) {
-				return Response.fail(StatusCodesResource.STATUS_CODE_404);
+				throw new IllegalArgumentException(ApiServiceExceptionMessage.STATUS_CODE_404);
 			}
 			if (response.statusCode() == HttpStatus.SC_TOO_MANY_REQUESTS) {
 				return Response.fail(StatusCodesResource.STATUS_CODE_429);
