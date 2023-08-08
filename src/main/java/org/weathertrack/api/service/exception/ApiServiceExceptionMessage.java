@@ -10,6 +10,11 @@ public class ApiServiceExceptionMessage {
 	public static final String URI_SYNTAX_IS_INVALID
 			= "Tried to build URI but the URI syntax is invalid!";
 
+	public static final String STATUS_CODE_400
+			= "Bad Request: The server cannot understand the request!";
+	public static final String STATUS_CODE_404
+			= "Not Found: The requested page or resource could not be found!";
+
 	private ApiServiceExceptionMessage() {
 	}
 }

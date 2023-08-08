@@ -21,6 +21,7 @@ public class StatusCodesResource {
 
 	public static final String STATUS_CODE_400 = properties.getProperty("STATUS_CODE_400");
 	public static final String STATUS_CODE_404 = properties.getProperty("STATUS_CODE_404");
+	public static final String STATUS_CODE_429 = properties.getProperty("STATUS_CODE_429");
 	public static final String STATUS_CODE_500 = properties.getProperty("STATUS_CODE_500");
 	public static final String STATUS_CODE_503 = properties.getProperty("STATUS_CODE_503");
 	public static final String STATUS_CODE_504 = properties.getProperty("STATUS_CODE_504");
