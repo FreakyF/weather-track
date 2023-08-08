@@ -1,5 +1,6 @@
 package org.weathertrack.api.service.geocoding.openmeteo;
 
+import org.apache.http.HttpStatus;
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -119,6 +120,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
 		when(mockResponse.body()).thenReturn(inputStream);
+		when(mockResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockResponse);
 
 		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
@@ -146,6 +148,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
 		when(mockResponse.body()).thenReturn(inputStream);
+		when(mockResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockResponse);
 
 		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
@@ -181,6 +184,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 		HttpResponse<InputStream> mockResponse = mock(HttpResponse.class);
 		when(mockResponse.body()).thenReturn(inputStream);
+		when(mockResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockResponse);
 
 		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
