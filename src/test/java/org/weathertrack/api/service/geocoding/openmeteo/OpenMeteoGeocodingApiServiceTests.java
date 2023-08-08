@@ -216,7 +216,6 @@ class OpenMeteoGeocodingApiServiceTests {
 	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage(
 			int statusCodeValue, boolean success, String responseMessage, ArrayList<CityDataDTO> expectedCityDataResponse) throws URISyntaxException, IOException, InterruptedException {
 		// When
-
 		var expectedResult = new ResponseData<>(success, responseMessage,
 				expectedCityDataResponse
 		);
@@ -258,7 +257,6 @@ class OpenMeteoGeocodingApiServiceTests {
 	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage(
 			int statusCodeValue, String exceptionMessage) throws URISyntaxException, IOException, InterruptedException {
 		// When
-
 		when(mockUriBuilder.setScheme(SCHEME)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setHost(HOST)).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setPath(PATH)).thenReturn(mockUriBuilder);
