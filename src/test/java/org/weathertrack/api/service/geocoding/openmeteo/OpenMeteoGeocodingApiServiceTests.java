@@ -1,7 +1,7 @@
 package org.weathertrack.api.service.geocoding.openmeteo;
 
-import org.apache.http.HttpStatus;
-import org.apache.http.client.utils.URIBuilder;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.net.URIBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

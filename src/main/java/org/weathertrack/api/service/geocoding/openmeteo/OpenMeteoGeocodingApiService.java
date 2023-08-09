@@ -2,8 +2,8 @@ package org.weathertrack.api.service.geocoding.openmeteo;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.utils.URIBuilder;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.net.URIBuilder;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.geocoding.GeocodingApiModule;
 import org.weathertrack.api.service.geocoding.GeocodingApiService;
@@ -58,10 +58,10 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 				return Response.ok(responseFinal);
 			}
 			if (response.statusCode() == HttpStatus.SC_MOVED_TEMPORARILY) {
-				return Response.ok();
+
 			}
 			if (response.statusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
-				return Response.ok();
+
 			}
 			if (response.statusCode() == HttpStatus.SC_BAD_REQUEST) {
 				throw new IllegalArgumentException(ApiServiceExceptionMessage.STATUS_CODE_400);

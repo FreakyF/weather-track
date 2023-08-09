@@ -2,7 +2,7 @@ package org.weathertrack.api.service.geocoding;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import org.apache.http.client.utils.URIBuilder;
+import org.apache.hc.core5.net.URIBuilder;
 
 public class GeocodingApiModule extends AbstractModule {
 	public static final String ANNOTATION_GEOCODING_API = "ANNOTATION_GEOCODING_API";
