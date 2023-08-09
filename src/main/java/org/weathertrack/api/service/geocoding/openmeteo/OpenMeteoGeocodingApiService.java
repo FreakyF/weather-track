@@ -17,23 +17,18 @@ import org.weathertrack.model.Response;
 import org.weathertrack.model.ResponseData;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.List;
 
 public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	private final URIBuilder uriBuilder;
-	private final HttpClient httpClient;
 	private final HttpService httpService;
 
 	@Inject
-	public OpenMeteoGeocodingApiService(@Named(GeocodingApiModule.ANNOTATION_GEOCODING_API) URIBuilder uriBuilder, HttpClient httpClient, HttpService httpService) {
+	public OpenMeteoGeocodingApiService(@Named(GeocodingApiModule.ANNOTATION_GEOCODING_API) URIBuilder uriBuilder, HttpService httpService) {
 		this.uriBuilder = uriBuilder;
-		this.httpClient = httpClient;
 		this.httpService = httpService;
 	}
 
@@ -77,6 +72,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 			}
 			return null;
 		} catch (IOException | InterruptedException e) {
+			Thread.currentThread().interrupt();
 			throw new RuntimeException(e);
 		}
 	}
@@ -102,13 +98,5 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
 		}
-	}
-
-	List<CityDataDTO> fetchCityDataFromApiResponse(URI requestUrl) {
-		throw new UnsupportedOperationException("Not Implemented");
-	}
-
-	String HandleStatusCode(HttpResponse<InputStream> response) {
-		throw new UnsupportedOperationException("Not Implemented");
 	}
 }
