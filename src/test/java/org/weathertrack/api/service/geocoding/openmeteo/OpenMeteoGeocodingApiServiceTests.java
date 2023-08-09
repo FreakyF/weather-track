@@ -26,7 +26,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -47,8 +46,6 @@ class OpenMeteoGeocodingApiServiceTests {
 	@Mock
 	private URIBuilder mockUriBuilder;
 	@Mock
-	private HttpClient mockHttpClient;
-	@Mock
 	private HttpService mockHttpService;
 	@Mock
 	private HttpResponse<InputStream> mockHttpResponse;
@@ -60,7 +57,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
 		MOCKED_CITY_DATA_DTO = TestData.Provider.createCityDataDTO();
-		sut = new OpenMeteoGeocodingApiService(mockUriBuilder, mockHttpClient, mockHttpService);
+		sut = new OpenMeteoGeocodingApiService(mockUriBuilder, mockHttpService);
 	}
 
 	@AfterEach
