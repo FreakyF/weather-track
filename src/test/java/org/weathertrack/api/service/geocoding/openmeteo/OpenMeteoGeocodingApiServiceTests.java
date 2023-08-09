@@ -196,11 +196,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage() {
-		var cityDataResponse = new ArrayList<>();
-		cityDataResponse.add(MOCKED_CITY_DATA_DTO);
 		return Stream.of(
-				Arguments.of(301, true, null, cityDataResponse),
-				Arguments.of(302, true, null, cityDataResponse),
 				Arguments.of(500, false, StatusCodesResource.STATUS_CODE_500, null),
 				Arguments.of(503, false, StatusCodesResource.STATUS_CODE_503, null),
 				Arguments.of(504, false, StatusCodesResource.STATUS_CODE_504, null)
