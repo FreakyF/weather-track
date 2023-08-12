@@ -9,7 +9,6 @@ public class ApiServiceExceptionMessage {
 			= "Tried to get geocoding city data but the geocoding city data is null!";
 	public static final String URI_SYNTAX_IS_INVALID
 			= "Tried to build URI but the URI syntax is invalid!";
-
 	public static final String STATUS_CODE_400
 			= "Bad Request: The server cannot understand the request!";
 	public static final String STATUS_CODE_404
