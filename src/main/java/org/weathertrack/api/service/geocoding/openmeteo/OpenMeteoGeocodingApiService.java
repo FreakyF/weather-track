@@ -27,50 +27,40 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	private final HttpService httpService;
 
 	@Inject
-	public OpenMeteoGeocodingApiService(@Named(GeocodingApiModule.ANNOTATION_GEOCODING_API) URIBuilder uriBuilder, HttpService httpService) {
+	public OpenMeteoGeocodingApiService(
+			@Named(GeocodingApiModule.ANNOTATION_GEOCODING_API) URIBuilder uriBuilder,
+			HttpService httpService) {
 		this.uriBuilder = uriBuilder;
 		this.httpService = httpService;
 	}
 
 	@Override
-	public ResponseData<List<CityDataDTO>> fetchCitiesForCityName(String cityName) throws IllegalArgumentException {
+	public ResponseData<List<CityDataDTO>> fetchCitiesForCityName(String cityName) {
 		var validationResult = validateCityName(cityName);
 		if (!validationResult.isSuccess()) {
 			throw new IllegalArgumentException(validationResult.getMessage());
 		}
-		var requestUrl = buildGeocodingApiUri(cityName);
+
+		URI requestUrl = buildGeocodingApiUri(cityName);
 		try {
 			var response = httpService.sendHttpGetRequest(requestUrl);
-			if (response.statusCode() == HttpStatus.SC_OK) {
+			int statusCode = response.statusCode();
+
+			if (statusCode == HttpStatus.SC_OK) {
 				CityDataResponseDTO responseDTO = httpService.parseJsonResponse(response.body(), CityDataResponseDTO.class);
-				if (responseDTO.getResults() == null) {
+				CityDataDTO[] cityDataDTO = responseDTO.getResults();
+
+				if (cityDataDTO == null) {
 					throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
 				}
-				if (responseDTO.getResults().length == 0) {
+				if (cityDataDTO.length == 0) {
 					return Response.fail(ApiMessageResource.NO_CITIES_FOUND);
 				}
-				var responseFinal = Arrays.asList(responseDTO.getResults());
-				return Response.ok(responseFinal);
+
+				return Response.ok(Arrays.asList(cityDataDTO));
+			} else {
+				return handleStatusCode(statusCode);
 			}
-			if (response.statusCode() == HttpStatus.SC_BAD_REQUEST) {
-				throw new IllegalArgumentException(ApiServiceExceptionMessage.STATUS_CODE_400);
-			}
-			if (response.statusCode() == HttpStatus.SC_NOT_FOUND) {
-				throw new IllegalArgumentException(ApiServiceExceptionMessage.STATUS_CODE_404);
-			}
-			if (response.statusCode() == HttpStatus.SC_TOO_MANY_REQUESTS) {
-				return Response.fail(StatusCodesResource.STATUS_CODE_429);
-			}
-			if (response.statusCode() == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-				return Response.fail(StatusCodesResource.STATUS_CODE_500);
-			}
-			if (response.statusCode() == HttpStatus.SC_SERVICE_UNAVAILABLE) {
-				return Response.fail(StatusCodesResource.STATUS_CODE_503);
-			}
-			if (response.statusCode() == HttpStatus.SC_GATEWAY_TIMEOUT) {
-				return Response.fail(StatusCodesResource.STATUS_CODE_504);
-			}
-			return null;
 		} catch (IOException | InterruptedException e) {
 			Thread.currentThread().interrupt();
 			throw new RuntimeException(e);
@@ -98,5 +88,19 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
 		}
+	}
+
+	private ResponseData<List<CityDataDTO>> handleStatusCode(int statusCode) {
+		return switch (statusCode) {
+			case HttpStatus.SC_BAD_REQUEST ->
+					throw new IllegalArgumentException(ApiServiceExceptionMessage.STATUS_CODE_400);
+			case HttpStatus.SC_NOT_FOUND ->
+					throw new IllegalArgumentException(ApiServiceExceptionMessage.STATUS_CODE_404);
+			case HttpStatus.SC_TOO_MANY_REQUESTS -> Response.fail(StatusCodesResource.STATUS_CODE_429);
+			case HttpStatus.SC_INTERNAL_SERVER_ERROR -> Response.fail(StatusCodesResource.STATUS_CODE_500);
+			case HttpStatus.SC_SERVICE_UNAVAILABLE -> Response.fail(StatusCodesResource.STATUS_CODE_503);
+			case HttpStatus.SC_GATEWAY_TIMEOUT -> Response.fail(StatusCodesResource.STATUS_CODE_504);
+			default -> null;
+		};
 	}
 }
