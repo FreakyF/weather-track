@@ -1,9 +1,11 @@
 package org.weathertrack.api.service.geocoding.openmeteo.model;
 
-public class CityDataResponseDTO {
-	private CityDataDTO[] results;
+import java.util.List;
 
-	public CityDataDTO[] getResults() {
+public class CityDataResponseDTO {
+	private List<CityDataDTO> results;
+
+	public List<CityDataDTO> getResults() {
 		return results;
 	}
 }

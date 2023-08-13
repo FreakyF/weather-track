@@ -15,6 +15,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.weathertrack.TestData;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
+import org.weathertrack.api.service.exception.BadRequestException;
+import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
@@ -29,6 +31,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -106,7 +109,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnResponseData() throws URISyntaxException, IOException, InterruptedException {
+	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedCityDataResponse = new ArrayList<>();
 		expectedCityDataResponse.add(MOCKED_CITY_DATA_DTO);
@@ -116,17 +119,12 @@ class OpenMeteoGeocodingApiServiceTests {
 		);
 
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
-		mockUriBuilder.build();
 
-		String jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
-		InputStream inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
+		var jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
+		mockHttpResponse(jsonResponse);
 
-		when(mockHttpResponse.body()).thenReturn(inputStream);
-		when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
-		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
-
-		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
-		when(mockedResponseDTO.getResults()).thenReturn(new CityDataDTO[]{MOCKED_CITY_DATA_DTO});
+		var mockedResponseDTO = mock(CityDataResponseDTO.class);
+		when(mockedResponseDTO.getResults()).thenReturn(List.of(MOCKED_CITY_DATA_DTO));
 		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
 
 		// Given
@@ -136,20 +134,23 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(expectedResult, result);
 	}
 
-	@Test
-	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException, IOException, InterruptedException {
-		// When
-		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
-		mockUriBuilder.build();
-
-		String jsonResponse = "{\"results\":[]}";
-		InputStream inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
+	private void mockHttpResponse(String jsonResponse) throws IOException, InterruptedException {
+		var inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
 
 		when(mockHttpResponse.body()).thenReturn(inputStream);
 		when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
+	}
 
-		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
+	@Test
+	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException_WithAppropriateMessage() throws IOException, InterruptedException {
+		// When
+		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
+
+		var jsonResponse = "{\"results\":[]}";
+		mockHttpResponse(jsonResponse);
+
+		var mockedResponseDTO = mock(CityDataResponseDTO.class);
 		when(mockedResponseDTO.getResults()).thenReturn(null);
 		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
 
@@ -167,12 +168,11 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() throws URISyntaxException, IOException, InterruptedException {
+	void fetchCitiesForCityName_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, null);
 
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
-		mockUriBuilder.build();
 
 		String jsonResponse = "{\"results\":[]}";
 		InputStream inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
@@ -182,7 +182,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
 
 		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
-		when(mockedResponseDTO.getResults()).thenReturn(new CityDataDTO[0]);
+		when(mockedResponseDTO.getResults()).thenReturn(List.of());
 		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
 
 		// Given
@@ -203,14 +203,13 @@ class OpenMeteoGeocodingApiServiceTests {
 	@ParameterizedTest
 	@MethodSource
 	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage(
-			int statusCodeValue, boolean success, String responseMessage, ArrayList<CityDataDTO> expectedCityDataResponse) throws URISyntaxException, IOException, InterruptedException {
+			int statusCodeValue, boolean success, String responseMessage, ArrayList<CityDataDTO> expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedResult = new ResponseData<>(success, responseMessage,
 				expectedCityDataResponse
 		);
 
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
-		mockUriBuilder.build();
 
 		when(mockHttpResponse.statusCode()).thenReturn(statusCodeValue);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
@@ -224,18 +223,17 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage() {
 		return Stream.of(
-				Arguments.of(400, ApiServiceExceptionMessage.STATUS_CODE_400),
-				Arguments.of(404, ApiServiceExceptionMessage.STATUS_CODE_404)
+				Arguments.of(400, ApiServiceExceptionMessage.STATUS_CODE_400, BadRequestException.class),
+				Arguments.of(404, ApiServiceExceptionMessage.STATUS_CODE_404, NotFoundException.class)
 		);
 	}
 
 	@ParameterizedTest
 	@MethodSource
 	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage(
-			int statusCodeValue, String exceptionMessage) throws URISyntaxException, IOException, InterruptedException {
+			int statusCodeValue, String exceptionMessage, Class<? extends Exception> exceptionClass) throws IOException, InterruptedException {
 		// When
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
-		mockUriBuilder.build();
 
 		when(mockHttpResponse.statusCode()).thenReturn(statusCodeValue);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
@@ -248,8 +246,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		);
 
 		// Then
-		assertTrue(thrown instanceof RuntimeException, "Expected IllegalArgumentException");
-		assertEquals(IllegalArgumentException.class, thrown.getClass());
+		assertEquals(exceptionClass, thrown.getClass());
 		assertEquals(exceptionMessage, thrown.getMessage());
 	}
 }

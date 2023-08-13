@@ -14,6 +14,9 @@ public class ApiServiceExceptionMessage {
 	public static final String STATUS_CODE_404
 			= "Not Found: The requested page or resource could not be found!";
 
+	public static final String UNHANDLED_STATUS_CODE
+			= "Unhandled status code: %s";
+
 	private ApiServiceExceptionMessage() {
 	}
 }
