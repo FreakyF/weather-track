@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.weathertrack.api.service.forecast.model.WeatherData;
 import org.weathertrack.input.service.userio.exception.WeatherExceptionMessage;
 
 import java.util.stream.Stream;

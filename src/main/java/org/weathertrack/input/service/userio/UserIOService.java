@@ -1,7 +1,7 @@
 package org.weathertrack.input.service.userio;
 
-import org.weathertrack.forecast.model.WeatherData;
-import org.weathertrack.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.forecast.model.WeatherData;
+import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 
 import java.util.List;
 

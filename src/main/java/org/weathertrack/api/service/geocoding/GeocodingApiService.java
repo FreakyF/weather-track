@@ -4,7 +4,7 @@ import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
-import org.weathertrack.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.model.ResponseData;
 
 import java.io.IOException;

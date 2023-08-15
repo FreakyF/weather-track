@@ -1,8 +1,8 @@
 package org.weathertrack.input.service.userio;
 
 import com.google.inject.Inject;
-import org.weathertrack.forecast.model.WeatherData;
-import org.weathertrack.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.forecast.model.WeatherData;
+import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.input.service.userio.resource.WeatherDisplayResource;
 import org.weathertrack.logging.Logger;

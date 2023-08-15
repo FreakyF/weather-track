@@ -1,4 +1,4 @@
-package org.weathertrack.forecast.model;
+package org.weathertrack.api.service.forecast.model;
 
 import org.weathertrack.input.service.userio.exception.WeatherExceptionMessage;
 
