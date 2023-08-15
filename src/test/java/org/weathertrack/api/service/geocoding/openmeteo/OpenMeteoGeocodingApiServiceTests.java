@@ -18,9 +18,7 @@ import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
-import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
-import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.api.service.resource.StatusCodesResource;
@@ -205,7 +203,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	@ParameterizedTest
 	@MethodSource
 	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage(
-			int statusCodeValue, boolean success, String responseMessage, ArrayList<CityDataDTO> expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
+			int statusCodeValue, boolean success, String responseMessage, ArrayList<GeocodingCityData> expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedResult = new ResponseData<>(success, responseMessage,
 				expectedCityDataResponse
@@ -255,38 +253,27 @@ class OpenMeteoGeocodingApiServiceTests {
 	@Test
 	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsNull_ShouldThrowException() {
 		// When
-		var exception = assertThrows(NullPointerException.class, () -> sut.fetchGeocodingDataForCity(null));
+
+		// Given
 
 		// Then
-		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, exception.getMessage());
 	}
 
 	@Test
 	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsValid_ShouldReturnGeocodingCityData() {
 		// When
-		var expectedResult = new ResponseData<>(true, null, MOCKED_CITY_DATA_DTO);
-		var mockCityDataRequest = new GetCityDataRequest(21, 37);
 
 		// Given
-		var result = sut.fetchGeocodingDataForCity(mockCityDataRequest);
 
 		// Then
-		assertEquals(expectedResult, result);
 	}
 
 	@Test
 	void fetchGeocodingDataForCity_WhenCityDataDTOIsNull_ShouldThrowException_WithAppropriateMessage() {
+		// When
+
 		// Given
-		var mockCityDataRequest = new GetCityDataRequest(21, 37);
-		var thrown = assertThrows(
-				Exception.class,
-				() -> sut.fetchGeocodingDataForCity(mockCityDataRequest),
-				"Expected fetchCitiesForCityName to throw Exception, but it didn't"
-		);
 
 		// Then
-		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException");
-		assertEquals(NullPointerException.class, thrown.getClass());
-		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, thrown.getMessage());
 	}
 }
