@@ -298,41 +298,4 @@ class OpenMeteoGeocodingApiServiceTests {
 
 		// Then
 	}
-
-	private static Stream<Arguments> fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage() {
-		return Stream.of(
-				Arguments.of(500, false, StatusCodesResource.STATUS_CODE_500, null),
-				Arguments.of(503, false, StatusCodesResource.STATUS_CODE_503, null),
-				Arguments.of(504, false, StatusCodesResource.STATUS_CODE_504, null)
-		);
-	}
-
-	@ParameterizedTest
-	@MethodSource
-	void fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage(
-			int statusCodeValue, boolean success, String responseMessage, ArrayList<CityDataDTO> expectedCityDataResponse) {
-		// When
-
-		// Given
-
-		// Then
-	}
-
-	private static Stream<Arguments> fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage() {
-		return Stream.of(
-				Arguments.of(400, ApiServiceExceptionMessage.STATUS_CODE_400, BadRequestException.class),
-				Arguments.of(404, ApiServiceExceptionMessage.STATUS_CODE_404, NotFoundException.class)
-		);
-	}
-
-	@ParameterizedTest
-	@MethodSource
-	void fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage(
-			int statusCodeValue, String exceptionMessage, Class<? extends Exception> exceptionClass) throws IOException, InterruptedException {
-		// When
-
-		// Given
-
-		// Then
-	}
 }
