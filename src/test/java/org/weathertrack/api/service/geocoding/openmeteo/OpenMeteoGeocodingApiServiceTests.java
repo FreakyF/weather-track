@@ -261,7 +261,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsValid_ShouldReturnResponseData() {
+	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsValid_ShouldReturnGeocodingCityData() {
 		// When
 		var expectedResult = new ResponseData<>(true, null, MOCKED_CITY_DATA_DTO);
 		var mockCityDataRequest = new GetCityDataRequest(21, 37);
