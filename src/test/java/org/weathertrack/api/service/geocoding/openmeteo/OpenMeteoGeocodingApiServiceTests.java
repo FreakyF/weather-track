@@ -18,7 +18,9 @@ import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.geocoding.model.GeocodingData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
+import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.api.service.resource.StatusCodesResource;
@@ -253,10 +255,14 @@ class OpenMeteoGeocodingApiServiceTests {
 	@Test
 	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsNull_ShouldThrowException() {
 		// When
+		var mockCityDataRequest = new GetCityDataRequest(21, 37);
+		var expectedResult = new GeocodingData(21, 37);
 
 		// Given
+		var result = sut.fetchGeocodingDataForCity(mockCityDataRequest);
 
 		// Then
+		assertEquals(expectedResult, result);
 	}
 
 	@Test
