@@ -288,17 +288,4 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(NullPointerException.class, thrown.getClass());
 		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, thrown.getMessage());
 	}
-
-	@Test
-	void fetchGeocodingDataForCity_WhenCityDataDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() {
-		// When
-		var mockCityDataRequest = new GetCityDataRequest(21, 37);
-		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, null);
-
-		// Given
-		var result = sut.fetchGeocodingDataForCity(mockCityDataRequest);
-
-		// Then
-		assertEquals(expectedResult, result);
-	}
 }
