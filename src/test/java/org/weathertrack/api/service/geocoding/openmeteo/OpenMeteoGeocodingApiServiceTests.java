@@ -277,7 +277,6 @@ class OpenMeteoGeocodingApiServiceTests {
 	void fetchGeocodingDataForCity_WhenCityDataDTOIsNull_ShouldThrowException_WithAppropriateMessage() {
 		// Given
 		var mockCityDataRequest = new GetCityDataRequest(21, 37);
-
 		var thrown = assertThrows(
 				Exception.class,
 				() -> sut.fetchGeocodingDataForCity(mockCityDataRequest),
@@ -293,9 +292,13 @@ class OpenMeteoGeocodingApiServiceTests {
 	@Test
 	void fetchGeocodingDataForCity_WhenCityDataDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() {
 		// When
+		var mockCityDataRequest = new GetCityDataRequest(21, 37);
+		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, null);
 
 		// Given
+		var result = sut.fetchGeocodingDataForCity(mockCityDataRequest);
 
 		// Then
+		assertEquals(expectedResult, result);
 	}
 }
