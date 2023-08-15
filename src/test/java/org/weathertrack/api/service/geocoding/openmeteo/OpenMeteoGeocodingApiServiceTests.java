@@ -17,6 +17,7 @@ import org.weathertrack.TestData;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
+import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
@@ -46,7 +47,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class OpenMeteoGeocodingApiServiceTests {
 	private final static String CITY_NAME = "Kielce";
-	private static CityDataDTO MOCKED_CITY_DATA_DTO;
+	private static GeocodingCityData MOCKED_CITY_DATA_DTO;
 	@Mock
 	private URIBuilder mockUriBuilder;
 	@Mock
