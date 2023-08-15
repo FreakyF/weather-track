@@ -19,6 +19,7 @@ import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
+import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.api.service.resource.StatusCodesResource;
@@ -261,17 +262,33 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@Test
 	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsValid_ShouldReturnResponseData() {
+		// When
+		var expectedResult = new ResponseData<>(true, null, MOCKED_CITY_DATA_DTO);
+		var mockCityDataRequest = new GetCityDataRequest(21, 37);
 
+		// Given
+		var result = sut.fetchGeocodingDataForCity(mockCityDataRequest);
+
+		// Then
+		assertEquals(expectedResult, result);
 	}
 
 	@Test
 	void fetchGeocodingDataForCity_WhenCityDataDTOIsNull_ShouldThrowException_WithAppropriateMessage() {
+		// When
 
+		// Given
+
+		// Then
 	}
 
 	@Test
 	void fetchGeocodingDataForCity_WhenCityDataDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() {
+		// When
 
+		// Given
+
+		// Then
 	}
 
 	private static Stream<Arguments> fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage() {
@@ -286,7 +303,11 @@ class OpenMeteoGeocodingApiServiceTests {
 	@MethodSource
 	void fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage(
 			int statusCodeValue, boolean success, String responseMessage, ArrayList<CityDataDTO> expectedCityDataResponse) {
+		// When
 
+		// Given
+
+		// Then
 	}
 
 	private static Stream<Arguments> fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage() {
@@ -300,5 +321,10 @@ class OpenMeteoGeocodingApiServiceTests {
 	@MethodSource
 	void fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage(
 			int statusCodeValue, String exceptionMessage, Class<? extends Exception> exceptionClass) throws IOException, InterruptedException {
+		// When
+
+		// Given
+
+		// Then
 	}
 }
