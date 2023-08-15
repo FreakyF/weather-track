@@ -9,6 +9,7 @@ import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.GeocodingApiModule;
 import org.weathertrack.api.service.geocoding.GeocodingApiService;
+import org.weathertrack.api.service.geocoding.model.GeocodingData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
@@ -37,7 +38,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	}
 
 	@Override
-	public ResponseData<List<CityDataDTO>> fetchCitiesForCityName(String cityName) throws IOException, InterruptedException, BadRequestException, NotFoundException {
+	public ResponseData<List<GeocodingCityData>> fetchCitiesForCityName(String cityName) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		var validationResult = validateCityName(cityName);
 		if (!validationResult.isSuccess()) {
 			throw new IllegalArgumentException(validationResult.getMessage());
@@ -72,7 +73,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	}
 
 	@Override
-	public GeocodingCityData fetchGeocodingDataForCity(GetCityDataRequest request) {
+	public GeocodingData fetchGeocodingDataForCity(GetCityDataRequest request) {
 		throw new UnsupportedOperationException("Not Implemented");
 	}
 
