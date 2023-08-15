@@ -252,26 +252,25 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@Test
 	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsNull_ShouldThrowException() {
+		// When
+		var exception = assertThrows(NullPointerException.class, () -> sut.fetchGeocodingDataForCity(null));
+
+		// Then
+		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, exception.getMessage());
+	}
+
+	@Test
+	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsValid_ShouldReturnResponseData() {
 
 	}
 
 	@Test
-	void fetchGeocodingDataForCity_WhenUriSyntaxIsInvalid_ShouldThrowException_WithAppropriateMessage() {
+	void fetchGeocodingDataForCity_WhenCityDataDTOIsNull_ShouldThrowException_WithAppropriateMessage() {
 
 	}
 
 	@Test
-	void fetchGeocodingDataForCity_WhenGetCityDataRequestAndUriIsValid_ShouldReturnResponseData() {
-
-	}
-
-	@Test
-	void fetchGeocodingDataForCity_WhenCityDataResponseDTOIsNull_ShouldThrowException_WithAppropriateMessage() {
-
-	}
-
-	@Test
-	void fetchGeocodingDataForCity_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() {
+	void fetchGeocodingDataForCity_WhenCityDataDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() {
 
 	}
 
