@@ -275,11 +275,19 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@Test
 	void fetchGeocodingDataForCity_WhenCityDataDTOIsNull_ShouldThrowException_WithAppropriateMessage() {
-		// When
-
 		// Given
+		var mockCityDataRequest = new GetCityDataRequest(21, 37);
+
+		var thrown = assertThrows(
+				Exception.class,
+				() -> sut.fetchGeocodingDataForCity(mockCityDataRequest),
+				"Expected fetchCitiesForCityName to throw Exception, but it didn't"
+		);
 
 		// Then
+		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException");
+		assertEquals(NullPointerException.class, thrown.getClass());
+		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, thrown.getMessage());
 	}
 
 	@Test
