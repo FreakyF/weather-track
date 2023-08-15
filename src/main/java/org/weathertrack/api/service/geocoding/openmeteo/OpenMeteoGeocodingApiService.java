@@ -15,6 +15,7 @@ import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.api.service.resource.StatusCodesResource;
+import org.weathertrack.geocoding.model.GeocodingCityData;
 import org.weathertrack.model.Response;
 import org.weathertrack.model.ResponseData;
 
@@ -71,7 +72,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	}
 
 	@Override
-	public ResponseData<CityDataDTO> fetchGeocodingDataForCity(GetCityDataRequest request) {
+	public GeocodingCityData fetchGeocodingDataForCity(GetCityDataRequest request) {
 		throw new UnsupportedOperationException("Not Implemented");
 	}
 
