@@ -9,14 +9,13 @@ import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.GeocodingApiModule;
 import org.weathertrack.api.service.geocoding.GeocodingApiService;
+import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.geocoding.model.GeocodingData;
-import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.api.service.resource.StatusCodesResource;
-import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.model.Response;
 import org.weathertrack.model.ResponseData;
 
@@ -60,7 +59,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		return Response.ok(cityDataDTOS);
 	}
 
-	private ResponseData<List<CityDataDTO>> getCitiesForCityNameFromApi(String cityName) throws IOException, InterruptedException, BadRequestException, NotFoundException {
+	private ResponseData<List<GeocodingCityData>> getCitiesForCityNameFromApi(String cityName) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		URI requestUrl = buildGeocodingApiUri(cityName);
 		var response = httpService.sendHttpGetRequest(requestUrl);
 
@@ -96,7 +95,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		}
 	}
 
-	private ResponseData<List<CityDataDTO>> handleStatusCode(int statusCode) throws BadRequestException, NotFoundException {
+	private ResponseData<List<GeocodingCityData>> handleStatusCode(int statusCode) throws BadRequestException, NotFoundException {
 		return switch (statusCode) {
 			case HttpStatus.SC_BAD_REQUEST -> throw new BadRequestException(ApiServiceExceptionMessage.STATUS_CODE_400);
 			case HttpStatus.SC_NOT_FOUND -> throw new NotFoundException(ApiServiceExceptionMessage.STATUS_CODE_404);
