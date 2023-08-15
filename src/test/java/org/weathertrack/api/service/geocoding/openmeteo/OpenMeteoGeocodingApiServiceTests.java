@@ -249,4 +249,57 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(exceptionClass, thrown.getClass());
 		assertEquals(exceptionMessage, thrown.getMessage());
 	}
+
+	@Test
+	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsNull_ShouldThrowException() {
+
+	}
+
+	@Test
+	void fetchGeocodingDataForCity_WhenUriSyntaxIsInvalid_ShouldThrowException_WithAppropriateMessage() {
+
+	}
+
+	@Test
+	void fetchGeocodingDataForCity_WhenGetCityDataRequestAndUriIsValid_ShouldReturnResponseData() {
+
+	}
+
+	@Test
+	void fetchGeocodingDataForCity_WhenCityDataResponseDTOIsNull_ShouldThrowException_WithAppropriateMessage() {
+
+	}
+
+	@Test
+	void fetchGeocodingDataForCity_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() {
+
+	}
+
+	private static Stream<Arguments> fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage() {
+		return Stream.of(
+				Arguments.of(500, false, StatusCodesResource.STATUS_CODE_500, null),
+				Arguments.of(503, false, StatusCodesResource.STATUS_CODE_503, null),
+				Arguments.of(504, false, StatusCodesResource.STATUS_CODE_504, null)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage(
+			int statusCodeValue, boolean success, String responseMessage, ArrayList<CityDataDTO> expectedCityDataResponse) {
+
+	}
+
+	private static Stream<Arguments> fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage() {
+		return Stream.of(
+				Arguments.of(400, ApiServiceExceptionMessage.STATUS_CODE_400, BadRequestException.class),
+				Arguments.of(404, ApiServiceExceptionMessage.STATUS_CODE_404, NotFoundException.class)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void fetchGeocodingDataForCity_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage(
+			int statusCodeValue, String exceptionMessage, Class<? extends Exception> exceptionClass) throws IOException, InterruptedException {
+	}
 }
