@@ -71,7 +71,7 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	}
 
 	@Override
-	public GeocodingData fetchGeocodingDataForCity(int selectedCityIndex) {
+	public ResponseData<GeocodingData> fetchGeocodingDataForCity(int selectedCityIndex) {
 		throw new UnsupportedOperationException("Not Implemented");
 	}
 

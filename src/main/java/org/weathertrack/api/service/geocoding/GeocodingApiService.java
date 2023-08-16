@@ -19,5 +19,5 @@ public interface GeocodingApiService {
 	 */
 	ResponseData<List<GeocodingCityData>> fetchCitiesForCityName(String cityName) throws IllegalArgumentException, IOException, InterruptedException, BadRequestException, NotFoundException;
 
-	GeocodingData fetchGeocodingDataForCity(int selectedCityIndex);
+	ResponseData<GeocodingData> fetchGeocodingDataForCity(int selectedCityIndex);
 }
