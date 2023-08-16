@@ -2,7 +2,6 @@ package org.weathertrack.api.service.geocoding.openmeteo.model;
 
 public class GetCityDataRequest {
 	private final double longitude;
-
 	private final double latitude;
 
 	public GetCityDataRequest(double longitude, double latitude) {
