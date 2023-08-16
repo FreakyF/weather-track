@@ -26,8 +26,6 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	private final URIBuilder uriBuilder;
 	private final HttpService httpService;
 
-	private List<GeocodingCityData> geocodingCityDataList;
-
 	@Inject
 	public OpenMeteoGeocodingApiService(
 			@Named(GeocodingApiModule.ANNOTATION_GEOCODING_API) URIBuilder uriBuilder,
@@ -68,7 +66,6 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		}
 
 		CityDataResponseDTO responseDTO = httpService.parseJsonResponse(response.body(), CityDataResponseDTO.class);
-		geocodingCityDataList = responseDTO.getResults();
 		return Response.ok(responseDTO.getResults());
 	}
 
