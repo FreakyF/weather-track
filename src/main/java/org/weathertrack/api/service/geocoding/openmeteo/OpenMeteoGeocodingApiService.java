@@ -10,7 +10,6 @@ import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.GeocodingApiModule;
 import org.weathertrack.api.service.geocoding.GeocodingApiService;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
-import org.weathertrack.api.service.geocoding.model.GeocodingData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
@@ -26,6 +25,8 @@ import java.util.List;
 public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	private final URIBuilder uriBuilder;
 	private final HttpService httpService;
+
+	private List<GeocodingCityData> geocodingCityDataList;
 
 	@Inject
 	public OpenMeteoGeocodingApiService(
@@ -67,12 +68,8 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		}
 
 		CityDataResponseDTO responseDTO = httpService.parseJsonResponse(response.body(), CityDataResponseDTO.class);
+		geocodingCityDataList = responseDTO.getResults();
 		return Response.ok(responseDTO.getResults());
-	}
-
-	@Override
-	public ResponseData<GeocodingData> fetchGeocodingDataForCity(int selectedCityIndex) {
-		throw new UnsupportedOperationException("Not Implemented");
 	}
 
 	private ResponseData<?> validateCityName(String cityName) {
