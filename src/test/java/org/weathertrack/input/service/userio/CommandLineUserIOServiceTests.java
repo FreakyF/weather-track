@@ -82,11 +82,15 @@ class CommandLineUserIOServiceTests {
 				new GeocodingCityData(
 						"Kielce",
 						"Świętokrzyskie",
-						"Poland"),
+						"Poland",
+						21,
+						37),
 				new GeocodingCityData(
 						"Brenna",
 						"Silesia",
-						"Poland")
+						"Poland",
+						69,
+						69)
 		);
 
 		// Given
@@ -119,7 +123,9 @@ class CommandLineUserIOServiceTests {
 				new GeocodingCityData(
 						"Kielce",
 						"Świętokrzyskie",
-						"Poland")
+						"Poland",
+						21,
+						37)
 		);
 
 		// Given
