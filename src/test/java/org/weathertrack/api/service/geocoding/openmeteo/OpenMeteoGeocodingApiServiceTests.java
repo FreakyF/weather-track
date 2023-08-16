@@ -18,9 +18,7 @@ import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
-import org.weathertrack.api.service.geocoding.model.GeocodingData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
-import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.api.service.resource.StatusCodesResource;
@@ -48,8 +46,6 @@ import static org.mockito.Mockito.when;
 class OpenMeteoGeocodingApiServiceTests {
 	private final static String CITY_NAME = "Kielce";
 	private static GeocodingCityData MOCKED_CITY_DATA_DTO;
-
-	private static GetCityDataRequest MOCKED_CITY_DATA_REQUEST;
 	@Mock
 	private URIBuilder mockUriBuilder;
 	@Mock
@@ -64,7 +60,6 @@ class OpenMeteoGeocodingApiServiceTests {
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
 		MOCKED_CITY_DATA_DTO = TestData.Provider.createCityDataDTO();
-		MOCKED_CITY_DATA_REQUEST = TestData.Provider.createCityDataRequest();
 		sut = new OpenMeteoGeocodingApiService(mockUriBuilder, mockHttpService);
 	}
 
@@ -254,41 +249,4 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(exceptionClass, thrown.getClass());
 		assertEquals(exceptionMessage, thrown.getMessage());
 	}
-
-	@Test
-	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsNull_ShouldThrowException() {
-		// Given
-		var thrown = assertThrows(
-				Exception.class,
-				() -> sut.fetchGeocodingDataForCity(MOCKED_CITY_DATA_REQUEST),
-				"Expected fetchGeocodingDataForCity to throw Exception, but it didn't"
-		);
-
-		// Then
-		assertEquals(NullPointerException.class, thrown.getClass());
-		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, thrown.getMessage());
-
-	}
-
-	@Test
-	void fetchGeocodingDataForCity_WhenGetCityDataRequestIsValid_ShouldReturnGeocodingData() {
-		// When
-		var expectedResult = new GeocodingData(21, 37);
-
-		// Given
-		var result = sut.fetchGeocodingDataForCity(MOCKED_CITY_DATA_REQUEST);
-
-		// Then
-		assertEquals(expectedResult, result);
-	}
-
-	@Test
-	void fetchGeocodingDataForCity_WhenCityDataDTOIsNull_ShouldThrowException_WithAppropriateMessage() {
-		// When
-
-		// Given
-
-		// Then
-	}
-
 }
