@@ -1,11 +1,12 @@
 package org.weathertrack.input.service.userio;
 
 import com.google.inject.Inject;
+import org.weathertrack.api.service.forecast.model.WeatherData;
+import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.input.resource.InputLogMessage;
+import org.weathertrack.input.service.userio.resource.WeatherDisplayResource;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
-import org.weathertrack.weather.model.WeatherData;
-import org.weathertrack.weather.resource.WeatherDisplayResource;
 
 import java.util.List;
 import java.util.Scanner;
@@ -38,7 +39,7 @@ public class CommandLineUserIOService implements UserIOService {
 	}
 
 	@Override
-	public void printCitiesWithSameName(List<String> citiesWithSameName) {
+	public void printCitiesWithSameName(List<GeocodingCityData> citiesWithSameName) {
 		if (citiesWithSameName.isEmpty()) {
 			logger.warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
 			return;
@@ -46,11 +47,14 @@ public class CommandLineUserIOService implements UserIOService {
 
 		StringBuilder message = new StringBuilder();
 		for (int i = 0; i < citiesWithSameName.size(); i++) {
-			message.append(i + 1).append(". ").append(citiesWithSameName.get(i));
-			var isLastCity = i == citiesWithSameName.size() - 1;
-			if (!isLastCity) {
-				message.append("\n");
-			}
+			message.append(i + 1)
+					.append(". ")
+					.append(citiesWithSameName.get(i).name())
+					.append(", ")
+					.append(citiesWithSameName.get(i).administration())
+					.append(", ")
+					.append(citiesWithSameName.get(i).country())
+					.append("\n");
 		}
 		System.out.print(message);
 	}
