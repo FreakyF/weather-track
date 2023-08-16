@@ -1,19 +1,19 @@
 package org.weathertrack.api.service.geocoding.model;
 
 public class GeocodingData {
-	private final double Longitude;
-	private final double Latitude;
+	private final double longitude;
+	private final double latitude;
 
 	public GeocodingData(double longitude, double latitude) {
-		Longitude = longitude;
-		Latitude = latitude;
+		this.longitude = longitude;
+		this.latitude = latitude;
 	}
 
 	public double getLongitude() {
-		return Longitude;
+		return longitude;
 	}
 
 	public double getLatitude() {
-		return Latitude;
+		return latitude;
 	}
 }
