@@ -2,10 +2,8 @@ package org.weathertrack.api.service.geocoding;
 
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
-import org.weathertrack.api.service.geocoding.model.GeocodingData;
-import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
-import org.weathertrack.api.service.geocoding.openmeteo.model.GetCityDataRequest;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.geocoding.model.GeocodingData;
 import org.weathertrack.model.ResponseData;
 
 import java.io.IOException;
@@ -20,5 +18,6 @@ public interface GeocodingApiService {
 	 * @throws InterruptedException     when sendHttpGetRequest is interrupted.
 	 */
 	ResponseData<List<GeocodingCityData>> fetchCitiesForCityName(String cityName) throws IllegalArgumentException, IOException, InterruptedException, BadRequestException, NotFoundException;
-	GeocodingData fetchGeocodingDataForCity(GetCityDataRequest request);
+
+	GeocodingData fetchGeocodingDataForCity(int selectedCityIndex);
 }
