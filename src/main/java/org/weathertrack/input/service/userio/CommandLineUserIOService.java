@@ -49,11 +49,11 @@ public class CommandLineUserIOService implements UserIOService {
 		for (int i = 0; i < citiesWithSameName.size(); i++) {
 			message.append(i + 1)
 					.append(". ")
-					.append(citiesWithSameName.get(i).getName())
+					.append(citiesWithSameName.get(i).name())
 					.append(", ")
-					.append(citiesWithSameName.get(i).getAdministration())
+					.append(citiesWithSameName.get(i).administration())
 					.append(", ")
-					.append(citiesWithSameName.get(i).getCountry())
+					.append(citiesWithSameName.get(i).country())
 					.append("\n");
 		}
 		System.out.print(message);
