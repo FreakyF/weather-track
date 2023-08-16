@@ -249,4 +249,40 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(exceptionClass, thrown.getClass());
 		assertEquals(exceptionMessage, thrown.getMessage());
 	}
+
+	@Test
+	void fetchGeocodingDataForCity_WhenIndexIsOutOfBounds_ShouldReturnResponseData_WithAppropriateMessage() {
+		// When
+
+		// Given
+
+		// Then
+	}
+
+	@Test
+	void fetchGeocodingDataForCity_WhenIndexIsValid_ShouldReturnResponseData() {
+		// When
+
+		// Given
+
+		// Then
+	}
+
+	@Test
+	void fetchGeocodingDataForCity_WhenGeocodingCityDataIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() {
+		// When
+
+		// Given
+
+		// Then
+	}
+
+	@Test
+	void fetchGeocodingDataForCity_WhenGeocodingCityDataIsNull_ShouldThrowException_WithAppropriateMessage() {
+		// When
+
+		// Given
+
+		// Then
+	}
 }
