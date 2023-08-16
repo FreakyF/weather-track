@@ -1,5 +1,9 @@
 package org.weathertrack.api.service.forecast;
 
+import org.weathertrack.api.service.forecast.model.WeatherData;
+import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.model.ResponseData;
+
 public interface ForecastApiService {
-	// TODO: Implement methods, should also return ResponseData.
+	ResponseData<WeatherData> fetchForecastForCoordinates(GeocodingCityData geocodingCityData);
 }
