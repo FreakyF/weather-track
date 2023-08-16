@@ -1,9 +1,5 @@
-### Description:
+### Related Issue(s):
 
-### User Story:
-
-### Acceptance Criteria:
-
-### Mockups or Diagrams (if applicable):
+### Changes Made:
 
 ### Additional Notes:
