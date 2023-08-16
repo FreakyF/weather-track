@@ -68,7 +68,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		closeable.close();
 	}
 
-	private static Stream<Arguments> fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage() {
+	private static Stream<Arguments> fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException() {
 		return Stream.of(
 				Arguments.of(null, ApiServiceExceptionMessage.CITY_NAME_IS_NULL, IllegalArgumentException.class),
 				Arguments.of("", ApiServiceExceptionMessage.CITY_NAME_IS_BLANK, IllegalArgumentException.class),
@@ -78,7 +78,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage(
+	void fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException(
 			String cityNameValue, String expectedExceptionMessage, Class<? extends Throwable> exceptionClass) {
 		// When
 		var exception = assertThrows(exceptionClass, () -> sut.fetchCitiesForCityName(cityNameValue));
@@ -88,7 +88,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenUriSyntaxIsInvalid_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException {
+	void fetchCitiesForCityName_WhenUriSyntaxIsInvalid_ShouldThrowException() throws URISyntaxException {
 		// When
 		var syntaxException = new URISyntaxException(CITY_NAME, ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
 
@@ -143,7 +143,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException_WithAppropriateMessage() throws IOException, InterruptedException {
+	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException() throws IOException, InterruptedException {
 		// When
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 
@@ -168,7 +168,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() throws IOException, InterruptedException, BadRequestException, NotFoundException {
+	void fetchCitiesForCityName_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, null);
 
@@ -192,7 +192,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(expectedResult, result);
 	}
 
-	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage() {
+	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData() {
 		return Stream.of(
 				Arguments.of(500, false, StatusCodesResource.STATUS_CODE_500, null),
 				Arguments.of(503, false, StatusCodesResource.STATUS_CODE_503, null),
@@ -202,7 +202,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage(
+	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData(
 			int statusCodeValue, boolean success, String responseMessage, ArrayList<GeocodingCityData> expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedResult = new ResponseData<>(success, responseMessage,
@@ -221,7 +221,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(expectedResult, result);
 	}
 
-	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage() {
+	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException() {
 		return Stream.of(
 				Arguments.of(400, ApiServiceExceptionMessage.STATUS_CODE_400, BadRequestException.class),
 				Arguments.of(404, ApiServiceExceptionMessage.STATUS_CODE_404, NotFoundException.class)
@@ -230,7 +230,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage(
+	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException(
 			int statusCodeValue, String exceptionMessage, Class<? extends Exception> exceptionClass) throws IOException, InterruptedException {
 		// When
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
