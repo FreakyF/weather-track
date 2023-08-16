@@ -18,6 +18,7 @@ import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.geocoding.model.GeocodingData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
@@ -46,6 +47,7 @@ import static org.mockito.Mockito.when;
 class OpenMeteoGeocodingApiServiceTests {
 	private final static String CITY_NAME = "Kielce";
 	private static GeocodingCityData MOCKED_CITY_DATA_DTO;
+	private static GeocodingData MOCKED_GEOCODING_DATA;
 	@Mock
 	private URIBuilder mockUriBuilder;
 	@Mock
@@ -60,6 +62,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
 		MOCKED_CITY_DATA_DTO = TestData.Provider.createCityDataDTO();
+		MOCKED_GEOCODING_DATA = TestData.Provider.createGeocodingData();
 		sut = new OpenMeteoGeocodingApiService(mockUriBuilder, mockHttpService);
 	}
 
@@ -250,22 +253,48 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(exceptionMessage, thrown.getMessage());
 	}
 
-	@Test
-	void fetchGeocodingDataForCity_WhenIndexIsOutOfBounds_ShouldReturnResponseData_WithAppropriateMessage() {
-		// When
-
-		// Given
-
-		// Then
+	private static Stream<Arguments> fetchGeocodingDataForCity_WhenIndexIsOutOfBounds_ShouldReturnResponseData_WithAppropriateMessage() {
+		return Stream.of(
+				Arguments.of(0),
+				Arguments.of(-1),
+				Arguments.of(-22),
+				Arguments.of(-2147483648)
+		);
 	}
 
-	@Test
-	void fetchGeocodingDataForCity_WhenIndexIsValid_ShouldReturnResponseData() {
+	@ParameterizedTest
+	@MethodSource
+	void fetchGeocodingDataForCity_WhenIndexIsOutOfBounds_ShouldReturnResponseData_WithAppropriateMessage(int selectedCityIndexValue) {
 		// When
+		var expectedResult = new ResponseData<>(false, ApiMessageResource.CITY_INDEX_OUT_OF_BOUNDS, null);
 
 		// Given
+		var result = sut.fetchGeocodingDataForCity(selectedCityIndexValue);
 
 		// Then
+		assertEquals(expectedResult, result);
+	}
+
+	private static Stream<Arguments> fetchGeocodingDataForCity_WhenIndexIsValid_ShouldReturnResponseData() {
+		return Stream.of(
+				Arguments.of(1),
+				Arguments.of(2),
+				Arguments.of(5),
+				Arguments.of(22)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void fetchGeocodingDataForCity_WhenIndexIsValid_ShouldReturnResponseData(int selectedCityIndexValue) {
+		// When
+		var expectedResult = new ResponseData<>(true, null, MOCKED_GEOCODING_DATA);
+
+		// Given
+		var result = sut.fetchGeocodingDataForCity(selectedCityIndexValue);
+
+		// Then
+		assertEquals(expectedResult, result);
 	}
 
 	@Test
