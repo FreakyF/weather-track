@@ -7,9 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.weathertrack.TestData;
+import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
 
 @ExtendWith(MockitoExtension.class)
 class OpenMeteoForecastApiServiceTests {
+	private static WeatherReport MOCKED_WEATHER_REPORT;
 	private AutoCloseable closeable;
 	@InjectMocks
 	private OpenMeteoForecastApiService sut;
@@ -17,6 +20,7 @@ class OpenMeteoForecastApiServiceTests {
 	@BeforeEach
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
+		MOCKED_WEATHER_REPORT = TestData.Provider.createWeatherReport();
 		sut = new OpenMeteoForecastApiService();
 	}
 
