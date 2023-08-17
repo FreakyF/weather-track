@@ -73,6 +73,8 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 			return uriBuilder
 					.setParameter("latitude", latitudeString)
 					.setParameter("longitude", longitudeString)
+					.setParameter("hourly", "temperature_2m")
+					.setParameter("daily", "weathercode,temperature_2m_max,windspeed_10m_max,winddirection_10m_dominant")
 					.build();
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);

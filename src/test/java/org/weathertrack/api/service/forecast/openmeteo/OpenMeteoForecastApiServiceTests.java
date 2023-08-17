@@ -164,6 +164,8 @@ class OpenMeteoForecastApiServiceTests {
 	private void buildMockUri() {
 		when(mockUriBuilder.setParameter("latitude", "21.0")).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("longitude", "37.0")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("daily", "weathercode,temperature_2m_max,windspeed_10m_max,winddirection_10m_dominant")).thenReturn(mockUriBuilder);
 
 	}
 
