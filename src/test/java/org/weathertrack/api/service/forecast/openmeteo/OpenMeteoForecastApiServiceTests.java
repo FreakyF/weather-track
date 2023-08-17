@@ -15,6 +15,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.weathertrack.TestData;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
+import org.weathertrack.api.service.exception.BadRequestException;
+import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
 import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReportResponseDTO;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
@@ -226,18 +228,33 @@ class OpenMeteoForecastApiServiceTests {
 
 	private static Stream<Arguments> fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldThrowException() {
 		return Stream.of(
-				Arguments.of()
+				Arguments.of(400, ApiServiceExceptionMessage.STATUS_CODE_400, BadRequestException.class),
+				Arguments.of(404, ApiServiceExceptionMessage.STATUS_CODE_404, NotFoundException.class)
 		);
 	}
 
 	@ParameterizedTest
 	@MethodSource
 	void fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldThrowException(
-			int statusCodeValue, boolean success, String responseMessage, ArrayList<GeocodingCityData> expectedCityDataResponse) {
+			int statusCodeValue, String exceptionMessage, Class<? extends Exception> exceptionClass) throws IOException, InterruptedException {
 		// When
 
+		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+
+		when(mockHttpResponse.statusCode()).thenReturn(statusCodeValue);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
+
 		// Given
+		var thrown = assertThrows(
+				Exception.class,
+				() -> sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA),
+				"Expected fetchCitiesForCityName to throw Exception, but it didn't"
+		);
 
 		// Then
+		assertEquals(exceptionClass, thrown.getClass());
+		assertEquals(exceptionMessage, thrown.getMessage());
 	}
 }
