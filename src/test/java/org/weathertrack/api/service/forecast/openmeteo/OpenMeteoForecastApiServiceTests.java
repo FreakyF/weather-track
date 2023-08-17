@@ -17,6 +17,8 @@ import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @ExtendWith(MockitoExtension.class)
 class OpenMeteoForecastApiServiceTests {
 	private static WeatherReport MOCKED_WEATHER_REPORT;
@@ -39,17 +41,19 @@ class OpenMeteoForecastApiServiceTests {
 	@Test
 	void fetchForecastForCoordinates_WhenGeocodingCityDataIsNull_ShouldThrowNullPointerException() {
 		// When
-		var mockGeocodingCityData = new GeocodingCityData("Kielce", "Świętokrzyskie", "Poland", 21, 37);
 
 		// Given
-		var result = sut.fetchForecastForCoordinates(mockGeocodingCityData);
+		var thrown = assertThrows(
+				Exception.class,
+				() -> sut.fetchForecastForCoordinates(null),
+				"Expected fetchForecastForCoordinates to throw Exception, but it didn't"
+		);
 
 		// Then
 	}
 
-	// TODO: Add what exception should be thrown.
 	@Test
-	void fetchForecastForCoordinates_WhenUriSyntaxIsInvalid_ShouldThrowException() {
+	void fetchForecastForCoordinates_WhenUriSyntaxIsInvalid_ShouldThrowIllegalArgumentException() {
 		// When
 
 		// Given
@@ -76,7 +80,7 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenWeatherReportIsEmpty_ShouldThrowException() {
+	void fetchForecastForCoordinates_WhenWeatherReportIsEmpty_ShouldReturnFailureResponseData() {
 		// When
 
 		// Given
