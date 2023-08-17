@@ -222,7 +222,6 @@ class OpenMeteoForecastApiServiceTests {
 		// Then
 		assertEquals(expectedResult, result);
 	}
-	// TODO: Add what exception should be thrown.
 
 	private static Stream<Arguments> fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldThrowException() {
 		return Stream.of(
