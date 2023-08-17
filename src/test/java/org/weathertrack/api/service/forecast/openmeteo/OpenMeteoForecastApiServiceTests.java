@@ -21,6 +21,7 @@ import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.ApiMessageResource;
+import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.ResponseData;
 
 import java.io.ByteArrayInputStream;
@@ -193,19 +194,33 @@ class OpenMeteoForecastApiServiceTests {
 
 	private static Stream<Arguments> fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldReturnResponseData() {
 		return Stream.of(
-				Arguments.of()
+				Arguments.of(500, false, StatusCodesResource.STATUS_CODE_500, null),
+				Arguments.of(503, false, StatusCodesResource.STATUS_CODE_503, null),
+				Arguments.of(504, false, StatusCodesResource.STATUS_CODE_504, null)
 		);
 	}
 
 	@ParameterizedTest
 	@MethodSource
 	void fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldReturnResponseData(
-			int statusCodeValue, boolean success, String responseMessage, ArrayList<GeocodingCityData> expectedCityDataResponse) {
+			int statusCodeValue, boolean success, String responseMessage, ArrayList<GeocodingCityData> expectedCityDataResponse) throws IOException, InterruptedException {
 		// When
+		var expectedResult = new ResponseData<>(success, responseMessage,
+				expectedCityDataResponse
+		);
+
+		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+
+		when(mockHttpResponse.statusCode()).thenReturn(statusCodeValue);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
 
 		// Given
+		var result = sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA);
 
 		// Then
+		assertEquals(expectedResult, result);
 	}
 	// TODO: Add what exception should be thrown.
 
