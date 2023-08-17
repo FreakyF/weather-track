@@ -1,5 +1,6 @@
 package org.weathertrack.api.service.forecast.openmeteo;
 
+import org.apache.hc.core5.http.HttpStatus;
 import org.apache.hc.core5.net.URIBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,14 +17,22 @@ import org.weathertrack.TestData;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.model.ResponseData;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +41,10 @@ class OpenMeteoForecastApiServiceTests {
 	private static GeocodingCityData MOCKED_GEOCODING_CITY_DATA;
 	@Mock
 	private URIBuilder mockUriBuilder;
+	@Mock
+	private HttpService mockHttpService;
+	@Mock
+	private HttpResponse<InputStream> mockHttpResponse;
 	private AutoCloseable closeable;
 	@InjectMocks
 	private OpenMeteoForecastApiService sut;
@@ -41,7 +54,7 @@ class OpenMeteoForecastApiServiceTests {
 		closeable = MockitoAnnotations.openMocks(this);
 		MOCKED_WEATHER_REPORT = TestData.Provider.createWeatherReport();
 		MOCKED_GEOCODING_CITY_DATA = TestData.Provider.createCityDataDTO();
-		sut = new OpenMeteoForecastApiService();
+		sut = new OpenMeteoForecastApiService(mockUriBuilder, mockHttpService);
 	}
 
 	@AfterEach
@@ -87,12 +100,35 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenGeocodingCityDataAndUriIsValid_ShouldReturnSuccessfulResponseData() {
+	void fetchForecastForCoordinates_WhenGeocodingCityDataAndUriIsValid_ShouldReturnSuccessfulResponseData() throws IOException, InterruptedException {
 		// When
+		var expectedWeatherReportResponse = new ArrayList<>();
+		expectedWeatherReportResponse.add(MOCKED_WEATHER_REPORT);
+
+		var expectedResult = new ResponseData<>(true, null,
+				expectedWeatherReportResponse
+		);
+
+		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+
+		var jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
+		mockHttpResponse(jsonResponse);
 
 		// Given
+		var result = sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA);
 
 		// Then
+		assertEquals(expectedResult, result);
+	}
+
+	private void mockHttpResponse(String jsonResponse) throws IOException, InterruptedException {
+		var inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
+
+		when(mockHttpResponse.body()).thenReturn(inputStream);
+		when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
 	}
 
 	@Test
