@@ -1,15 +1,13 @@
 package org.weathertrack.api.service.forecast.openmeteo.model;
 
-import java.time.LocalDateTime;
-
 public class CurrentWeather {
-	private final LocalDateTime time;
+	private final String time;
 	private final double temperature;
 	private final int weathercode;
 	private final double windspeed;
 	private final int winddirection;
 
-	public CurrentWeather(LocalDateTime time,
+	public CurrentWeather(String time,
 	                      double temperature,
 	                      int weathercode,
 	                      double windspeed,
@@ -19,5 +17,25 @@ public class CurrentWeather {
 		this.weathercode = weathercode;
 		this.windspeed = windspeed;
 		this.winddirection = winddirection;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public double getTemperature() {
+		return temperature;
+	}
+
+	public int getWeathercode() {
+		return weathercode;
+	}
+
+	public double getWindspeed() {
+		return windspeed;
+	}
+
+	public int getWinddirection() {
+		return winddirection;
 	}
 }

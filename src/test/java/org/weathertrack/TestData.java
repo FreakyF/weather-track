@@ -1,9 +1,7 @@
 package org.weathertrack;
 
 import org.weathertrack.api.service.forecast.openmeteo.model.CurrentWeather;
-import org.weathertrack.api.service.forecast.openmeteo.model.HourlyUnits;
-import org.weathertrack.api.service.forecast.openmeteo.model.HourlyWeather;
-import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
+import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 
@@ -36,7 +34,7 @@ public class TestData {
 			);
 		}
 
-		public static WeatherReport createWeatherReport() {
+		public static ForecastReport createWeatherReport() {
 			LocalDateTime[] hourlyTime = {
 					LocalDateTime.of(2023, 8, 16, 12, 0),
 					LocalDateTime.of(2023, 8, 16, 13, 0),
@@ -54,7 +52,7 @@ public class TestData {
 
 			LocalDateTime currentWeatherTime = LocalDateTime.now();
 			CurrentWeather currentWeather = new CurrentWeather(currentWeatherTime, 25.0, 200, 5.0, 180);
-			return new WeatherReport(
+			return new ForecastReport(
 					21,
 					37,
 					283,

@@ -9,10 +9,12 @@ import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.forecast.ForecastApiModule;
 import org.weathertrack.api.service.forecast.ForecastApiService;
-import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
-import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReportResponseDTO;
+import org.weathertrack.api.service.forecast.model.ForecastData;
+import org.weathertrack.api.service.forecast.openmeteo.converter.ForecastDataConverter;
+import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.api.service.http.exception.ParseJsonException;
 import org.weathertrack.model.Response;
 import org.weathertrack.model.ResponseData;
 
@@ -35,32 +37,41 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 	}
 
 	@Override
-	public ResponseData<WeatherReport> fetchForecastForCoordinates(GeocodingCityData geocodingCityData) throws BadRequestException, NotFoundException, IOException, InterruptedException {
+	public ResponseData<ForecastData> fetchForecastForCoordinates(GeocodingCityData geocodingCityData) throws BadRequestException, NotFoundException, IOException, InterruptedException {
 		if (geocodingCityData == null) {
 			throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
 		}
 
 		var response = getForecastForCoordinatesFromApi(geocodingCityData);
 		if (!response.isSuccess()) {
-			return response;
+			return Response.fail(response.getMessage());
 		}
-		var forecastReportDTO = response.getValue();
+		ForecastReport forecastReportDTO = response.getValue();
 		if (forecastReportDTO == null) {
 			throw new NullPointerException(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL);
 		}
-		return Response.ok(forecastReportDTO);
+
+		ForecastData forecastData = ForecastDataConverter.forecastReportToForecastData(forecastReportDTO);
+		return Response.ok(forecastData);
 	}
 
-	private ResponseData<WeatherReport> getForecastForCoordinatesFromApi(GeocodingCityData geocodingCityData) throws BadRequestException, NotFoundException, IOException, InterruptedException {
+	private ResponseData<ForecastReport> getForecastForCoordinatesFromApi(GeocodingCityData geocodingCityData) throws BadRequestException, NotFoundException, IOException, InterruptedException {
 		URI requestUrl = buildForecastApiUri(geocodingCityData);
+		System.out.println(requestUrl);
 		var response = httpService.sendHttpGetRequest(requestUrl);
 
 		if (response.statusCode() != HttpStatus.SC_OK) {
 			return handleStatusCode(response.statusCode());
 		}
 
-		WeatherReportResponseDTO responseDTO = httpService.parseJsonResponse(response.body(), WeatherReportResponseDTO.class);
-		return Response.ok(responseDTO.getResults());
+		ForecastReport responseDTO;
+		try {
+			responseDTO = httpService.parseJsonResponse(response.body(), ForecastReport.class);
+		} catch (ParseJsonException e) {
+			return Response.fail("Could not get forecast for coordinates: " + geocodingCityData.longitude() + ", " + geocodingCityData.latitude());
+		}
+
+		return Response.ok(responseDTO);
 	}
 
 	private URI buildForecastApiUri(GeocodingCityData geocodingCityData) {
@@ -73,9 +84,9 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 			return uriBuilder
 					.setParameter("latitude", latitudeString)
 					.setParameter("longitude", longitudeString)
-					.setParameter("hourly", "temperature_2m")
-					.setParameter("daily", "weathercode,temperature_2m_max,windspeed_10m_max,winddirection_10m_dominant")
-					.setParameter("timezone", "GMT")
+					.setParameter("hourly", "temperature_2m,relativehumidity_2m,precipitation,weathercode,surface_pressure,windspeed_10m")
+					.setParameter("daily", "weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max")
+					.setParameter("timezone", "auto")
 					.build();
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);

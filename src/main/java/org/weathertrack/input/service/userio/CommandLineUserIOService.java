@@ -1,14 +1,18 @@
 package org.weathertrack.input.service.userio;
 
 import com.google.inject.Inject;
-import org.weathertrack.api.service.forecast.model.WeatherData;
+import org.weathertrack.api.service.forecast.model.ForecastData;
+import org.weathertrack.api.service.forecast.model.Unit;
+import org.weathertrack.api.service.forecast.model.WeatherRecord;
+import org.weathertrack.api.service.forecast.openmeteo.resource.ForecastInterpreter;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.input.resource.InputLogMessage;
-import org.weathertrack.input.service.userio.resource.WeatherDisplayResource;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 @SuppressWarnings("java:S106")
@@ -60,48 +64,30 @@ public class CommandLineUserIOService implements UserIOService {
 	}
 
 	@Override
-	public void printWeather(WeatherData weatherData) {
-		var weatherConditionMessage = String.format(
-				WeatherDisplayResource.WEATHER_CONDITION,
-				weatherData.weatherCondition()
-		);
-		System.out.println(weatherConditionMessage);
+	public void printWeather(ForecastData forecastData) {
+		System.out.println("\nWeather forecast for timezone: " + forecastData.getZoneId() + " (UTC offset: " + forecastData.getUtcOffsetSeconds() + " seconds)");
 
-		var temperatureMessage = String.format(
-				WeatherDisplayResource.TEMPERATURE,
-				weatherData.temperatureCelsius()
-		);
-		System.out.println(temperatureMessage);
+		System.out.println("\nHourly forecast:");
+		System.out.println("------------------------------");
+		for (Map.Entry<LocalDateTime, WeatherRecord> entry : forecastData.getHourlyWeatherRecords().entrySet()) {
+			System.out.println("Time: " + entry.getKey());
+			System.out.println("Temperature: " + entry.getValue().temperature() + " " + forecastData.getUnits().get(Unit.CELSIUS));
+			System.out.println("Weather code: " + ForecastInterpreter.interpretWeatherCode(entry.getValue().weatherCode()));
+			System.out.println("Wind speed: " + entry.getValue().windSpeed() + " " + forecastData.getUnits().get(Unit.KPH));
+			System.out.println("Precipitation: " + entry.getValue().precipitation() + " " + forecastData.getUnits().get(Unit.MM));
+			System.out.println("Humidity: " + (entry.getValue().humidity() != null ? entry.getValue().humidity() : "N/A") + " " + forecastData.getUnits().get(Unit.PERCENT));
+			System.out.println("------------------------------");
+		}
 
-		var cloudinessMessage = String.format(
-				WeatherDisplayResource.CLOUDINESS,
-				weatherData.cloudiness()
-		);
-		System.out.println(cloudinessMessage);
-
-		var rainChanceMessage = String.format(
-				WeatherDisplayResource.RAIN_CHANCE,
-				weatherData.rainChance()
-		);
-
-		System.out.println(rainChanceMessage);
-
-		var windSpeedMessage = String.format(
-				WeatherDisplayResource.WIND_SPEED,
-				weatherData.windSpeed()
-		);
-		System.out.println(windSpeedMessage);
-
-		var humidityMessage = String.format(
-				WeatherDisplayResource.HUMIDITY,
-				weatherData.humidity()
-		);
-		System.out.println(humidityMessage);
-
-		var pressureMessage = String.format(
-				WeatherDisplayResource.PRESSURE,
-				weatherData.pressure()
-		);
-		System.out.print(pressureMessage);
+		System.out.println("\nDaily forecast:");
+		System.out.println("------------------------------");
+		for (Map.Entry<LocalDateTime, WeatherRecord> entry : forecastData.getDailyWeatherRecords().entrySet()) {
+			System.out.println("Date: " + entry.getKey().toLocalDate());
+			System.out.println("Max temperature: " + entry.getValue().temperature() + " " + forecastData.getUnits().get(Unit.CELSIUS));
+			System.out.println("Weather code: " + ForecastInterpreter.interpretWeatherCode(entry.getValue().weatherCode()));
+			System.out.println("Max wind speed: " + entry.getValue().windSpeed() + " " + forecastData.getUnits().get(Unit.KPH));
+			System.out.println("Precipitation probability: " + entry.getValue().precipitation() + " " + forecastData.getUnits().get(Unit.PERCENT));
+			System.out.println("------------------------------");
+		}
 	}
 }

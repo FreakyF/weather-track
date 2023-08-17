@@ -12,6 +12,7 @@ import org.weathertrack.api.service.geocoding.GeocodingApiService;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.api.service.http.exception.ParseJsonException;
 import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.model.Response;
 import org.weathertrack.model.ResponseData;
@@ -48,7 +49,6 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 			return response;
 		}
 		var cityDataDTOS = response.getValue();
-
 		if (cityDataDTOS == null) {
 			throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
 		}
@@ -67,9 +67,11 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 			return handleStatusCode(response.statusCode());
 		}
 
-		CityDataResponseDTO responseDTO = httpService.parseJsonResponse(response.body(), CityDataResponseDTO.class);
-		if (responseDTO.getResults() == null) {
-			throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
+		CityDataResponseDTO responseDTO;
+		try {
+			responseDTO = httpService.parseJsonResponse(response.body(), CityDataResponseDTO.class);
+		} catch (ParseJsonException e) {
+			return Response.fail("Could not get cities for city name: " + cityName);
 		}
 		List<GeocodingCityData> geocodingCitiesData = new ArrayList<>();
 		for (var cityData : responseDTO.getResults()) {

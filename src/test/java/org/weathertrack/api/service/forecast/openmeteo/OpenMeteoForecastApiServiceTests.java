@@ -17,8 +17,7 @@ import org.weathertrack.TestData;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
-import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
-import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReportResponseDTO;
+import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.StatusCodesResource;
@@ -42,7 +41,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OpenMeteoForecastApiServiceTests {
-	private static WeatherReport MOCKED_WEATHER_REPORT;
+	private static ForecastReport MOCKED_WEATHER_REPORT;
 	private static GeocodingCityData MOCKED_GEOCODING_CITY_DATA;
 	@Mock
 	private URIBuilder mockUriBuilder;
@@ -181,7 +180,7 @@ class OpenMeteoForecastApiServiceTests {
 	@ParameterizedTest
 	@MethodSource
 	void fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldReturnResponseData(
-			int statusCodeValue, boolean success, String responseMessage, WeatherReport expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
+			int statusCodeValue, boolean success, String responseMessage, ForecastReport expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedResult = new ResponseData<>(success, responseMessage,
 				expectedCityDataResponse
