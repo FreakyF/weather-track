@@ -19,6 +19,7 @@ import org.weathertrack.model.ResponseData;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.weathertrack.api.service.HttpStatusCodeHandler.handleStatusCode;
@@ -67,7 +68,22 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		}
 
 		CityDataResponseDTO responseDTO = httpService.parseJsonResponse(response.body(), CityDataResponseDTO.class);
-		return Response.ok(responseDTO.getResults());
+		if (responseDTO.getResults() == null) {
+			throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
+		}
+		List<GeocodingCityData> geocodingCitiesData = new ArrayList<>();
+		for (var cityData : responseDTO.getResults()) {
+			var geocodingCityData = new GeocodingCityData(
+					cityData.getName(),
+					cityData.getAdmin1(),
+					cityData.getCountry(),
+					cityData.getLatitude(),
+					cityData.getLongitude()
+			);
+			geocodingCitiesData.add(geocodingCityData);
+		}
+
+		return Response.ok(geocodingCitiesData);
 	}
 
 	private ResponseData<?> validateCityName(String cityName) {

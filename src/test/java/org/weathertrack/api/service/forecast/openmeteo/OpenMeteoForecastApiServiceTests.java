@@ -58,7 +58,7 @@ class OpenMeteoForecastApiServiceTests {
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
 		MOCKED_WEATHER_REPORT = TestData.Provider.createWeatherReport();
-		MOCKED_GEOCODING_CITY_DATA = TestData.Provider.createCityDataDTO();
+		MOCKED_GEOCODING_CITY_DATA = TestData.Provider.createGeocodingCityData();
 		sut = new OpenMeteoForecastApiService(mockUriBuilder, mockHttpService);
 	}
 
@@ -166,6 +166,7 @@ class OpenMeteoForecastApiServiceTests {
 		when(mockUriBuilder.setParameter("longitude", "37.0")).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("daily", "weathercode,temperature_2m_max,windspeed_10m_max,winddirection_10m_dominant")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("timezone", "GMT")).thenReturn(mockUriBuilder);
 
 	}
 

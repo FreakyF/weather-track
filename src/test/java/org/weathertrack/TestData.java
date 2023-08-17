@@ -5,18 +5,34 @@ import org.weathertrack.api.service.forecast.openmeteo.model.HourlyUnits;
 import org.weathertrack.api.service.forecast.openmeteo.model.HourlyWeather;
 import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 
 import java.time.LocalDateTime;
 
 public class TestData {
 	public static class Provider {
-		public static GeocodingCityData createCityDataDTO() {
-			return new GeocodingCityData(
+		public static CityDataDTO createCityDataDTO() {
+			return new CityDataDTO(
+					1,
 					"Kielce",
-					"Świętokrzyskie",
+					21.0,
+					37.0,
+					202.2,
+					"PL",
+					"PL",
+					12312312L,
+					12312312L,
+					12312312L,
+					0L,
+					"Europe/Warsaw",
+					12313123123L,
+					null,
+					6969L,
 					"Poland",
-					21,
-					37
+					"Świętokrzyskie",
+					"Świętokrzyskie",
+					"Świętokrzyskie",
+					null
 			);
 		}
 
@@ -49,6 +65,16 @@ public class TestData {
 					hourlyWeather,
 					hourlyUnits,
 					currentWeather
+			);
+		}
+
+		public static GeocodingCityData createGeocodingCityData() {
+			return new GeocodingCityData(
+					"Kielce",
+					"Świętokrzyskie",
+					"Poland",
+					21,
+					37
 			);
 		}
 	}

@@ -53,6 +53,7 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 
 	private ResponseData<WeatherReport> getForecastForCoordinatesFromApi(GeocodingCityData geocodingCityData) throws BadRequestException, NotFoundException, IOException, InterruptedException {
 		URI requestUrl = buildForecastApiUri(geocodingCityData);
+		System.out.println(requestUrl);
 		var response = httpService.sendHttpGetRequest(requestUrl);
 
 		if (response.statusCode() != HttpStatus.SC_OK) {
@@ -75,6 +76,7 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 					.setParameter("longitude", longitudeString)
 					.setParameter("hourly", "temperature_2m")
 					.setParameter("daily", "weathercode,temperature_2m_max,windspeed_10m_max,winddirection_10m_dominant")
+					.setParameter("timezone", "GMT")
 					.build();
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
