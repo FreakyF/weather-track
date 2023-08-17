@@ -118,9 +118,7 @@ class OpenMeteoForecastApiServiceTests {
 				expectedWeatherReportResponse
 		);
 
-		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+		buildMockUri();
 
 		var jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
 		mockHttpResponse(jsonResponse);
@@ -143,9 +141,7 @@ class OpenMeteoForecastApiServiceTests {
 	@Test
 	void fetchForecastForCoordinates_WhenWeatherReportIsNull_ShouldThrowNullPointerException() throws IOException, InterruptedException {
 		// When
-		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+		buildMockUri();
 
 		var jsonResponse = "{\"results\":[]}";
 		mockHttpResponse(jsonResponse);
@@ -167,14 +163,18 @@ class OpenMeteoForecastApiServiceTests {
 		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, thrown.getMessage());
 	}
 
+	private void buildMockUri() {
+		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+	}
+
 	@Test
 	void fetchForecastForCoordinates_WhenWeatherReportIsEmpty_ShouldReturnFailureResponseData() throws IOException, InterruptedException {
 		// When
 		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, null);
 
-		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+		buildMockUri();
 
 		var jsonResponse = "{\"results\":[]}";
 		var inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
@@ -211,9 +211,7 @@ class OpenMeteoForecastApiServiceTests {
 				expectedCityDataResponse
 		);
 
-		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+		buildMockUri();
 
 		when(mockHttpResponse.statusCode()).thenReturn(statusCodeValue);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
@@ -238,10 +236,7 @@ class OpenMeteoForecastApiServiceTests {
 	void fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldThrowException(
 			int statusCodeValue, String exceptionMessage, Class<? extends Exception> exceptionClass) throws IOException, InterruptedException {
 		// When
-
-		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+		buildMockUri();
 
 		when(mockHttpResponse.statusCode()).thenReturn(statusCodeValue);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
