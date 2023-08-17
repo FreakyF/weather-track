@@ -31,7 +31,6 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -109,11 +108,9 @@ class OpenMeteoForecastApiServiceTests {
 	@Test
 	void fetchForecastForCoordinates_WhenGeocodingCityDataAndUriIsValid_ShouldReturnSuccessfulResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
-		var expectedWeatherReportResponse = new ArrayList<>();
-		expectedWeatherReportResponse.add(MOCKED_WEATHER_REPORT);
 
 		var expectedResult = new ResponseData<>(true, null,
-				expectedWeatherReportResponse
+				MOCKED_WEATHER_REPORT
 		);
 
 		buildMockUri();
@@ -178,7 +175,7 @@ class OpenMeteoForecastApiServiceTests {
 	@ParameterizedTest
 	@MethodSource
 	void fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldReturnResponseData(
-			int statusCodeValue, boolean success, String responseMessage, ArrayList<GeocodingCityData> expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
+			int statusCodeValue, boolean success, String responseMessage, WeatherReport expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedResult = new ResponseData<>(success, responseMessage,
 				expectedCityDataResponse

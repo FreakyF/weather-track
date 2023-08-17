@@ -13,13 +13,14 @@ import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
 import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReportResponseDTO;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.http.HttpService;
-import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.Response;
 import org.weathertrack.model.ResponseData;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import static org.weathertrack.api.service.HttpStatusCodeHandler.handleStatusCode;
 
 public class OpenMeteoForecastApiService implements ForecastApiService {
 	private final URIBuilder uriBuilder;
@@ -76,18 +77,5 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
 		}
-	}
-
-	private ResponseData<WeatherReport> handleStatusCode(int statusCode) throws BadRequestException, NotFoundException {
-		return switch (statusCode) {
-			case HttpStatus.SC_BAD_REQUEST -> throw new BadRequestException(ApiServiceExceptionMessage.STATUS_CODE_400);
-			case HttpStatus.SC_NOT_FOUND -> throw new NotFoundException(ApiServiceExceptionMessage.STATUS_CODE_404);
-			case HttpStatus.SC_TOO_MANY_REQUESTS -> Response.fail(StatusCodesResource.STATUS_CODE_429);
-			case HttpStatus.SC_INTERNAL_SERVER_ERROR -> Response.fail(StatusCodesResource.STATUS_CODE_500);
-			case HttpStatus.SC_SERVICE_UNAVAILABLE -> Response.fail(StatusCodesResource.STATUS_CODE_503);
-			case HttpStatus.SC_GATEWAY_TIMEOUT -> Response.fail(StatusCodesResource.STATUS_CODE_504);
-			default ->
-					throw new UnsupportedOperationException(String.format(ApiServiceExceptionMessage.UNHANDLED_STATUS_CODE, statusCode));
-		};
 	}
 }

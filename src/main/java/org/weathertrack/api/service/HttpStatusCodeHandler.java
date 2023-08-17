@@ -1,17 +1,15 @@
-package org.weathertrack.api.service.handler.status.code;
+package org.weathertrack.api.service;
 
 import org.apache.hc.core5.http.HttpStatus;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
-import org.weathertrack.api.service.handler.StatusCodeHandlerService;
 import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.Response;
 import org.weathertrack.model.ResponseData;
 
-public class HttpStatusCodeHandlerService implements StatusCodeHandlerService {
-	@Override
-	public ResponseData<?> handleStatusCode(int statusCode) throws BadRequestException, NotFoundException {
+public class HttpStatusCodeHandler {
+	public static <V> ResponseData<V> handleStatusCode(int statusCode) throws BadRequestException, NotFoundException {
 		return switch (statusCode) {
 			case HttpStatus.SC_BAD_REQUEST -> throw new BadRequestException(ApiServiceExceptionMessage.STATUS_CODE_400);
 			case HttpStatus.SC_NOT_FOUND -> throw new NotFoundException(ApiServiceExceptionMessage.STATUS_CODE_404);
@@ -22,5 +20,8 @@ public class HttpStatusCodeHandlerService implements StatusCodeHandlerService {
 			default ->
 					throw new UnsupportedOperationException(String.format(ApiServiceExceptionMessage.UNHANDLED_STATUS_CODE, statusCode));
 		};
+	}
+
+	private HttpStatusCodeHandler() {
 	}
 }
