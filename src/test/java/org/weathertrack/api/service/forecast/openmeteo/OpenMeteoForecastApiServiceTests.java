@@ -1,5 +1,6 @@
 package org.weathertrack.api.service.forecast.openmeteo;
 
+import org.apache.hc.core5.net.URIBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,20 +9,29 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.weathertrack.TestData;
+import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OpenMeteoForecastApiServiceTests {
 	private static WeatherReport MOCKED_WEATHER_REPORT;
+	private static GeocodingCityData MOCKED_GEOCODING_CITY_DATA;
+	@Mock
+	private URIBuilder mockUriBuilder;
 	private AutoCloseable closeable;
 	@InjectMocks
 	private OpenMeteoForecastApiService sut;
@@ -30,6 +40,7 @@ class OpenMeteoForecastApiServiceTests {
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
 		MOCKED_WEATHER_REPORT = TestData.Provider.createWeatherReport();
+		MOCKED_GEOCODING_CITY_DATA = TestData.Provider.createCityDataDTO();
 		sut = new OpenMeteoForecastApiService();
 	}
 
@@ -40,8 +51,6 @@ class OpenMeteoForecastApiServiceTests {
 
 	@Test
 	void fetchForecastForCoordinates_WhenGeocodingCityDataIsNull_ShouldThrowNullPointerException() {
-		// When
-
 		// Given
 		var thrown = assertThrows(
 				Exception.class,
@@ -50,15 +59,31 @@ class OpenMeteoForecastApiServiceTests {
 		);
 
 		// Then
+		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException");
+		assertEquals(NullPointerException.class, thrown.getClass());
+		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, thrown.getMessage());
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenUriSyntaxIsInvalid_ShouldThrowIllegalArgumentException() {
+	void fetchForecastForCoordinates_WhenUriSyntaxIsInvalid_ShouldThrowIllegalArgumentException() throws URISyntaxException {
 		// When
+		var latitude = "21";
+		var syntaxException = new URISyntaxException(latitude, ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
+
+		when(mockUriBuilder.setParameter("latitude", latitude)).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.build()).thenThrow(syntaxException);
 
 		// Given
+		var thrown = assertThrows(
+				Exception.class,
+				() -> sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA),
+				"Expected fetchForecastForCoordinates to throw Exception, but it didn't"
+		);
 
 		// Then
+		assertTrue(thrown instanceof RuntimeException, "Expected IllegalArgumentException");
+		assertEquals(IllegalArgumentException.class, thrown.getClass());
+		assertEquals(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID, thrown.getMessage());
 	}
 
 	@Test
