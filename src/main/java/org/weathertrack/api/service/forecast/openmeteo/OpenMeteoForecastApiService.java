@@ -53,7 +53,6 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 
 	private ResponseData<WeatherReport> getForecastForCoordinatesFromApi(GeocodingCityData geocodingCityData) throws BadRequestException, NotFoundException, IOException, InterruptedException {
 		URI requestUrl = buildForecastApiUri(geocodingCityData);
-		System.out.println(requestUrl);
 		var response = httpService.sendHttpGetRequest(requestUrl);
 
 		if (response.statusCode() != HttpStatus.SC_OK) {
