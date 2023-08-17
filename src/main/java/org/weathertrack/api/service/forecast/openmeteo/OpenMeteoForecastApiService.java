@@ -67,7 +67,7 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 		var latitude = geocodingCityData.latitude();
 		var latitudeString = String.valueOf(latitude);
 
-		var longitude = geocodingCityData.latitude();
+		var longitude = geocodingCityData.longitude();
 		var longitudeString = String.valueOf(longitude);
 		try {
 			return uriBuilder

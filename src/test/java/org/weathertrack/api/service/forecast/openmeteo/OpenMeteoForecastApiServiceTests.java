@@ -20,7 +20,6 @@ import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
 import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReportResponseDTO;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
-import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.ResponseData;
@@ -89,7 +88,7 @@ class OpenMeteoForecastApiServiceTests {
 		var latitude = "21";
 		var syntaxException = new URISyntaxException(latitude, ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
 
-		when(mockUriBuilder.setParameter("latitude", latitude)).thenReturn(mockUriBuilder);
+		buildMockUri();
 		when(mockUriBuilder.build()).thenThrow(syntaxException);
 
 		// Given
@@ -118,6 +117,10 @@ class OpenMeteoForecastApiServiceTests {
 		var jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
 		mockHttpResponse(jsonResponse);
 
+		var mockedResponseDTO = mock(WeatherReportResponseDTO.class);
+		when(mockedResponseDTO.getResults()).thenReturn(MOCKED_WEATHER_REPORT);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(WeatherReportResponseDTO.class))).thenReturn(mockedResponseDTO);
+
 		// Given
 		var result = sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA);
 
@@ -143,25 +146,25 @@ class OpenMeteoForecastApiServiceTests {
 
 		var mockedResponseDTO = mock(WeatherReportResponseDTO.class);
 		when(mockedResponseDTO.getResults()).thenReturn(null);
-		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(WeatherReportResponseDTO.class))).thenReturn(mockedResponseDTO);
 
 		// Given
 		var thrown = assertThrows(
 				Exception.class,
 				() -> sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA),
-				"Expected fetchCitiesForCityName to throw Exception, but it didn't"
+				"Expected fetchForecastForCoordinates to throw Exception, but it didn't"
 		);
 
 		// Then
 		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException");
 		assertEquals(NullPointerException.class, thrown.getClass());
-		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, thrown.getMessage());
+		assertEquals(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL, thrown.getMessage());
 	}
 
 	private void buildMockUri() {
-		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("latitude", "21.0")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("longitude", "37.0")).thenReturn(mockUriBuilder);
+
 	}
 
 	private static Stream<Arguments> fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldReturnResponseData() {
