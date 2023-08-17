@@ -16,8 +16,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.weathertrack.TestData;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReport;
+import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReportResponseDTO;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.model.ResponseData;
 
 import java.io.ByteArrayInputStream;
@@ -27,12 +30,15 @@ import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -132,21 +138,57 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenWeatherReportIsNull_ShouldThrowNullPointerException() {
+	void fetchForecastForCoordinates_WhenWeatherReportIsNull_ShouldThrowNullPointerException() throws IOException, InterruptedException {
 		// When
+		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+
+		var jsonResponse = "{\"results\":[]}";
+		mockHttpResponse(jsonResponse);
+
+		var mockedResponseDTO = mock(WeatherReportResponseDTO.class);
+		when(mockedResponseDTO.getResults()).thenReturn(null);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
 
 		// Given
+		var thrown = assertThrows(
+				Exception.class,
+				() -> sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA),
+				"Expected fetchCitiesForCityName to throw Exception, but it didn't"
+		);
 
 		// Then
+		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException");
+		assertEquals(NullPointerException.class, thrown.getClass());
+		assertEquals(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL, thrown.getMessage());
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenWeatherReportIsEmpty_ShouldReturnFailureResponseData() {
+	void fetchForecastForCoordinates_WhenWeatherReportIsEmpty_ShouldReturnFailureResponseData() throws IOException, InterruptedException {
 		// When
+		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, null);
+
+		when(mockUriBuilder.setParameter("latitude", "21")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("longitude", "37")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
+
+		var jsonResponse = "{\"results\":[]}";
+		var inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
+
+		when(mockHttpResponse.body()).thenReturn(inputStream);
+		when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
+
+		var mockedResponseDTO = mock(WeatherReportResponseDTO.class);
+		when(mockedResponseDTO.getResults()).thenReturn(List.of());
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
 
 		// Given
+		var result = sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA);
 
 		// Then
+		assertEquals(expectedResult, result);
 	}
 
 	private static Stream<Arguments> fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldReturnResponseData() {
