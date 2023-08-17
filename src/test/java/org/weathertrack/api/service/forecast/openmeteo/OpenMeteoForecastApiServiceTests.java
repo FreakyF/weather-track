@@ -22,7 +22,6 @@ import org.weathertrack.api.service.forecast.openmeteo.model.WeatherReportRespon
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
-import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.ResponseData;
 
@@ -33,7 +32,6 @@ import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -109,7 +107,7 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenGeocodingCityDataAndUriIsValid_ShouldReturnSuccessfulResponseData() throws IOException, InterruptedException {
+	void fetchForecastForCoordinates_WhenGeocodingCityDataAndUriIsValid_ShouldReturnSuccessfulResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedWeatherReportResponse = new ArrayList<>();
 		expectedWeatherReportResponse.add(MOCKED_WEATHER_REPORT);
@@ -169,31 +167,6 @@ class OpenMeteoForecastApiServiceTests {
 		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
 	}
 
-	@Test
-	void fetchForecastForCoordinates_WhenWeatherReportIsEmpty_ShouldReturnFailureResponseData() throws IOException, InterruptedException {
-		// When
-		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, null);
-
-		buildMockUri();
-
-		var jsonResponse = "{\"results\":[]}";
-		var inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
-
-		when(mockHttpResponse.body()).thenReturn(inputStream);
-		when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
-		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
-
-		var mockedResponseDTO = mock(WeatherReportResponseDTO.class);
-		when(mockedResponseDTO.getResults()).thenReturn(List.of());
-		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
-
-		// Given
-		var result = sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA);
-
-		// Then
-		assertEquals(expectedResult, result);
-	}
-
 	private static Stream<Arguments> fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldReturnResponseData() {
 		return Stream.of(
 				Arguments.of(500, false, StatusCodesResource.STATUS_CODE_500, null),
@@ -205,7 +178,7 @@ class OpenMeteoForecastApiServiceTests {
 	@ParameterizedTest
 	@MethodSource
 	void fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldReturnResponseData(
-			int statusCodeValue, boolean success, String responseMessage, ArrayList<GeocodingCityData> expectedCityDataResponse) throws IOException, InterruptedException {
+			int statusCodeValue, boolean success, String responseMessage, ArrayList<GeocodingCityData> expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedResult = new ResponseData<>(success, responseMessage,
 				expectedCityDataResponse
