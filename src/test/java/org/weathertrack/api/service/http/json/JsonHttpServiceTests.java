@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.logging.factory.LoggerFactory;
 
 import java.io.IOException;
@@ -26,7 +25,7 @@ class JsonHttpServiceTests {
 	@Mock
 	private HttpClient httpClient;
 	@InjectMocks
-	private HttpService sut;
+	private JsonHttpService sut;
 
 	@BeforeEach
 	void setUp() {
