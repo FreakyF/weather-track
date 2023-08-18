@@ -1,11 +1,13 @@
 package org.weathertrack;
 
-import org.weathertrack.api.service.forecast.openmeteo.model.CurrentWeather;
-import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
+import org.weathertrack.api.service.forecast.model.ForecastData;
+import org.weathertrack.api.service.forecast.model.Unit;
+import org.weathertrack.api.service.forecast.model.WeatherRecord;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class TestData {
 	public static class Provider {
@@ -34,35 +36,6 @@ public class TestData {
 			);
 		}
 
-		public static ForecastReport createWeatherReport() {
-			LocalDateTime[] hourlyTime = {
-					LocalDateTime.of(2023, 8, 16, 12, 0),
-					LocalDateTime.of(2023, 8, 16, 13, 0),
-					LocalDateTime.of(2023, 8, 16, 14, 0),
-
-			};
-			double[] hourlyTemperature = {
-					23.5,
-					24.2,
-					25.0,
-			};
-
-			LocalDateTime currentWeatherTime = LocalDateTime.now();
-			CurrentWeather currentWeather = new CurrentWeather(currentWeatherTime, 25.0, 200, 5.0, 180);
-			return new ForecastReport(
-					21,
-					37,
-					283,
-					1234.5,
-					6,
-					"Europe/Warsaw",
-					"CET",
-					hourlyWeather,
-					hourlyUnits,
-					currentWeather
-			);
-		}
-
 		public static GeocodingCityData createGeocodingCityData() {
 			return new GeocodingCityData(
 					"Kielce",
@@ -71,6 +44,23 @@ public class TestData {
 					21,
 					37
 			);
+		}
+
+		public static ForecastData createForecastData() {
+			ForecastData.Builder builder = new ForecastData.Builder();
+
+			WeatherRecord dailyWeatherRecord = new WeatherRecord(25.5, 200, 8.3, 5);
+			WeatherRecord hourlyWeatherRecord = new WeatherRecord(22.0, 300, 10.1, 2, 2);
+			builder.addDailyRecord(LocalDateTime.now(), dailyWeatherRecord);
+			builder.addHourlyRecord(LocalDateTime.now(), hourlyWeatherRecord);
+
+			builder.addUnit(Unit.CELSIUS, "°C");
+
+			builder.setUtcOffsetSeconds(3600);
+
+			builder.setTimeZone(ZoneId.of("UTC"));
+
+			return builder.build();
 		}
 	}
 
