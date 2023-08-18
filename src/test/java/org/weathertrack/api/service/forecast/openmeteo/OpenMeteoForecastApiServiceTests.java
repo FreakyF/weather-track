@@ -18,6 +18,7 @@ import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.forecast.model.ForecastData;
+import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.http.exception.ParseJsonException;
@@ -144,7 +145,7 @@ class OpenMeteoForecastApiServiceTests {
 		var jsonResponse = "{\"results\":[]}";
 		mockHttpResponse(jsonResponse);
 
-		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastData.class))).thenReturn(MOCKED_FORECAST_DATA);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastReport.class))).thenReturn(null);
 
 		// Given
 		var thrown = assertThrows(
