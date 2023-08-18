@@ -17,7 +17,7 @@ import org.weathertrack.TestData;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
-import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
+import org.weathertrack.api.service.forecast.model.ForecastData;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.http.exception.ParseJsonException;
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OpenMeteoForecastApiServiceTests {
-	private static ForecastReport MOCKED_WEATHER_REPORT;
+	private static ForecastData MOCKED_FORECAST_DATA;
 	private static GeocodingCityData MOCKED_GEOCODING_CITY_DATA;
 	@Mock
 	private URIBuilder mockUriBuilder;
@@ -57,7 +57,7 @@ class OpenMeteoForecastApiServiceTests {
 	@BeforeEach
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
-		MOCKED_WEATHER_REPORT = TestData.Provider.createWeatherReport();
+		MOCKED_FORECAST_DATA = TestData.Provider.createForecastData();
 		MOCKED_GEOCODING_CITY_DATA = TestData.Provider.createGeocodingCityData();
 		sut = new OpenMeteoForecastApiService(mockUriBuilder, mockHttpService);
 	}
@@ -109,7 +109,7 @@ class OpenMeteoForecastApiServiceTests {
 		// When
 
 		var expectedResult = new ResponseData<>(true, null,
-				MOCKED_WEATHER_REPORT
+				MOCKED_FORECAST_DATA
 		);
 
 		buildMockUri();
@@ -117,9 +117,9 @@ class OpenMeteoForecastApiServiceTests {
 		var jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
 		mockHttpResponse(jsonResponse);
 
-		var mockedResponseDTO = mock(ForecastReport.class);
-		when(mockedResponseDTO).thenReturn(MOCKED_WEATHER_REPORT);
-		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastReport.class))).thenReturn(mockedResponseDTO);
+		var mockedResponseDTO = mock(ForecastData.class);
+		when(mockedResponseDTO).thenReturn(MOCKED_FORECAST_DATA);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastData.class))).thenReturn(MOCKED_FORECAST_DATA);
 
 		// Given
 		var result = sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA);
@@ -137,16 +137,14 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenWeatherReportIsNull_ShouldThrowNullPointerException() throws IOException, InterruptedException, ParseJsonException {
+	void fetchForecastForCoordinates_WhenForecastDataIsNull_ShouldThrowNullPointerException() throws IOException, InterruptedException, ParseJsonException {
 		// When
 		buildMockUri();
 
 		var jsonResponse = "{\"results\":[]}";
 		mockHttpResponse(jsonResponse);
 
-		var mockedResponseDTO = mock(ForecastReport.class);
-		when(mockedResponseDTO).thenReturn(MOCKED_WEATHER_REPORT);
-		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastReport.class))).thenReturn(mockedResponseDTO);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastData.class))).thenReturn(MOCKED_FORECAST_DATA);
 
 		// Given
 		var thrown = assertThrows(
@@ -164,9 +162,9 @@ class OpenMeteoForecastApiServiceTests {
 	private void buildMockUri() {
 		when(mockUriBuilder.setParameter("latitude", "21.0")).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("longitude", "37.0")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("hourly", "temperature_2m")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("daily", "weathercode,temperature_2m_max,windspeed_10m_max,winddirection_10m_dominant")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter("timezone", "GMT")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("hourly", "temperature_2m,relativehumidity_2m,precipitation,weathercode,surface_pressure,windspeed_10m")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("daily", "weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder.setParameter("timezone", "auto")).thenReturn(mockUriBuilder);
 
 	}
 
@@ -181,7 +179,7 @@ class OpenMeteoForecastApiServiceTests {
 	@ParameterizedTest
 	@MethodSource
 	void fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldReturnResponseData(
-			int statusCodeValue, boolean success, String responseMessage, ForecastReport expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
+			int statusCodeValue, boolean success, String responseMessage, ForecastData expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedResult = new ResponseData<>(success, responseMessage,
 				expectedCityDataResponse

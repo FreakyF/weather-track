@@ -8,6 +8,7 @@ import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class TestData {
 	public static class Provider {
@@ -49,12 +50,19 @@ public class TestData {
 		public static ForecastData createForecastData() {
 			ForecastData.Builder builder = new ForecastData.Builder();
 
-			WeatherRecord dailyWeatherRecord = new WeatherRecord(25.5, 200, 8.3, 5);
-			WeatherRecord hourlyWeatherRecord = new WeatherRecord(22.0, 300, 10.1, 2, 2);
-			builder.addDailyRecord(LocalDateTime.now(), dailyWeatherRecord);
-			builder.addHourlyRecord(LocalDateTime.now(), hourlyWeatherRecord);
+			WeatherRecord dailyWeatherRecord = new WeatherRecord(25.5, 0, 8.3, 5);
+			WeatherRecord hourlyWeatherRecord = new WeatherRecord(22.0, 1, 10.1, 2, 2);
+			String dateTimeString = "2023-08-18T21:04:16.056821";
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+			LocalDateTime localDateTime = LocalDateTime.parse(dateTimeString, formatter);
+			builder.addDailyRecord(localDateTime, dailyWeatherRecord);
+			builder.addHourlyRecord(localDateTime, hourlyWeatherRecord);
 
 			builder.addUnit(Unit.CELSIUS, "°C");
+			builder.addUnit(Unit.KPH, "Kph");
+			builder.addUnit(Unit.PERCENT, "%");
+			builder.addUnit(Unit.MM, "mm");
 
 			builder.setUtcOffsetSeconds(3600);
 

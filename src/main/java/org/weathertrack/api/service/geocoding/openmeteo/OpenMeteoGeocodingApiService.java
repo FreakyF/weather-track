@@ -70,6 +70,9 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		CityDataResponseDTO responseDTO;
 		try {
 			responseDTO = httpService.parseJsonResponse(response.body(), CityDataResponseDTO.class);
+			if (responseDTO.getResults() == null) {
+				throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
+			}
 		} catch (ParseJsonException e) {
 			return Response.fail("Could not get cities for city name: " + cityName);
 		}
