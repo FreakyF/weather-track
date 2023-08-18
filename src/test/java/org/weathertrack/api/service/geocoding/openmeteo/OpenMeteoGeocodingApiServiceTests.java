@@ -21,6 +21,7 @@ import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.api.service.http.exception.ParseJsonException;
 import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.ResponseData;
@@ -112,7 +113,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException {
+	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException, ParseJsonException {
 		// When
 		List<GeocodingCityData> expectedCityDataResponse = new ArrayList<>();
 		expectedCityDataResponse.add(MOCKED_GEOCODING_CITY_DATA_DTO);
@@ -146,7 +147,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException() throws IOException, InterruptedException {
+	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException() throws IOException, InterruptedException, ParseJsonException {
 		// When
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 
@@ -171,7 +172,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException {
+	void fetchCitiesForCityName_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException, ParseJsonException {
 		// When
 		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, null);
 

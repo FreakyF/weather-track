@@ -20,6 +20,7 @@ import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.api.service.http.exception.ParseJsonException;
 import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.ResponseData;
 
@@ -104,7 +105,7 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenGeocodingCityDataAndUriIsValid_ShouldReturnSuccessfulResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException {
+	void fetchForecastForCoordinates_WhenGeocodingCityDataAndUriIsValid_ShouldReturnSuccessfulResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException, ParseJsonException {
 		// When
 
 		var expectedResult = new ResponseData<>(true, null,
@@ -116,9 +117,9 @@ class OpenMeteoForecastApiServiceTests {
 		var jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
 		mockHttpResponse(jsonResponse);
 
-		var mockedResponseDTO = mock(WeatherReportResponseDTO.class);
-		when(mockedResponseDTO.getResults()).thenReturn(MOCKED_WEATHER_REPORT);
-		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(WeatherReportResponseDTO.class))).thenReturn(mockedResponseDTO);
+		var mockedResponseDTO = mock(ForecastReport.class);
+		when(mockedResponseDTO).thenReturn(MOCKED_WEATHER_REPORT);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastReport.class))).thenReturn(mockedResponseDTO);
 
 		// Given
 		var result = sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA);
@@ -136,16 +137,16 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenWeatherReportIsNull_ShouldThrowNullPointerException() throws IOException, InterruptedException {
+	void fetchForecastForCoordinates_WhenWeatherReportIsNull_ShouldThrowNullPointerException() throws IOException, InterruptedException, ParseJsonException {
 		// When
 		buildMockUri();
 
 		var jsonResponse = "{\"results\":[]}";
 		mockHttpResponse(jsonResponse);
 
-		var mockedResponseDTO = mock(WeatherReportResponseDTO.class);
-		when(mockedResponseDTO.getResults()).thenReturn(null);
-		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(WeatherReportResponseDTO.class))).thenReturn(mockedResponseDTO);
+		var mockedResponseDTO = mock(ForecastReport.class);
+		when(mockedResponseDTO).thenReturn(MOCKED_WEATHER_REPORT);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastReport.class))).thenReturn(mockedResponseDTO);
 
 		// Given
 		var thrown = assertThrows(

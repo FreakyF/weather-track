@@ -46,9 +46,6 @@ public class TestData {
 					24.2,
 					25.0,
 			};
-			HourlyWeather hourlyWeather = new HourlyWeather(hourlyTime, hourlyTemperature);
-
-			HourlyUnits hourlyUnits = new HourlyUnits("Celsius");
 
 			LocalDateTime currentWeatherTime = LocalDateTime.now();
 			CurrentWeather currentWeather = new CurrentWeather(currentWeatherTime, 25.0, 200, 5.0, 180);

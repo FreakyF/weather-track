@@ -2,7 +2,12 @@ package org.weathertrack.api.service.http.json;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.logging.factory.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,14 +19,19 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class JsonHttpServiceTests {
-	private HttpService sut;
+	@Mock
+	private LoggerFactory mockLogger;
+	@Mock
 	private HttpClient httpClient;
+	@InjectMocks
+	private HttpService sut;
 
 	@BeforeEach
 	void setUp() {
 		httpClient = mock(HttpClient.class);
-		sut = new JsonHttpService(httpClient);
+		sut = new JsonHttpService(httpClient, mockLogger);
 	}
 
 	@Test
