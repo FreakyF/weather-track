@@ -65,24 +65,25 @@ public class CommandLineUserIOService implements UserIOService {
 
 	@Override
 	public void printWeather(ForecastData forecastData) {
-		System.out.println("\nWeather forecast for timezone: " + forecastData.getZoneId() + " (UTC offset: " + forecastData.getUtcOffsetSeconds() + " seconds)");
+		var newLine = System.lineSeparator();
+		System.out.print("\nWeather forecast for timezone: " + forecastData.getZoneId() + " (UTC offset: " + forecastData.getUtcOffsetSeconds() + " seconds)" + newLine + newLine);
 
-		System.out.println("\nHourly forecast:");
-		System.out.println("------------------------------");
+		System.out.print("Hourly forecast:" + newLine);
+		System.out.print("------------------------------" + newLine);
 		for (Map.Entry<LocalDateTime, WeatherRecord> entry : forecastData.getHourlyWeatherRecords().entrySet()) {
-			System.out.println("Time: " + entry.getKey());
-			System.out.println("Temperature: " + entry.getValue().temperature() + " " + forecastData.getUnits().get(Unit.CELSIUS));
-			System.out.println("Weather code: " + ForecastInterpreter.interpretWeatherCode(entry.getValue().weatherCode()));
-			System.out.println("Wind speed: " + entry.getValue().windSpeed() + " " + forecastData.getUnits().get(Unit.KPH));
-			System.out.println("Precipitation: " + entry.getValue().precipitation() + " " + forecastData.getUnits().get(Unit.MM));
-			System.out.println("Humidity: " + (entry.getValue().humidity() != null ? entry.getValue().humidity() : "N/A") + " " + forecastData.getUnits().get(Unit.PERCENT));
-			System.out.println("------------------------------");
+			System.out.print("Time: " + entry.getKey() + newLine);
+			System.out.print("Temperature: " + entry.getValue().temperature() + " " + forecastData.getUnits().get(Unit.CELSIUS) + newLine);
+			System.out.print("Weather code: " + ForecastInterpreter.interpretWeatherCode(entry.getValue().weatherCode()) + newLine);
+			System.out.print("Wind speed: " + entry.getValue().windSpeed() + " " + forecastData.getUnits().get(Unit.KPH) + newLine);
+			System.out.print("Precipitation: " + entry.getValue().precipitation() + " " + forecastData.getUnits().get(Unit.MM) + newLine);
+			System.out.print("Humidity: " + (entry.getValue().humidity() != null ? entry.getValue().humidity() : "N/A") + " " + forecastData.getUnits().get(Unit.PERCENT) + newLine);
+			System.out.print("------------------------------" + newLine + newLine);
 		}
 
-		System.out.println("\nDaily forecast:");
-		System.out.println("------------------------------");
+		System.out.print("Daily forecast:" + newLine);
+		System.out.print("------------------------------" + newLine);
 		for (Map.Entry<LocalDateTime, WeatherRecord> entry : forecastData.getDailyWeatherRecords().entrySet()) {
-			System.out.println("Date: " + entry.getKey().toLocalDate());
+			System.out.print("Date: " + entry.getKey().toLocalDate() + newLine);
 			System.out.println("Max temperature: " + entry.getValue().temperature() + " " + forecastData.getUnits().get(Unit.CELSIUS));
 			System.out.println("Weather code: " + ForecastInterpreter.interpretWeatherCode(entry.getValue().weatherCode()));
 			System.out.println("Max wind speed: " + entry.getValue().windSpeed() + " " + forecastData.getUnits().get(Unit.KPH));
