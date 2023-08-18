@@ -31,7 +31,7 @@ public class Main {
 		out.println("Welcome to WeatherTrack!");
 		out.println("===================================");
 		var userIOService = injector.getInstance(UserIOService.class);
-		var cityName = "Brenna";
+		var cityName = userIOService.getCityNameFromUser();
 		var geocodingApiService = injector.getInstance(GeocodingApiService.class);
 		var getCitiesForCityNameResponse = geocodingApiService.fetchCitiesForCityName(cityName);
 		if (getCitiesForCityNameResponse.isSuccess()) {
