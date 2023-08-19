@@ -3,17 +3,31 @@ package org.weathertrack.api.service.forecast.openmeteo.model;
 import java.util.Map;
 
 public class ForecastReport {
-	private double latitude;
-	private double longitude;
-	private double generationtime_ms;
-	private int utc_offset_seconds;
-	private String timezone;
-	private String timezone_abbreviation;
-	private double elevation;
-	private Map<String, String> hourly_units;
-	private Hourly hourly;
-	private Map<String, String> daily_units;
-	private Daily daily;
+	private final double latitude;
+	private final double longitude;
+	private final double generationtime_ms;
+	private final int utc_offset_seconds;
+	private final String timezone;
+	private final String timezone_abbreviation;
+	private final double elevation;
+	private final Map<String, String> hourly_units;
+	private final Hourly hourly;
+	private final Map<String, String> daily_units;
+	private final Daily daily;
+
+	public ForecastReport(double latitude, double longitude, double generationtime_ms, int utc_offset_seconds, String timezone, String timezone_abbreviation, double elevation, Map<String, String> hourly_units, Hourly hourly, Map<String, String> daily_units, Daily daily) {
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.generationtime_ms = generationtime_ms;
+		this.utc_offset_seconds = utc_offset_seconds;
+		this.timezone = timezone;
+		this.timezone_abbreviation = timezone_abbreviation;
+		this.elevation = elevation;
+		this.hourly_units = hourly_units;
+		this.hourly = hourly;
+		this.daily_units = daily_units;
+		this.daily = daily;
+	}
 
 	public double getLatitude() {
 		return latitude;
