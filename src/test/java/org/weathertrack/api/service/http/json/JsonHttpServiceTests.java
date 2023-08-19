@@ -8,14 +8,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.weathertrack.logging.factory.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,31 +25,50 @@ class JsonHttpServiceTests {
 	@Mock
 	private LoggerFactory mockLogger;
 	@Mock
-	private HttpClient httpClient;
+	private HttpClient mockhttpClient;
+
+	@Mock
+	private HttpResponse<Object> mockHttpResponse;
 	@InjectMocks
 	private JsonHttpService sut;
 
 	@BeforeEach
 	void setUp() {
-		httpClient = mock(HttpClient.class);
-		sut = new JsonHttpService(httpClient, mockLogger);
+		sut = new JsonHttpService(mockhttpClient, mockLogger);
 	}
 
 	@Test
 	void sendHttpGetRequest_WhenUriIsValid_ShouldReturnRequest() throws IOException, InterruptedException {
 		// When
-		var mockHttpResponse = mock(HttpResponse.class);
 
 		var expectedUri = URI.create("https://geocoding-api.open-meteo.com/v1/search");
 		var expectedResponse = "Mocked expected response";
 
-		when(mockHttpResponse.body()).thenReturn(expectedResponse);
-		when(httpClient.send(any(), any())).thenReturn(mockHttpResponse);
+		try (InputStream expectedResponseStream = new ByteArrayInputStream(expectedResponse.getBytes())) {
+			when(mockHttpResponse.body()).thenReturn(expectedResponseStream);
+			when(mockhttpClient.send(any(), any())).thenReturn(mockHttpResponse);
 
-		// Given
-		var result = sut.sendHttpGetRequest(expectedUri);
+			// Given
+			var result = sut.sendHttpGetRequest(expectedUri);
 
-		// Then
-		assertEquals(expectedResponse, result.body());
+			// Convert the InputStream from the result to a String
+			String resultString;
+			try (InputStream resultStream = result.body()) {
+				resultString = new String(resultStream.readAllBytes(), StandardCharsets.UTF_8);
+			}
+
+			// Then
+			assertEquals(expectedResponse, resultString);
+		}
+	}
+
+	@Test
+	void parseJsonResponse_WhenFailsToParse_ShouldThrowParseJsonException() {
+
+	}
+
+	@Test
+	void parseJsonResponse_WhenParseSuccess_ShouldReturnParsedJson() {
+
 	}
 }
