@@ -79,11 +79,11 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		List<GeocodingCityData> geocodingCitiesData = new ArrayList<>();
 		for (var cityData : responseDTO.getResults()) {
 			var geocodingCityData = new GeocodingCityData(
-					cityData.getName(),
-					cityData.getAdmin1(),
-					cityData.getCountry(),
-					cityData.getLatitude(),
-					cityData.getLongitude()
+					cityData.name(),
+					cityData.admin1(),
+					cityData.country(),
+					cityData.latitude(),
+					cityData.longitude()
 			);
 			geocodingCitiesData.add(geocodingCityData);
 		}
