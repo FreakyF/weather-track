@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.http.exception.ParseJsonException;
 import org.weathertrack.logging.factory.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
@@ -17,6 +19,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -64,11 +67,28 @@ class JsonHttpServiceTests {
 
 	@Test
 	void parseJsonResponse_WhenFailsToParse_ShouldThrowParseJsonException() {
+		String invalidJson = "invalid_json";
+		InputStream responseBody = new ByteArrayInputStream(invalidJson.getBytes());
+		Class<?> clazz = GeocodingCityData.class;
 
+		// Given
+		var thrown = assertThrows(
+				Exception.class,
+				() -> sut.parseJsonResponse(responseBody, clazz),
+				"Expected parseJsonResponse to throw Exception, but it didn't"
+		);
+
+		// Then
+		assertEquals(ParseJsonException.class, thrown.getClass());
+		assertEquals("java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 1 path $", thrown.getMessage());
 	}
 
 	@Test
 	void parseJsonResponse_WhenParseSuccess_ShouldReturnParsedJson() {
+		// When
 
+		// Given
+
+		// Then
 	}
 }
