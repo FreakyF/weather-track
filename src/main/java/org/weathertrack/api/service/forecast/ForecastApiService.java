@@ -9,5 +9,6 @@ import org.weathertrack.model.ResponseData;
 import java.io.IOException;
 
 public interface ForecastApiService {
+	// TODO: Document this method.
 	ResponseData<ForecastData> fetchForecastForCoordinates(GeocodingCityData geocodingCityData) throws BadRequestException, NotFoundException, IOException, InterruptedException;
 }

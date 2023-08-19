@@ -20,6 +20,7 @@ public class ForecastDataConverter {
 		if (forecastReportDTO == null) {
 			throw new NullPointerException(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL);
 		}
+
 		ForecastData.Builder builder = new ForecastData.Builder();
 
 		setTimeZone(forecastReportDTO);

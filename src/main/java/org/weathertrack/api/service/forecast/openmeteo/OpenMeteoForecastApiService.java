@@ -37,26 +37,27 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 	}
 
 	@Override
-	public ResponseData<ForecastData> fetchForecastForCoordinates(GeocodingCityData geocodingCityData) throws BadRequestException, NotFoundException, IOException, InterruptedException {
+	public ResponseData<ForecastData> fetchForecastForCoordinates(GeocodingCityData geocodingCityData)
+			throws BadRequestException, NotFoundException, IOException, InterruptedException {
 		if (geocodingCityData == null) {
 			throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
 		}
 
 		var response = getForecastForCoordinatesFromApi(geocodingCityData);
 		if (!response.success()) {
-			return Response.fail(response.message());
+			return Response.fail(response.message()); // TODO: Create unit test for this case
 		}
-		ForecastReport forecastReportDTO = response.value();
+		ForecastReport forecastReportDTO = response.value(); // TODO: Use var instead
 		if (forecastReportDTO == null) {
 			throw new NullPointerException(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL);
 		}
 
-		ForecastData forecastData = ForecastDataConverter.forecastReportToForecastData(forecastReportDTO);
+		ForecastData forecastData = ForecastDataConverter.forecastReportToForecastData(forecastReportDTO); // TODO: Use var instead, it is explicit what it is from the method name.
 		return Response.ok(forecastData);
 	}
 
 	private ResponseData<ForecastReport> getForecastForCoordinatesFromApi(GeocodingCityData geocodingCityData) throws BadRequestException, NotFoundException, IOException, InterruptedException {
-		URI requestUrl = buildForecastApiUri(geocodingCityData);
+		URI requestUrl = buildForecastApiUri(geocodingCityData); // TODO: Use var instead, it is explicit what it is from the method name.
 		var response = httpService.sendHttpGetRequest(requestUrl);
 
 		if (response.statusCode() != HttpStatus.SC_OK) {
@@ -67,7 +68,7 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 		try {
 			responseDTO = httpService.parseJsonResponse(response.body(), ForecastReport.class);
 		} catch (ParseJsonException e) {
-			return Response.fail("Could not get forecast for coordinates: " + geocodingCityData.longitude() + ", " + geocodingCityData.latitude());
+			return Response.fail("Could not get forecast for coordinates: " + geocodingCityData.longitude() + ", " + geocodingCityData.latitude()); // TODO: Extract this to configuration file to allow for localization
 		}
 
 		return Response.ok(responseDTO);
@@ -75,18 +76,17 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 
 	private URI buildForecastApiUri(GeocodingCityData geocodingCityData) {
 		var latitude = geocodingCityData.latitude();
-		var latitudeString = String.valueOf(latitude);
-
 		var longitude = geocodingCityData.longitude();
-		var longitudeString = String.valueOf(longitude);
 		try {
 			return uriBuilder
-					.setParameter("latitude", latitudeString)
-					.setParameter("longitude", longitudeString)
+					.setParameter("latitude", String.valueOf(latitude))
+					.setParameter("longitude", String.valueOf(longitude))
 					.setParameter("hourly", "temperature_2m,relativehumidity_2m,precipitation,weathercode,surface_pressure,windspeed_10m")
 					.setParameter("daily", "weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max")
 					.setParameter("timezone", "auto")
 					.build();
+			// TODO: Create a static class with const fields for the parameters of OpenMeteo API. It should be placed in OpenMeteo package. Thanks to this we could get rid of magic stirngs.
+			// TODO: Create a OpenMeteoApiParameterBuilder. Apply builder pattern. You should choose what you want to include in the request, for eg. if you want to include temperature_2m you should have method AddTemperature() etc.
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
 		}

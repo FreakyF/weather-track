@@ -3,6 +3,7 @@ package org.weathertrack.api.service.geocoding.openmeteo.model;
 import java.util.Arrays;
 import java.util.Objects;
 
+// TODO: Format it better
 public record CityDataDTO(long id, String name, double latitude, double longitude, double elevation,
                           String feature_code, String country_code, long admin1_id, long admin2_id, long admin3_id,
                           long admin4_id, String timezone, Long population, long[] postcodes, long country_id,

@@ -16,12 +16,11 @@ public class ForecastInterpreter {
 			properties = new Properties();
 			properties.load(inputStream);
 		} catch (IOException e) {
-			e.printStackTrace();
+			e.printStackTrace(); // TODO: Improve exception catching. Get rid of standalone e.printStackTrace everywhere.
 		}
 	}
 
 	public static String interpretWeatherCode(int code) {
-		String codeString = String.valueOf(code);
-		return properties.getProperty(codeString, "Unknown weather code");
+		return properties.getProperty(String.valueOf(code), "Unknown weather code"); // TODO: Extract this string to properties file for localization. Not every user will understand English
 	}
 }

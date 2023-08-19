@@ -58,6 +58,7 @@ class OpenMeteoForecastApiServiceTests {
 	@BeforeEach
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
+		// TODO: Does every unit test need these three mocks? It would be better to invoke them when it is required.
 		MOCKED_FORECAST_DATA = TestData.Provider.createForecastData();
 		MOCKED_FORECAST_REPORT = TestData.Provider.createForecastReport();
 		MOCKED_GEOCODING_CITY_DATA = TestData.Provider.createGeocodingCityData();
@@ -87,10 +88,10 @@ class OpenMeteoForecastApiServiceTests {
 	@Test
 	void fetchForecastForCoordinates_WhenUriSyntaxIsInvalid_ShouldThrowIllegalArgumentException() throws URISyntaxException {
 		// When
-		var latitude = "21";
+		final var latitude = "21";
 		var syntaxException = new URISyntaxException(latitude, ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
 
-		buildMockUri();
+		mockUriBuilderParameters();
 		when(mockUriBuilder.build()).thenThrow(syntaxException);
 
 		// Given
@@ -109,12 +110,11 @@ class OpenMeteoForecastApiServiceTests {
 	@Test
 	void fetchForecastForCoordinates_WhenGeocodingCityDataAndUriIsValid_ShouldReturnSuccessfulResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException, ParseJsonException {
 		// When
-
 		var expectedResult = new ResponseData<>(true, null,
 				MOCKED_FORECAST_DATA
 		);
 
-		buildMockUri();
+		mockUriBuilderParameters();
 
 		var jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
 		mockHttpResponse(jsonResponse);
@@ -139,7 +139,7 @@ class OpenMeteoForecastApiServiceTests {
 	@Test
 	void fetchForecastForCoordinates_WhenForecastDataIsNull_ShouldThrowNullPointerException() throws IOException, InterruptedException, ParseJsonException {
 		// When
-		buildMockUri();
+		mockUriBuilderParameters();
 
 		var jsonResponse = "{\"results\":[]}";
 		mockHttpResponse(jsonResponse);
@@ -154,12 +154,13 @@ class OpenMeteoForecastApiServiceTests {
 		);
 
 		// Then
-		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException");
+		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException"); // TODO: Remove this redundant assertion.
 		assertEquals(NullPointerException.class, thrown.getClass());
 		assertEquals(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL, thrown.getMessage());
 	}
 
-	private void buildMockUri() {
+	private void mockUriBuilderParameters() { // TODO: Rename this method. It is not building. It is mocking the URI builder parameters.
+		// TODO:Use constants I told you to create in another comment
 		when(mockUriBuilder.setParameter("latitude", "21.0")).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("longitude", "37.0")).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("hourly", "temperature_2m,relativehumidity_2m,precipitation,weathercode,surface_pressure,windspeed_10m")).thenReturn(mockUriBuilder);
@@ -185,8 +186,7 @@ class OpenMeteoForecastApiServiceTests {
 				expectedCityDataResponse
 		);
 
-		buildMockUri();
-
+		mockUriBuilderParameters();
 		when(mockHttpResponse.statusCode()).thenReturn(statusCodeValue);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
 
@@ -209,8 +209,7 @@ class OpenMeteoForecastApiServiceTests {
 	void fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldThrowException(
 			int statusCodeValue, String exceptionMessage, Class<? extends Exception> exceptionClass) throws IOException, InterruptedException {
 		// When
-		buildMockUri();
-
+		mockUriBuilderParameters();
 		when(mockHttpResponse.statusCode()).thenReturn(statusCodeValue);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
 

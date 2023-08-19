@@ -8,7 +8,7 @@ public class GeocodingApiModule extends AbstractModule {
 	public static final String ANNOTATION_GEOCODING_API = "ANNOTATION_GEOCODING_API";
 	private static final String GEOCODING_API_SCHEME = "https";
 	private static final String GEOCODING_API_HOST = "geocoding-api.open-meteo.com";
-	private static final String GEOCODING_API_PATH = "/v1/search";
+	private static final String GEOCODING_API_PATH = "/v1/search";    // TODO: Move to a config file. Look at ForecastApiModule for an example.
 
 	@Override
 	protected void configure() {

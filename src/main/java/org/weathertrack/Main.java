@@ -35,7 +35,7 @@ public class Main {
 		var getCitiesForCityNameResponse = geocodingApiService.fetchCitiesForCityName(cityName);
 		if (getCitiesForCityNameResponse.success()) {
 			userIOService.printCitiesWithSameName(getCitiesForCityNameResponse.value());
-			var userChoice = "1";
+			var userChoice = userIOService.getUserInput("Please enter the index: ");
 			var selectedCity = getCitiesForCityNameResponse.value().get(Integer.parseInt(userChoice) - 1);
 			var forecastApiService = injector.getInstance(ForecastApiService.class);
 			var getForecastForCoordinatesResponse = forecastApiService.fetchForecastForCoordinates(selectedCity);

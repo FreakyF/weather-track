@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.List;
 
 public interface GeocodingApiService {
+	// TODO: Improve documentation. Logic is not correct. sendHttpGetRequest CANNOT BE null.
+
 	/**
 	 * @param cityName name of the city to get detailed data for.
 	 * @return List of detailed information for cities with given name.

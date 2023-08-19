@@ -24,6 +24,7 @@ class ForecastDataConverterTests {
 	@BeforeEach
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
+		// TODO: These mocks are not required in all unit tests. Move they to
 		MOCKED_FORECAST_REPORT = TestData.Provider.createForecastReport();
 		MOCKED_FORECAST_DATA = TestData.Provider.createForecastData();
 	}
@@ -43,7 +44,7 @@ class ForecastDataConverterTests {
 		);
 
 		// Then
-		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException");
+		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException"); // TODO: Remove this redundant assertion.
 		assertEquals(NullPointerException.class, thrown.getClass());
 		assertEquals(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL, thrown.getMessage());
 	}
@@ -59,4 +60,6 @@ class ForecastDataConverterTests {
 		// Then
 		assertEquals(expectedResult, result);
 	}
+
+	// TODO: Implement more unit tests for various cases when something is missing in the forecast report.
 }
