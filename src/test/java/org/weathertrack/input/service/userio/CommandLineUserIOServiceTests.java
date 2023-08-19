@@ -150,7 +150,7 @@ class CommandLineUserIOServiceTests {
 		var newLine = System.lineSeparator();
 		var expectedOutput =
 				newLine +
-						"Weather forecast for timezone: UTC (UTC offset: 3600 seconds)" + newLine + newLine +
+						"Weather forecast for timezone: Europe/Warsaw (UTC offset: 3600 seconds)" + newLine + newLine +
 						"Hourly forecast:" + newLine +
 						"------------------------------" + newLine +
 						"Time: 2023-08-18T21:04:16.056821" + newLine +
@@ -174,7 +174,7 @@ class CommandLineUserIOServiceTests {
 
 	@ParameterizedTest
 	@ValueSource(strings = {
-			"Weather forecast for timezone: UTC (UTC offset: 3600 seconds)",
+			"Weather forecast for timezone: Europe/Warsaw (UTC offset: 3600 seconds)",
 			"\n",
 			"Hourly forecast:",
 			"------------------------------",
