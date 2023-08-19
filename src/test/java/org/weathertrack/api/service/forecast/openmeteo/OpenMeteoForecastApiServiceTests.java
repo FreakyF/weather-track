@@ -38,12 +38,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OpenMeteoForecastApiServiceTests {
 	private static ForecastData MOCKED_FORECAST_DATA;
+	private static ForecastReport MOCKED_FORECAST_REPORT;
 	private static GeocodingCityData MOCKED_GEOCODING_CITY_DATA;
 	@Mock
 	private URIBuilder mockUriBuilder;
@@ -59,6 +59,7 @@ class OpenMeteoForecastApiServiceTests {
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
 		MOCKED_FORECAST_DATA = TestData.Provider.createForecastData();
+		MOCKED_FORECAST_REPORT = TestData.Provider.createForecastReport();
 		MOCKED_GEOCODING_CITY_DATA = TestData.Provider.createGeocodingCityData();
 		sut = new OpenMeteoForecastApiService(mockUriBuilder, mockHttpService);
 	}
@@ -118,9 +119,7 @@ class OpenMeteoForecastApiServiceTests {
 		var jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
 		mockHttpResponse(jsonResponse);
 
-		var mockedResponseDTO = mock(ForecastData.class);
-		when(mockedResponseDTO).thenReturn(MOCKED_FORECAST_DATA);
-		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastData.class))).thenReturn(MOCKED_FORECAST_DATA);
+		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastReport.class))).thenReturn(MOCKED_FORECAST_REPORT);
 
 		// Given
 		var result = sut.fetchForecastForCoordinates(MOCKED_GEOCODING_CITY_DATA);
