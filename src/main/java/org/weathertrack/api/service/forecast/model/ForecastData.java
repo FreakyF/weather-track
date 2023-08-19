@@ -42,7 +42,7 @@ public class ForecastData {
 			units.put(unit, unitName);
 		}
 
-		public void setUtcOffsetSeconds(int utcOffsetSeconds) {
+		public static void setUtcOffsetSeconds(int utcOffsetSeconds) {
 			Builder.utcOffsetSeconds = utcOffsetSeconds;
 		}
 
@@ -70,7 +70,7 @@ public class ForecastData {
 			return units;
 		}
 
-		public void setTimeZone(ZoneId zoneId) {
+		public static void setTimeZone(ZoneId zoneId) {
 			Builder.zoneId = zoneId;
 		}
 	}
