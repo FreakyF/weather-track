@@ -31,16 +31,16 @@ public class ForecastDataConverter {
 	}
 
 	private static void extractUnits(ForecastReport forecastReportDTO, ForecastData.Builder builder) {
-		forecastReportDTO.getHourly_units().forEach((unit, value) -> builder.addUnit(Unit.fromJsonKey(unit), value));
-		forecastReportDTO.getDaily_units().forEach((unit, value) -> builder.addUnit(Unit.fromJsonKey(unit), value));
+		forecastReportDTO.hourly_units().forEach((unit, value) -> builder.addUnit(Unit.fromJsonKey(unit), value));
+		forecastReportDTO.daily_units().forEach((unit, value) -> builder.addUnit(Unit.fromJsonKey(unit), value));
 	}
 
 	private static void extractDailyWeatherRecords(ForecastReport forecastReportDTO, ForecastData.Builder builder) {
-		List<String> dailyTimes = forecastReportDTO.getDaily().time();
-		List<Double> dailyTemperatures = forecastReportDTO.getDaily().temperature_2m_max();
-		List<Integer> dailyWeatherCodes = forecastReportDTO.getDaily().weathercode();
-		List<Double> dailyWindSpeeds = forecastReportDTO.getDaily().windspeed_10m_max();
-		List<Integer> dailyPrecipitations = forecastReportDTO.getDaily().precipitation_probability_max();
+		List<String> dailyTimes = forecastReportDTO.daily().time();
+		List<Double> dailyTemperatures = forecastReportDTO.daily().temperature_2m_max();
+		List<Integer> dailyWeatherCodes = forecastReportDTO.daily().weathercode();
+		List<Double> dailyWindSpeeds = forecastReportDTO.daily().windspeed_10m_max();
+		List<Integer> dailyPrecipitations = forecastReportDTO.daily().precipitation_probability_max();
 
 		for (int i = 0; i < dailyTimes.size(); i++) {
 			LocalDate date = LocalDate.parse(dailyTimes.get(i), DateTimeFormatter.ISO_DATE);
@@ -56,12 +56,12 @@ public class ForecastDataConverter {
 	}
 
 	private static void extractHourlyWeatherRecords(ForecastReport forecastReportDTO, ForecastData.Builder builder) {
-		List<String> hourlyTimes = forecastReportDTO.getHourly().getTime();
-		List<Double> hourlyTemperatures = forecastReportDTO.getHourly().getTemperature_2m();
-		List<Integer> hourlyWeatherCodes = forecastReportDTO.getHourly().getWeathercode();
-		List<Double> hourlyWindSpeeds = forecastReportDTO.getHourly().getWindspeed_10m();
-		List<Double> hourlyPrecipitations = forecastReportDTO.getHourly().getPrecipitation();
-		List<Integer> hourlyHumidities = forecastReportDTO.getHourly().getRelativehumidity_2m();
+		List<String> hourlyTimes = forecastReportDTO.hourly().getTime();
+		List<Double> hourlyTemperatures = forecastReportDTO.hourly().getTemperature_2m();
+		List<Integer> hourlyWeatherCodes = forecastReportDTO.hourly().getWeathercode();
+		List<Double> hourlyWindSpeeds = forecastReportDTO.hourly().getWindspeed_10m();
+		List<Double> hourlyPrecipitations = forecastReportDTO.hourly().getPrecipitation();
+		List<Integer> hourlyHumidities = forecastReportDTO.hourly().getRelativehumidity_2m();
 
 		for (int i = 0; i < hourlyTimes.size(); i++) {
 			LocalDateTime dateTime = LocalDateTime.parse(hourlyTimes.get(i), DateTimeFormatter.ISO_DATE_TIME);
@@ -77,8 +77,8 @@ public class ForecastDataConverter {
 	}
 
 	private static void setTimeZone(ForecastReport forecastReportDTO, ForecastData.Builder builder) {
-		ZoneId zoneId = ZoneId.of(forecastReportDTO.getTimezone());
+		ZoneId zoneId = ZoneId.of(forecastReportDTO.timezone());
 		builder.setTimeZone(zoneId);
-		builder.setUtcOffsetSeconds(forecastReportDTO.getUtc_offset_seconds());
+		builder.setUtcOffsetSeconds(forecastReportDTO.utc_offset_seconds());
 	}
 }
