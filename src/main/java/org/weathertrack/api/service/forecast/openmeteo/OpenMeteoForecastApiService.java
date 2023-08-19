@@ -43,10 +43,10 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 		}
 
 		var response = getForecastForCoordinatesFromApi(geocodingCityData);
-		if (!response.isSuccess()) {
-			return Response.fail(response.getMessage());
+		if (!response.success()) {
+			return Response.fail(response.message());
 		}
-		ForecastReport forecastReportDTO = response.getValue();
+		ForecastReport forecastReportDTO = response.value();
 		if (forecastReportDTO == null) {
 			throw new NullPointerException(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL);
 		}

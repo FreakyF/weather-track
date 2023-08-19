@@ -40,15 +40,15 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	@Override
 	public ResponseData<List<GeocodingCityData>> fetchCitiesForCityName(String cityName) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		var validationResult = validateCityName(cityName);
-		if (!validationResult.isSuccess()) {
-			throw new IllegalArgumentException(validationResult.getMessage());
+		if (!validationResult.success()) {
+			throw new IllegalArgumentException(validationResult.message());
 		}
 
 		var response = getCitiesForCityNameFromApi(cityName);
-		if (!response.isSuccess()) {
+		if (!response.success()) {
 			return response;
 		}
-		var cityDataDTOS = response.getValue();
+		var cityDataDTOS = response.value();
 		if (cityDataDTOS == null) {
 			throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
 		}

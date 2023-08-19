@@ -34,20 +34,20 @@ public class Main {
 		var cityName = userIOService.getCityNameFromUser();
 		var geocodingApiService = injector.getInstance(GeocodingApiService.class);
 		var getCitiesForCityNameResponse = geocodingApiService.fetchCitiesForCityName(cityName);
-		if (getCitiesForCityNameResponse.isSuccess()) {
-			userIOService.printCitiesWithSameName(getCitiesForCityNameResponse.getValue());
+		if (getCitiesForCityNameResponse.success()) {
+			userIOService.printCitiesWithSameName(getCitiesForCityNameResponse.value());
 			var userChoice = "1";
-			var selectedCity = getCitiesForCityNameResponse.getValue().get(Integer.parseInt(userChoice) - 1);
+			var selectedCity = getCitiesForCityNameResponse.value().get(Integer.parseInt(userChoice) - 1);
 			var forecastApiService = injector.getInstance(ForecastApiService.class);
 			var getForecastForCoordinatesResponse = forecastApiService.fetchForecastForCoordinates(selectedCity);
-			if (getForecastForCoordinatesResponse.isSuccess()) {
-				userIOService.printWeather(getForecastForCoordinatesResponse.getValue());
+			if (getForecastForCoordinatesResponse.success()) {
+				userIOService.printWeather(getForecastForCoordinatesResponse.value());
 			}
 
 			return;
 		}
 
 		var logger = injector.getInstance(org.weathertrack.logging.Logger.class);
-		logger.error(getCitiesForCityNameResponse.getMessage());
+		logger.error(getCitiesForCityNameResponse.message());
 	}
 }
