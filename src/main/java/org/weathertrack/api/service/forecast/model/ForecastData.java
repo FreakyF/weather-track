@@ -30,24 +30,20 @@ public class ForecastData {
 		private static ZoneId zoneId;
 		private static int utcOffsetSeconds;
 
-		public Builder addDailyRecord(LocalDateTime date, WeatherRecord weatherRecord) {
+		public void addDailyRecord(LocalDateTime date, WeatherRecord weatherRecord) {
 			dailyWeatherRecords.put(date, weatherRecord);
-			return this;
 		}
 
-		public Builder addHourlyRecord(LocalDateTime date, WeatherRecord weatherRecord) {
+		public void addHourlyRecord(LocalDateTime date, WeatherRecord weatherRecord) {
 			hourlyWeatherRecords.put(date, weatherRecord);
-			return this;
 		}
 
-		public Builder addUnit(Unit unit, String unitName) {
+		public void addUnit(Unit unit, String unitName) {
 			units.put(unit, unitName);
-			return this;
 		}
 
-		public Builder setUtcOffsetSeconds(int utcOffsetSeconds) {
+		public void setUtcOffsetSeconds(int utcOffsetSeconds) {
 			Builder.utcOffsetSeconds = utcOffsetSeconds;
-			return this;
 		}
 
 		public ForecastData build() {
