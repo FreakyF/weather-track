@@ -1,7 +1,5 @@
 package org.weathertrack.api.service.forecast.openmeteo.resource;
 
-import org.weathertrack.input.service.userio.resource.WeatherDisplayResource;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -14,7 +12,7 @@ public class ForecastInterpreter {
 	}
 
 	static {
-		try (InputStream inputStream = WeatherDisplayResource.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
+		try (InputStream inputStream = ForecastInterpreter.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
 			properties = new Properties();
 			properties.load(inputStream);
 		} catch (IOException e) {
