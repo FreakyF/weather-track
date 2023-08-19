@@ -159,7 +159,7 @@ class OpenMeteoForecastApiServiceTests {
 		assertEquals(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL, thrown.getMessage());
 	}
 
-	private void mockUriBuilderParameters() { // TODO: Rename this method. It is not building. It is mocking the URI builder parameters.
+	private void mockUriBuilderParameters() {
 		// TODO:Use constants I told you to create in another comment
 		when(mockUriBuilder.setParameter("latitude", "21.0")).thenReturn(mockUriBuilder);
 		when(mockUriBuilder.setParameter("longitude", "37.0")).thenReturn(mockUriBuilder);
