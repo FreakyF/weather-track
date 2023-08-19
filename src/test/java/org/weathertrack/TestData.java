@@ -71,9 +71,9 @@ public class TestData {
 			builder.addUnit(Unit.PERCENT, "%");
 			builder.addUnit(Unit.MM, "mm");
 
-			builder.setUtcOffsetSeconds(3600);
+			ForecastData.Builder.setUtcOffsetSeconds(3600);
 
-			builder.setTimeZone(ZoneId.of("Europe/Warsaw"));
+			ForecastData.Builder.setTimeZone(ZoneId.of("Europe/Warsaw"));
 
 			return builder.build();
 		}
