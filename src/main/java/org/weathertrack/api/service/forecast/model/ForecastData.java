@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ForecastData {
 	private final Map<LocalDateTime, WeatherRecord> dailyWeatherRecords;
@@ -96,5 +97,17 @@ public class ForecastData {
 
 	public int getUtcOffsetSeconds() {
 		return utcOffsetSeconds;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ForecastData that)) return false;
+		return getUtcOffsetSeconds() == that.getUtcOffsetSeconds() && Objects.equals(getDailyWeatherRecords(), that.getDailyWeatherRecords()) && Objects.equals(getHourlyWeatherRecords(), that.getHourlyWeatherRecords()) && Objects.equals(getUnits(), that.getUnits()) && Objects.equals(getZoneId(), that.getZoneId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getDailyWeatherRecords(), getHourlyWeatherRecords(), getUnits(), getZoneId(), getUtcOffsetSeconds());
 	}
 }
