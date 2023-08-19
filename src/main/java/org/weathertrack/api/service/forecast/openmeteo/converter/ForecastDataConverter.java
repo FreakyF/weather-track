@@ -22,7 +22,7 @@ public class ForecastDataConverter {
 		}
 		ForecastData.Builder builder = new ForecastData.Builder();
 
-		setTimeZone(forecastReportDTO, builder);
+		setTimeZone(forecastReportDTO);
 		extractHourlyWeatherRecords(forecastReportDTO, builder);
 		extractDailyWeatherRecords(forecastReportDTO, builder);
 		extractUnits(forecastReportDTO, builder);
@@ -76,9 +76,9 @@ public class ForecastDataConverter {
 		}
 	}
 
-	private static void setTimeZone(ForecastReport forecastReportDTO, ForecastData.Builder builder) {
+	private static void setTimeZone(ForecastReport forecastReportDTO) {
 		ZoneId zoneId = ZoneId.of(forecastReportDTO.timezone());
-		builder.setTimeZone(zoneId);
-		builder.setUtcOffsetSeconds(forecastReportDTO.utc_offset_seconds());
+		ForecastData.Builder.setTimeZone(zoneId);
+		ForecastData.Builder.setUtcOffsetSeconds(forecastReportDTO.utc_offset_seconds());
 	}
 }
