@@ -1,5 +1,6 @@
 package org.weathertrack.api.service.forecast.openmeteo.converter;
 
+import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.forecast.model.ForecastData;
 import org.weathertrack.api.service.forecast.model.Unit;
 import org.weathertrack.api.service.forecast.model.WeatherRecord;
@@ -16,6 +17,9 @@ public class ForecastDataConverter {
 	}
 
 	public static ForecastData forecastReportToForecastData(ForecastReport forecastReportDTO) {
+		if (forecastReportDTO == null) {
+			throw new NullPointerException(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL);
+		}
 		ForecastData.Builder builder = new ForecastData.Builder();
 
 		setTimeZone(forecastReportDTO, builder);
