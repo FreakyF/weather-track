@@ -15,8 +15,7 @@ import org.weathertrack.logging.LoggingModule;
 
 import java.io.IOException;
 
-import static java.lang.System.out;
-
+@SuppressWarnings("java:S106")
 public class Main {
 	private static final Injector injector = Guice.createInjector(
 			new LoggingModule(),
@@ -27,9 +26,9 @@ public class Main {
 	);
 
 	public static void main(String[] args) throws BadRequestException, NotFoundException, IOException, InterruptedException {
-		out.println("===================================");
-		out.println("Welcome to WeatherTrack!");
-		out.println("===================================");
+		System.out.println("===================================");
+		System.out.println("Welcome to WeatherTrack!");
+		System.out.println("===================================");
 		var userIOService = injector.getInstance(UserIOService.class);
 		var cityName = userIOService.getCityNameFromUser();
 		var geocodingApiService = injector.getInstance(GeocodingApiService.class);
