@@ -56,12 +56,12 @@ public class ForecastDataConverter {
 	}
 
 	private static void extractHourlyWeatherRecords(ForecastReport forecastReportDTO, ForecastData.Builder builder) {
-		List<String> hourlyTimes = forecastReportDTO.hourly().getTime();
-		List<Double> hourlyTemperatures = forecastReportDTO.hourly().getTemperature_2m();
-		List<Integer> hourlyWeatherCodes = forecastReportDTO.hourly().getWeathercode();
-		List<Double> hourlyWindSpeeds = forecastReportDTO.hourly().getWindspeed_10m();
-		List<Double> hourlyPrecipitations = forecastReportDTO.hourly().getPrecipitation();
-		List<Integer> hourlyHumidities = forecastReportDTO.hourly().getRelativehumidity_2m();
+		List<String> hourlyTimes = forecastReportDTO.hourly().time();
+		List<Double> hourlyTemperatures = forecastReportDTO.hourly().temperature_2m();
+		List<Integer> hourlyWeatherCodes = forecastReportDTO.hourly().weathercode();
+		List<Double> hourlyWindSpeeds = forecastReportDTO.hourly().windspeed_10m();
+		List<Double> hourlyPrecipitations = forecastReportDTO.hourly().precipitation();
+		List<Integer> hourlyHumidities = forecastReportDTO.hourly().relativehumidity_2m();
 
 		for (int i = 0; i < hourlyTimes.size(); i++) {
 			LocalDateTime dateTime = LocalDateTime.parse(hourlyTimes.get(i), DateTimeFormatter.ISO_DATE_TIME);
