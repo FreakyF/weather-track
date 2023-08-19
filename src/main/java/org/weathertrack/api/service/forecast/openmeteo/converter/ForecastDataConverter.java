@@ -36,11 +36,11 @@ public class ForecastDataConverter {
 	}
 
 	private static void extractDailyWeatherRecords(ForecastReport forecastReportDTO, ForecastData.Builder builder) {
-		List<String> dailyTimes = forecastReportDTO.getDaily().getTime();
-		List<Double> dailyTemperatures = forecastReportDTO.getDaily().getTemperature_2m_max();
-		List<Integer> dailyWeatherCodes = forecastReportDTO.getDaily().getWeathercode();
-		List<Double> dailyWindSpeeds = forecastReportDTO.getDaily().getWindspeed_10m_max();
-		List<Integer> dailyPrecipitations = forecastReportDTO.getDaily().getPrecipitation_probability_max();
+		List<String> dailyTimes = forecastReportDTO.getDaily().time();
+		List<Double> dailyTemperatures = forecastReportDTO.getDaily().temperature_2m_max();
+		List<Integer> dailyWeatherCodes = forecastReportDTO.getDaily().weathercode();
+		List<Double> dailyWindSpeeds = forecastReportDTO.getDaily().windspeed_10m_max();
+		List<Integer> dailyPrecipitations = forecastReportDTO.getDaily().precipitation_probability_max();
 
 		for (int i = 0; i < dailyTimes.size(); i++) {
 			LocalDate date = LocalDate.parse(dailyTimes.get(i), DateTimeFormatter.ISO_DATE);
