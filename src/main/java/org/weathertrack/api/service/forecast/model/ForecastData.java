@@ -3,6 +3,7 @@ package org.weathertrack.api.service.forecast.model;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -25,7 +26,7 @@ public class ForecastData {
 	public static class Builder {
 		private static final Map<LocalDateTime, WeatherRecord> dailyWeatherRecords = new HashMap<>();
 		private static final Map<LocalDateTime, WeatherRecord> hourlyWeatherRecords = new HashMap<>();
-		private static final Map<Unit, String> units = new HashMap<>();
+		private static final Map<Unit, String> units = new EnumMap<>(Unit.class);
 
 		private static ZoneId zoneId;
 		private static int utcOffsetSeconds;
