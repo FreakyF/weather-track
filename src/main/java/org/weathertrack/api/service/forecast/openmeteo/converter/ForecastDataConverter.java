@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ForecastDataConverter {
-	private ForecastDataConverter() {
+	ForecastDataConverter() {
 	}
 
 	public static ForecastData forecastReportToForecastData(ForecastReport forecastReportDTO) {
