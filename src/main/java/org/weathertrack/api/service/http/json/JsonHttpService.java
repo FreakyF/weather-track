@@ -38,7 +38,7 @@ public class JsonHttpService implements HttpService {
 	}
 
 	public <T> T parseJsonResponse(InputStream responseBody, Class<T> clazz) throws ParseJsonException {
-		T parsedJson = null;
+		T parsedJson;
 		try (InputStreamReader inputStreamReader = new InputStreamReader(responseBody)) {
 			parsedJson = gson.fromJson(inputStreamReader, clazz);
 		} catch (Exception e) {
