@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.weathertrack.TestData;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.http.exception.ParseJsonException;
 import org.weathertrack.logging.factory.LoggerFactory;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class JsonHttpServiceTests {
+	private GeocodingCityData MOCKED_GEOCODING_CITY_DATA;
 	@Mock
 	private LoggerFactory mockLogger;
 	@Mock
@@ -38,6 +40,7 @@ class JsonHttpServiceTests {
 	@BeforeEach
 	void setUp() {
 		sut = new JsonHttpService(mockhttpClient, mockLogger);
+		MOCKED_GEOCODING_CITY_DATA = TestData.Provider.createGeocodingCityData();
 	}
 
 	@Test
@@ -54,7 +57,6 @@ class JsonHttpServiceTests {
 			// Given
 			var result = sut.sendHttpGetRequest(expectedUri);
 
-			// Convert the InputStream from the result to a String
 			String resultString;
 			try (InputStream resultStream = result.body()) {
 				resultString = new String(resultStream.readAllBytes(), StandardCharsets.UTF_8);
@@ -67,9 +69,9 @@ class JsonHttpServiceTests {
 
 	@Test
 	void parseJsonResponse_WhenFailsToParse_ShouldThrowParseJsonException() {
-		String invalidJson = "invalid_json";
-		InputStream responseBody = new ByteArrayInputStream(invalidJson.getBytes());
-		Class<?> clazz = GeocodingCityData.class;
+		var invalidJson = "invalid_json";
+		var responseBody = new ByteArrayInputStream(invalidJson.getBytes());
+		var clazz = GeocodingCityData.class;
 
 		// Given
 		var thrown = assertThrows(
@@ -84,11 +86,18 @@ class JsonHttpServiceTests {
 	}
 
 	@Test
-	void parseJsonResponse_WhenParseSuccess_ShouldReturnParsedJson() {
+	void parseJsonResponse_WhenParseSuccess_ShouldReturnParsedJson() throws ParseJsonException {
 		// When
+		var expectedResult = MOCKED_GEOCODING_CITY_DATA;
+		var validJson = "{\"name\":\"Kielce\",\"administration\":\"Świętokrzyskie\",\"country\":\"Poland\",\"latitude\":21.0,\"longitude\":37.0}";
+
+		var responseBody = new ByteArrayInputStream(validJson.getBytes());
+		var clazz = GeocodingCityData.class;
 
 		// Given
+		var result = sut.parseJsonResponse(responseBody, clazz);
 
 		// Then
+		assertEquals(expectedResult, result);
 	}
 }
