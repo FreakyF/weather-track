@@ -9,7 +9,6 @@ import org.weathertrack.model.ResponseData;
 import java.io.IOException;
 
 public interface ForecastApiService {
-	// TODO: Document this method.
 
 	/**
 	 * @param geocodingCityData contains the latitude and longitude of the location for which the forecast is requested.
