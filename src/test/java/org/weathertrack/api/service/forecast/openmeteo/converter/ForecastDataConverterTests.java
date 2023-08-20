@@ -8,24 +8,17 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.weathertrack.TestData;
 import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
-import org.weathertrack.api.service.forecast.model.ForecastData;
-import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class ForecastDataConverterTests {
-	private ForecastReport MOCKED_FORECAST_REPORT;
-	private static ForecastData MOCKED_FORECAST_DATA;
 	private AutoCloseable closeable;
 
 	@BeforeEach
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
-		// TODO: These mocks are not required in all unit tests. Move they to
-		MOCKED_FORECAST_REPORT = TestData.Provider.createForecastReport();
-		MOCKED_FORECAST_DATA = TestData.Provider.createForecastData();
 	}
 
 	@AfterEach
@@ -50,10 +43,11 @@ class ForecastDataConverterTests {
 	@Test
 	void forecastReportToForecastData_WhenForecastReportIsValid_ShouldReturnForecastData() {
 		// When
-		var expectedResult = MOCKED_FORECAST_DATA;
+		var expectedResult = TestData.Provider.createForecastData();
+		var mockedForecastReport = TestData.Provider.createForecastReport();
 
 		// Given
-		var result = ForecastDataConverter.forecastReportToForecastData(MOCKED_FORECAST_REPORT);
+		var result = ForecastDataConverter.forecastReportToForecastData(mockedForecastReport);
 
 		// Then
 		assertEquals(expectedResult, result);
