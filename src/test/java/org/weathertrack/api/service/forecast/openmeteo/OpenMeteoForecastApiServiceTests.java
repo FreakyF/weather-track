@@ -154,7 +154,6 @@ class OpenMeteoForecastApiServiceTests {
 		);
 
 		// Then
-		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException"); // TODO: Remove this redundant assertion.
 		assertEquals(NullPointerException.class, thrown.getClass());
 		assertEquals(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL, thrown.getMessage());
 	}
