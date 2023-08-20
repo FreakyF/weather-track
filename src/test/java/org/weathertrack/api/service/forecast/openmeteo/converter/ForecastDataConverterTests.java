@@ -13,7 +13,6 @@ import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class ForecastDataConverterTests {
@@ -44,7 +43,6 @@ class ForecastDataConverterTests {
 		);
 
 		// Then
-		assertTrue(thrown instanceof RuntimeException, "Expected NullPointerException"); // TODO: Remove this redundant assertion.
 		assertEquals(NullPointerException.class, thrown.getClass());
 		assertEquals(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL, thrown.getMessage());
 	}
