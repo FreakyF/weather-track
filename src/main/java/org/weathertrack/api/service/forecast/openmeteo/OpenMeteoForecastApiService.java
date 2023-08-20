@@ -47,12 +47,12 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 		if (!response.success()) {
 			return Response.fail(response.message()); // TODO: Create unit test for this case
 		}
-		ForecastReport forecastReportDTO = response.value(); // TODO: Use var instead
+		var forecastReportDTO = response.value();
 		if (forecastReportDTO == null) {
 			throw new NullPointerException(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL);
 		}
 
-		ForecastData forecastData = ForecastDataConverter.forecastReportToForecastData(forecastReportDTO); // TODO: Use var instead, it is explicit what it is from the method name.
+		var forecastData = ForecastDataConverter.forecastReportToForecastData(forecastReportDTO);
 		return Response.ok(forecastData);
 	}
 
