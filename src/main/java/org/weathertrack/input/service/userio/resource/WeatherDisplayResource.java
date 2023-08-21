@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class WeatherDisplayResource {
-	private static final String PROPERTIES_FILE = "forecast_display.properties";
+	private static final String PROPERTIES_FILE = "input/service/userio/resource/forecast_display.properties";
 	private static Properties properties;
 
 	static {
