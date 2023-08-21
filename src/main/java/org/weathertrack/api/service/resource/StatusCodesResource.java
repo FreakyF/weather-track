@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class StatusCodesResource {
-	private static final String PROPERTIES_FILE = "api.service.resource/status_codes.properties";
+	private static final String PROPERTIES_FILE = "api/service/resource/status_codes.properties";
 	private static Properties properties;
 
 	static {
