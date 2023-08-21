@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ForecastInterpreter {
-	private static final String PROPERTIES_FILE = "api.service.resource/api/service/forecast/openmeteo/resource/forecast_descriptions.properties";
+	private static final String PROPERTIES_FILE = "api/service/forecast/openmeteo/resource/forecast_descriptions.properties";
 	private static Properties properties;
 
 	private ForecastInterpreter() {
