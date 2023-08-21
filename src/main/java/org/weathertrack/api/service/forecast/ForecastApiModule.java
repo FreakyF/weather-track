@@ -28,7 +28,7 @@ public class ForecastApiModule extends AbstractModule {
 		var forecastApiServiceUriBuilder = new URIBuilder()
 				.setScheme(forecastApiUriData.get(FORECAST_API_SCHEME_PROPERTY_NAME))
 				.setHost(forecastApiUriData.get(FORECAST_API_HOST_PROPERTY_NAME))
-				.setPath(FORECAST_API_PATH_PROPERTY_NAME);
+				.setPath(forecastApiUriData.get(FORECAST_API_PATH_PROPERTY_NAME));
 		bind(URIBuilder.class).annotatedWith(Names.named(ANNOTATION_FORECAST_API)).toInstance(forecastApiServiceUriBuilder);
 	}
 
