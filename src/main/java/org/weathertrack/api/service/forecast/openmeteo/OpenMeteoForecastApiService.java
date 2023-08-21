@@ -12,6 +12,7 @@ import org.weathertrack.api.service.forecast.ForecastApiService;
 import org.weathertrack.api.service.forecast.model.ForecastData;
 import org.weathertrack.api.service.forecast.openmeteo.converter.ForecastDataConverter;
 import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
+import org.weathertrack.api.service.forecast.openmeteo.resource.ApiParametersResource;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.http.exception.ParseJsonException;
@@ -79,13 +80,12 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 		var longitude = geocodingCityData.longitude();
 		try {
 			return uriBuilder
-					.setParameter("latitude", String.valueOf(latitude))
-					.setParameter("longitude", String.valueOf(longitude))
-					.setParameter("hourly", "temperature_2m,relativehumidity_2m,precipitation,weathercode,surface_pressure,windspeed_10m")
-					.setParameter("daily", "weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max")
-					.setParameter("timezone", "auto")
+					.setParameter(ApiParametersResource.LATITUDE, String.valueOf(latitude))
+					.setParameter(ApiParametersResource.LONGITUDE, String.valueOf(longitude))
+					.setParameter(ApiParametersResource.HOURLY, "temperature_2m,relativehumidity_2m,precipitation,weathercode,surface_pressure,windspeed_10m")
+					.setParameter(ApiParametersResource.DAILY, "weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max")
+					.setParameter(ApiParametersResource.TIMEZONE, "auto")
 					.build();
-			// TODO: Create a static class with const fields for the parameters of OpenMeteo API. It should be placed in OpenMeteo package. Thanks to this we could get rid of magic stirngs.
 			// TODO: Create a OpenMeteoApiParameterBuilder. Apply builder pattern. You should choose what you want to include in the request, for eg. if you want to include temperature_2m you should have method AddTemperature() etc.
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
