@@ -46,7 +46,7 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 
 		var response = getForecastForCoordinatesFromApi(geocodingCityData);
 		if (!response.success()) {
-			return Response.fail(response.message()); // TODO: Create unit test for this case
+			return Response.fail(response.message());
 		}
 		var forecastReportDTO = response.value();
 		if (forecastReportDTO == null) {

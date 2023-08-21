@@ -107,12 +107,9 @@ class OpenMeteoForecastApiServiceTests {
 			throws IOException, InterruptedException, BadRequestException, NotFoundException, ParseJsonException {
 		// When
 		var mockedForecastData = TestData.Provider.createForecastData();
-
 		var mockedForecastReport = TestData.Provider.createForecastReport();
 		var mockedGeocodingCityData = TestData.Provider.createGeocodingCityData();
-		var expectedResult = new ResponseData<>(true, null,
-				mockedForecastData
-		);
+		var expectedResult = new ResponseData<>(true, null, mockedForecastData);
 
 		mockUriBuilderParameters();
 
@@ -129,14 +126,6 @@ class OpenMeteoForecastApiServiceTests {
 
 		// Then
 		assertEquals(expectedResult, result);
-	}
-
-	private void mockHttpResponse(String jsonResponse) throws IOException, InterruptedException {
-		var inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
-
-		when(mockHttpResponse.body()).thenReturn(inputStream);
-		when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
-		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
 	}
 
 	@Test
@@ -169,30 +158,29 @@ class OpenMeteoForecastApiServiceTests {
 
 	@Test
 	void fetchForecastForCoordinates_WhenResponseFails_ShouldReturnResponseData()
-			throws IOException, InterruptedException, ParseJsonException {
+			throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var mockedGeocodingCityData = TestData.Provider.createGeocodingCityData();
+		var expectedResult = new ResponseData<>(false, StatusCodesResource.STATUS_CODE_429, null);
 
 		mockUriBuilderParameters();
 
-		var jsonResponse = "{\"results\":[]}";
-		mockHttpResponse(jsonResponse);
-
-		when(mockHttpService.parseJsonResponse(
-				any(InputStream.class),
-				eq(ForecastReport.class)))
-				.thenReturn(null);
+		when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_TOO_MANY_REQUESTS);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
 
 		// Given
-		var thrown = assertThrows(
-				Exception.class,
-				() -> sut.fetchForecastForCoordinates(mockedGeocodingCityData),
-				"Expected fetchForecastForCoordinates to throw Exception, but it didn't"
-		);
+		var result = sut.fetchForecastForCoordinates(mockedGeocodingCityData);
 
 		// Then
-		assertEquals(NullPointerException.class, thrown.getClass());
-		assertEquals(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL, thrown.getMessage());
+		assertEquals(expectedResult, result);
+	}
+
+	private void mockHttpResponse(String jsonResponse) throws IOException, InterruptedException {
+		var inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
+
+		when(mockHttpResponse.body()).thenReturn(inputStream);
+		when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
+		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
 	}
 
 	private void mockUriBuilderParameters() {
@@ -243,9 +231,7 @@ class OpenMeteoForecastApiServiceTests {
 		// When
 		var mockedGeocodingCityData = TestData.Provider.createGeocodingCityData();
 
-		var expectedResult = new ResponseData<>(success, responseMessage,
-				expectedCityDataResponse
-		);
+		var expectedResult = new ResponseData<>(success, responseMessage, expectedCityDataResponse);
 
 		mockUriBuilderParameters();
 		when(mockHttpResponse.statusCode()).thenReturn(statusCodeValue);
