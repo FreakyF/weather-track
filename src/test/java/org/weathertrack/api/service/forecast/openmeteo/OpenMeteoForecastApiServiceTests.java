@@ -18,8 +18,8 @@ import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.forecast.model.ForecastData;
+import org.weathertrack.api.service.forecast.openmeteo.builder.ApiParameters;
 import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
-import org.weathertrack.api.service.forecast.openmeteo.resource.ApiParametersResource;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.http.exception.ParseJsonException;
 import org.weathertrack.api.service.resource.StatusCodesResource;
@@ -186,27 +186,27 @@ class OpenMeteoForecastApiServiceTests {
 	private void mockUriBuilderParameters() {
 		when(mockUriBuilder
 				.setParameter(
-						ApiParametersResource.LATITUDE,
+						ApiParameters.LATITUDE,
 						"21.0"))
 				.thenReturn(mockUriBuilder);
 		when(mockUriBuilder
 				.setParameter(
-						ApiParametersResource.LONGITUDE,
+						ApiParameters.LONGITUDE,
 						"37.0"))
 				.thenReturn(mockUriBuilder);
 		when(mockUriBuilder
 				.setParameter(
-						ApiParametersResource.HOURLY,
+						ApiParameters.HOURLY,
 						"temperature_2m,relativehumidity_2m" +
 								",precipitation,weathercode,surface_pressure,windspeed_10m"))
 				.thenReturn(mockUriBuilder);
 		when(mockUriBuilder
 				.setParameter(
-						ApiParametersResource.DAILY,
+						ApiParameters.DAILY,
 						"weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max"))
 				.thenReturn(mockUriBuilder);
 		when(mockUriBuilder
-				.setParameter(ApiParametersResource.TIMEZONE,
+				.setParameter(ApiParameters.TIMEZONE,
 						"auto"))
 				.thenReturn(mockUriBuilder);
 
