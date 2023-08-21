@@ -79,7 +79,8 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenUriSyntaxIsInvalid_ShouldThrowIllegalArgumentException() throws URISyntaxException {
+	void fetchForecastForCoordinates_WhenUriSyntaxIsInvalid_ShouldThrowIllegalArgumentException()
+			throws URISyntaxException {
 		// When
 		final var latitude = "21";
 		var mockedGeocodingCityData = TestData.Provider.createGeocodingCityData();
@@ -102,7 +103,8 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenGeocodingCityDataAndUriIsValid_ShouldReturnSuccessfulResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException, ParseJsonException {
+	void fetchForecastForCoordinates_WhenGeocodingCityDataAndUriIsValid_ShouldReturnSuccessfulResponseData()
+			throws IOException, InterruptedException, BadRequestException, NotFoundException, ParseJsonException {
 		// When
 		var mockedForecastData = TestData.Provider.createForecastData();
 
@@ -117,7 +119,10 @@ class OpenMeteoForecastApiServiceTests {
 		var jsonResponse = "{\"results\":[{\"name\":\"TestCity\",\"population\":1000000}]}";
 		mockHttpResponse(jsonResponse);
 
-		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastReport.class))).thenReturn(mockedForecastReport);
+		when(mockHttpService.parseJsonResponse(
+				any(InputStream.class),
+				eq(ForecastReport.class)))
+				.thenReturn(mockedForecastReport);
 
 		// Given
 		var result = sut.fetchForecastForCoordinates(mockedGeocodingCityData);
@@ -135,7 +140,8 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	@Test
-	void fetchForecastForCoordinates_WhenForecastDataIsNull_ShouldThrowNullPointerException() throws IOException, InterruptedException, ParseJsonException {
+	void fetchForecastForCoordinates_WhenForecastDataIsNull_ShouldThrowNullPointerException()
+			throws IOException, InterruptedException, ParseJsonException {
 		// When
 		var mockedGeocodingCityData = TestData.Provider.createGeocodingCityData();
 
@@ -144,7 +150,38 @@ class OpenMeteoForecastApiServiceTests {
 		var jsonResponse = "{\"results\":[]}";
 		mockHttpResponse(jsonResponse);
 
-		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(ForecastReport.class))).thenReturn(null);
+		when(mockHttpService.parseJsonResponse(
+				any(InputStream.class),
+				eq(ForecastReport.class)))
+				.thenReturn(null);
+
+		// Given
+		var thrown = assertThrows(
+				Exception.class,
+				() -> sut.fetchForecastForCoordinates(mockedGeocodingCityData),
+				"Expected fetchForecastForCoordinates to throw Exception, but it didn't"
+		);
+
+		// Then
+		assertEquals(NullPointerException.class, thrown.getClass());
+		assertEquals(ApiServiceExceptionMessage.FORECAST_REPORT_DATA_IS_NULL, thrown.getMessage());
+	}
+
+	@Test
+	void fetchForecastForCoordinates_WhenResponseFails_ShouldReturnResponseData()
+			throws IOException, InterruptedException, ParseJsonException {
+		// When
+		var mockedGeocodingCityData = TestData.Provider.createGeocodingCityData();
+
+		mockUriBuilderParameters();
+
+		var jsonResponse = "{\"results\":[]}";
+		mockHttpResponse(jsonResponse);
+
+		when(mockHttpService.parseJsonResponse(
+				any(InputStream.class),
+				eq(ForecastReport.class)))
+				.thenReturn(null);
 
 		// Given
 		var thrown = assertThrows(
@@ -159,11 +196,31 @@ class OpenMeteoForecastApiServiceTests {
 	}
 
 	private void mockUriBuilderParameters() {
-		when(mockUriBuilder.setParameter(ApiParametersResource.LATITUDE, "21.0")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter(ApiParametersResource.LONGITUDE, "37.0")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter(ApiParametersResource.HOURLY, "temperature_2m,relativehumidity_2m,precipitation,weathercode,surface_pressure,windspeed_10m")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter(ApiParametersResource.DAILY, "weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max")).thenReturn(mockUriBuilder);
-		when(mockUriBuilder.setParameter(ApiParametersResource.TIMEZONE, "auto")).thenReturn(mockUriBuilder);
+		when(mockUriBuilder
+				.setParameter(
+						ApiParametersResource.LATITUDE,
+						"21.0"))
+				.thenReturn(mockUriBuilder);
+		when(mockUriBuilder
+				.setParameter(
+						ApiParametersResource.LONGITUDE,
+						"37.0"))
+				.thenReturn(mockUriBuilder);
+		when(mockUriBuilder
+				.setParameter(
+						ApiParametersResource.HOURLY,
+						"temperature_2m,relativehumidity_2m" +
+								",precipitation,weathercode,surface_pressure,windspeed_10m"))
+				.thenReturn(mockUriBuilder);
+		when(mockUriBuilder
+				.setParameter(
+						ApiParametersResource.DAILY,
+						"weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max"))
+				.thenReturn(mockUriBuilder);
+		when(mockUriBuilder
+				.setParameter(ApiParametersResource.TIMEZONE,
+						"auto"))
+				.thenReturn(mockUriBuilder);
 
 	}
 
@@ -178,7 +235,11 @@ class OpenMeteoForecastApiServiceTests {
 	@ParameterizedTest
 	@MethodSource
 	void fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldReturnResponseData(
-			int statusCodeValue, boolean success, String responseMessage, ForecastData expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
+			int statusCodeValue,
+			boolean success,
+			String responseMessage,
+			ForecastData expectedCityDataResponse)
+			throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var mockedGeocodingCityData = TestData.Provider.createGeocodingCityData();
 
@@ -207,7 +268,10 @@ class OpenMeteoForecastApiServiceTests {
 	@ParameterizedTest
 	@MethodSource
 	void fetchForecastForCoordinates_WhenStatusCodeIsReceived_ShouldThrowException(
-			int statusCodeValue, String exceptionMessage, Class<? extends Exception> exceptionClass) throws IOException, InterruptedException {
+			int statusCodeValue,
+			String exceptionMessage,
+			Class<? extends Exception> exceptionClass)
+			throws IOException, InterruptedException {
 		// When
 		var mockedGeocodingCityData = TestData.Provider.createGeocodingCityData();
 
