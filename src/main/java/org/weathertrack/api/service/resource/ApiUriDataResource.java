@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 
 public class ApiUriDataResource {
-	private static final String PROPERTIES_FILE = "api/config.properties";
+	private static final String PROPERTIES_FILE = "api.service.resource/config.properties";
 
 	public static Map<String, String> getApiUriDataFromProperties(String apiSchemePropertyName, String apiHostPropertyName, String apiPathPropertyName) {
 		Map<String, String> apiUriData = new HashMap<>();
