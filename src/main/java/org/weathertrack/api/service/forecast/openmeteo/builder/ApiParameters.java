@@ -1,4 +1,4 @@
-package org.weathertrack.api.service.forecast.openmeteo.resource;
+package org.weathertrack.api.service.forecast.openmeteo.builder;
 
 public class ApiParametersResource {
 	public static final String LATITUDE = "latitude";
