@@ -20,7 +20,9 @@ public class ForecastInterpreter {
 		}
 	}
 
+	private static final String DEFAULT_WEATHER_INTERPRETATION = properties.getProperty("UNKNOWN_WEATHER_CODE");
+
 	public static String interpretWeatherCode(int code) {
-		return properties.getProperty(String.valueOf(code), "Unknown weather code"); // TODO: Extract this string to properties file for localization. Not every user will understand English
+		return properties.getProperty(String.valueOf(code), DEFAULT_WEATHER_INTERPRETATION);
 	}
 }
