@@ -1,5 +1,8 @@
 package org.weathertrack.api.service.forecast.openmeteo.resource;
 
+import org.weathertrack.logging.Logger;
+import org.weathertrack.logging.factory.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -7,22 +10,33 @@ import java.util.Properties;
 public class ForecastInterpreter {
 	private static final String PROPERTIES_FILE = "api/service/forecast/openmeteo/resource/forecast_descriptions.properties";
 	private static Properties properties;
+	private static String defaultWeatherInterpretation;
+	private static Logger<ForecastInterpreter> logger;
+	private static boolean initialized;
 
 	private ForecastInterpreter() {
 	}
 
-	static {
+	public static void initialize(LoggerFactory loggerFactory) {
+		logger = loggerFactory.create(ForecastInterpreter.class);
+		loadProperties();
+		defaultWeatherInterpretation = properties.getProperty("UNKNOWN_WEATHER_CODE");
+		initialized = true;
+	}
+
+	private static void loadProperties() {
 		try (InputStream inputStream = ForecastInterpreter.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
 			properties = new Properties();
 			properties.load(inputStream);
 		} catch (IOException e) {
-			e.printStackTrace(); // TODO: Improve exception catching. Get rid of standalone e.printStackTrace everywhere.
+			logger.error("Error loading properties: " + e.getMessage());
 		}
 	}
 
-	private static final String DEFAULT_WEATHER_INTERPRETATION = properties.getProperty("UNKNOWN_WEATHER_CODE");
-
 	public static String interpretWeatherCode(int code) {
-		return properties.getProperty(String.valueOf(code), DEFAULT_WEATHER_INTERPRETATION);
+		if (!initialized) {
+			throw new UnsupportedOperationException("Not implemented"); // TODO: Implement custom exception for this exception.
+		}
+		return properties.getProperty(String.valueOf(code), defaultWeatherInterpretation);
 	}
 }

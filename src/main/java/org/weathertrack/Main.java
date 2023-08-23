@@ -7,11 +7,13 @@ import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.forecast.ForecastApiModule;
 import org.weathertrack.api.service.forecast.ForecastApiService;
+import org.weathertrack.api.service.forecast.openmeteo.resource.ForecastInterpreter;
 import org.weathertrack.api.service.geocoding.GeocodingApiModule;
 import org.weathertrack.api.service.geocoding.GeocodingApiService;
 import org.weathertrack.input.service.userio.UserIOModule;
 import org.weathertrack.input.service.userio.UserIOService;
 import org.weathertrack.logging.LoggingModule;
+import org.weathertrack.logging.factory.LoggerFactory;
 
 import java.io.IOException;
 
@@ -26,6 +28,8 @@ public class Main {
 	);
 
 	public static void main(String[] args) throws BadRequestException, NotFoundException, IOException, InterruptedException {
+		ForecastInterpreter.initialize(injector.getInstance(LoggerFactory.class));
+
 		System.out.println("===================================");
 		System.out.println("Welcome to WeatherTrack!");
 		System.out.println("===================================");
