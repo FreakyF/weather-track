@@ -11,9 +11,13 @@ import java.util.Properties;
 
 public class OpenMeteoForecastApiServiceResource {
 	private static final String PROPERTIES_FILE = "api/service/forecast/OpenMeteoForecastApiService.properties";
-	private static Properties properties;
 	private static Logger<OpenMeteoForecastApiServiceResource> logger;
 	private static boolean initialized;
+	public static final String COULD_NOT_GET_FORECAST_FOR_COORDINATES;
+
+	static {
+		COULD_NOT_GET_FORECAST_FOR_COORDINATES = loadProperties();
+	}
 
 	public static void initialize(LoggerFactory loggerFactory) {
 		logger = loggerFactory.create(OpenMeteoForecastApiServiceResource.class);
@@ -21,19 +25,19 @@ public class OpenMeteoForecastApiServiceResource {
 		initialized = true;
 	}
 
-	private static void loadProperties() {
+	private static String loadProperties() {
 		if (!initialized) {
 			throw new NotInitializedException(OpenMeteoForecastApiServiceResourceMessage.FORECAST_API_SERVICE_LOCALIZATION_NOT_INITIALIZED);
 		}
 		try (InputStream inputStream = OpenMeteoForecastApiServiceResource.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
-			properties = new Properties();
+			Properties properties = new Properties();
 			properties.load(inputStream);
+			return properties.getProperty("COULD_NOT_GET_FORECAST_FOR_COORDINATES");
 		} catch (IOException e) {
 			logger.error("Error loading properties: " + e.getMessage());
+			return null;
 		}
 	}
-
-	public static final String COULD_NOT_GET_FORECAST_FOR_COORDINATES = properties.getProperty("COULD_NOT_GET_FORECAST_FOR_COORDINATES");
 
 	private OpenMeteoForecastApiServiceResource() {
 	}
