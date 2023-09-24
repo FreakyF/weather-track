@@ -1,5 +1,6 @@
 package org.weathertrack.api.service.forecast.openmeteo.resource;
 
+import org.weathertrack.api.service.forecast.openmeteo.exception.ForecastIntepreterMessage;
 import org.weathertrack.api.service.forecast.openmeteo.exception.NotInitializedException;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
@@ -36,7 +37,7 @@ public class ForecastInterpreter {
 
 	public static String interpretWeatherCode(int code) {
 		if (!initialized) {
-			throw new NotInitializedException("Error while trying to initialize weather codes descriptions");
+			throw new NotInitializedException(ForecastIntepreterMessage.FORECAST_DESCRIPTIONS_NOT_INITIALIZED);
 		}
 		return properties.getProperty(String.valueOf(code), defaultWeatherInterpretation);
 	}
