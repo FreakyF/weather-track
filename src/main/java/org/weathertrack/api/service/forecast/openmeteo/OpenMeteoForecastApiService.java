@@ -13,6 +13,7 @@ import org.weathertrack.api.service.forecast.model.ForecastData;
 import org.weathertrack.api.service.forecast.openmeteo.builder.OpenMeteoApiURIBuilder;
 import org.weathertrack.api.service.forecast.openmeteo.converter.ForecastDataConverter;
 import org.weathertrack.api.service.forecast.openmeteo.model.ForecastReport;
+import org.weathertrack.api.service.forecast.openmeteo.resource.OpenMeteoForecastApiServiceResource;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.http.HttpService;
 import org.weathertrack.api.service.http.exception.ParseJsonException;
@@ -69,7 +70,7 @@ public class OpenMeteoForecastApiService implements ForecastApiService {
 		try {
 			responseDTO = httpService.parseJsonResponse(response.body(), ForecastReport.class);
 		} catch (ParseJsonException e) {
-			return Response.fail("Could not get forecast for coordinates: " + geocodingCityData.longitude() + ", " + geocodingCityData.latitude()); // TODO: Extract this to configuration file to allow for localization
+			return Response.fail(OpenMeteoForecastApiServiceResource.COULD_NOT_GET_FORECAST_FOR_COORDINATES + geocodingCityData.longitude() + ", " + geocodingCityData.latitude());
 		}
 
 		return Response.ok(responseDTO);
