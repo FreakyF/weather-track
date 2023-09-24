@@ -1,5 +1,6 @@
 package org.weathertrack.api.service.forecast.openmeteo.resource;
 
+import org.weathertrack.api.service.forecast.openmeteo.exception.NotInitializedException;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
 
@@ -35,7 +36,7 @@ public class ForecastInterpreter {
 
 	public static String interpretWeatherCode(int code) {
 		if (!initialized) {
-			throw new UnsupportedOperationException("Not implemented"); // TODO: Implement custom exception for this exception.
+			throw new NotInitializedException("Error while trying to initialize weather codes descriptions");
 		}
 		return properties.getProperty(String.valueOf(code), defaultWeatherInterpretation);
 	}
