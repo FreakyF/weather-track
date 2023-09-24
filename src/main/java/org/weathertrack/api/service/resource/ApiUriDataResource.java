@@ -1,8 +1,8 @@
 package org.weathertrack.api.service.resource;
 
+import org.weathertrack.api.service.exception.ApiUriDataResourceMessage;
+import org.weathertrack.api.service.exception.NotInitializedException;
 import org.weathertrack.api.service.forecast.ForecastApiModule;
-import org.weathertrack.api.service.forecast.openmeteo.exception.ForecastIntepreterMessage;
-import org.weathertrack.api.service.forecast.openmeteo.exception.NotInitializedException;
 import org.weathertrack.logging.Logger;
 import org.weathertrack.logging.factory.LoggerFactory;
 
@@ -26,7 +26,7 @@ public class ApiUriDataResource {
 	                                                              String apiHostPropertyName,
 	                                                              String apiPathPropertyName) {
 		if (!initialized) {
-			throw new NotInitializedException(ForecastIntepreterMessage.FORECAST_DESCRIPTIONS_NOT_INITIALIZED);
+			throw new NotInitializedException(ApiUriDataResourceMessage.API_URI_DATA_NOT_INITIALIZED);
 		}
 		Map<String, String> apiUriData = new HashMap<>();
 		try (InputStream inputStream = ForecastApiModule.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
