@@ -42,6 +42,5 @@ public class ApiUriDataResource {
 	}
 
 	private ApiUriDataResource() {
-
 	}
 }
