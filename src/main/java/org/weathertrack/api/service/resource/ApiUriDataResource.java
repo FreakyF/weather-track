@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Properties;
 
 public class ApiUriDataResource {
-	private static final String PROPERTIES_FILE = "api/service/resource/config.properties";
+	private static final String PROPERTIES_FILE = "api/service/resource/api_config.properties";
 	private static Logger<ApiUriDataResource> logger;
 	private static boolean initialized;
 
@@ -36,7 +36,7 @@ public class ApiUriDataResource {
 			apiUriData.put(apiHostPropertyName, properties.getProperty(apiHostPropertyName));
 			apiUriData.put(apiPathPropertyName, properties.getProperty(apiPathPropertyName));
 		} catch (IOException e) {
-			logger.error("NOT IMPLEMENTED"); // TODO: Improve exception handling. Throw appropiate exception. Handle how user should be notified.
+			logger.error(ApiUriDataResourceMessage.API_CONFIG_NOT_FOUND);
 		}
 		return apiUriData;
 	}
