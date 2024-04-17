@@ -12,15 +12,18 @@ import org.weathertrack.api.service.geocoding.GeocodingApiService;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.api.service.http.exception.ParseJsonException;
 import org.weathertrack.api.service.resource.ApiMessageResource;
-import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.Response;
 import org.weathertrack.model.ResponseData;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.weathertrack.api.service.HttpStatusCodeHandler.handleStatusCode;
 
 public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	private final URIBuilder uriBuilder;
@@ -37,16 +40,15 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 	@Override
 	public ResponseData<List<GeocodingCityData>> fetchCitiesForCityName(String cityName) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		var validationResult = validateCityName(cityName);
-		if (!validationResult.isSuccess()) {
-			throw new IllegalArgumentException(validationResult.getMessage());
+		if (!validationResult.success()) {
+			throw new IllegalArgumentException(validationResult.message());
 		}
 
 		var response = getCitiesForCityNameFromApi(cityName);
-		if (!response.isSuccess()) {
+		if (!response.success()) {
 			return response;
 		}
-		var cityDataDTOS = response.getValue();
-
+		var cityDataDTOS = response.value();
 		if (cityDataDTOS == null) {
 			throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
 		}
@@ -65,8 +67,28 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 			return handleStatusCode(response.statusCode());
 		}
 
-		CityDataResponseDTO responseDTO = httpService.parseJsonResponse(response.body(), CityDataResponseDTO.class);
-		return Response.ok(responseDTO.getResults());
+		CityDataResponseDTO responseDTO;
+		try {
+			responseDTO = httpService.parseJsonResponse(response.body(), CityDataResponseDTO.class);
+			if (responseDTO.getResults() == null) {
+				throw new NullPointerException(ApiServiceExceptionMessage.GEOCODING_CITY_DATA_IS_NULL);
+			}
+		} catch (ParseJsonException e) {
+			return Response.fail("Could not get cities for city name: " + cityName);
+		}
+		List<GeocodingCityData> geocodingCitiesData = new ArrayList<>();
+		for (var cityData : responseDTO.getResults()) {
+			var geocodingCityData = new GeocodingCityData(
+					cityData.name(),
+					cityData.admin1(),
+					cityData.country(),
+					cityData.latitude(),
+					cityData.longitude()
+			);
+			geocodingCitiesData.add(geocodingCityData);
+		}
+
+		return Response.ok(geocodingCitiesData);
 	}
 
 	private ResponseData<?> validateCityName(String cityName) {
@@ -88,16 +110,4 @@ public class OpenMeteoGeocodingApiService implements GeocodingApiService {
 		}
 	}
 
-	private ResponseData<List<GeocodingCityData>> handleStatusCode(int statusCode) throws BadRequestException, NotFoundException {
-		return switch (statusCode) {
-			case HttpStatus.SC_BAD_REQUEST -> throw new BadRequestException(ApiServiceExceptionMessage.STATUS_CODE_400);
-			case HttpStatus.SC_NOT_FOUND -> throw new NotFoundException(ApiServiceExceptionMessage.STATUS_CODE_404);
-			case HttpStatus.SC_TOO_MANY_REQUESTS -> Response.fail(StatusCodesResource.STATUS_CODE_429);
-			case HttpStatus.SC_INTERNAL_SERVER_ERROR -> Response.fail(StatusCodesResource.STATUS_CODE_500);
-			case HttpStatus.SC_SERVICE_UNAVAILABLE -> Response.fail(StatusCodesResource.STATUS_CODE_503);
-			case HttpStatus.SC_GATEWAY_TIMEOUT -> Response.fail(StatusCodesResource.STATUS_CODE_504);
-			default ->
-					throw new UnsupportedOperationException(String.format(ApiServiceExceptionMessage.UNHANDLED_STATUS_CODE, statusCode));
-		};
-	}
 }

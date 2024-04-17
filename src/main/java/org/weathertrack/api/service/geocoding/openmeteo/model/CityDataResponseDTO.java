@@ -1,13 +1,11 @@
 package org.weathertrack.api.service.geocoding.openmeteo.model;
 
-import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
-
 import java.util.List;
 
 public class CityDataResponseDTO {
-	private List<GeocodingCityData> results;
+	private List<CityDataDTO> results;
 
-	public List<GeocodingCityData> getResults() {
+	public List<CityDataDTO> getResults() {
 		return results;
 	}
 }

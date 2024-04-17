@@ -16,7 +16,7 @@ class WeatherDataTests {
 
 	private WeatherData weatherData;
 
-	private static Stream<Arguments> WeatherCondition_ShouldThrowError_withAppropriateMessage() {
+	private static Stream<Arguments> WeatherCondition_ShouldThrowError() {
 		return Stream.of(
 				Arguments.of(null, WeatherExceptionMessage.WEATHER_CONDITION_IS_NULL),
 				Arguments.of("", WeatherExceptionMessage.WEATHER_CONDITION_IS_EMPTY),
@@ -26,7 +26,7 @@ class WeatherDataTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void WeatherCondition_ShouldThrowError_withAppropriateMessage(String weatherConditionValue, String exceptionMessage) {
+	void WeatherCondition_ShouldThrowError(String weatherConditionValue, String exceptionMessage) {
 		// Given
 		var throwedException = assertThrows(IllegalStateException.class, () -> weatherData = new WeatherData(
 				weatherConditionValue,
@@ -143,7 +143,7 @@ class WeatherDataTests {
 		assertEquals(expectedOutput, result);
 	}
 
-	private static Stream<Arguments> Cloudiness_ShouldThrowError_withAppropriateMessage() {
+	private static Stream<Arguments> Cloudiness_ShouldThrowError() {
 		return Stream.of(
 				Arguments.of(101, WeatherExceptionMessage.CLOUDINESS_IS_ABOVE_100),
 				Arguments.of(-1, WeatherExceptionMessage.CLOUDINESS_IS_BELOW_0)
@@ -152,7 +152,7 @@ class WeatherDataTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void Cloudiness_ShouldThrowError_withAppropriateMessage(int cloudinessValue, String exceptionMessage) {
+	void Cloudiness_ShouldThrowError(int cloudinessValue, String exceptionMessage) {
 		// Given
 		var throwedException = assertThrows(IllegalArgumentException.class, () -> weatherData = new WeatherData(
 				"Sunny",
@@ -189,7 +189,7 @@ class WeatherDataTests {
 		assertEquals(expectedOutput, result);
 	}
 
-	private static Stream<Arguments> RainChance_ShouldThrowError_WithAppropriateMessage() {
+	private static Stream<Arguments> RainChance_ShouldThrowError() {
 		return Stream.of(
 				Arguments.of(101, WeatherExceptionMessage.RAIN_CHANCE_IS_ABOVE_100),
 				Arguments.of(-1, WeatherExceptionMessage.RAIN_CHANCE_IS_BELOW_0)
@@ -198,7 +198,7 @@ class WeatherDataTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void RainChance_ShouldThrowError_WithAppropriateMessage(int rainChanceValue, String exceptionMessage) {
+	void RainChance_ShouldThrowError(int rainChanceValue, String exceptionMessage) {
 		// Given
 		var throwedException = assertThrows(IllegalArgumentException.class, () -> weatherData = new WeatherData(
 				"Sunny",
@@ -235,7 +235,7 @@ class WeatherDataTests {
 		assertEquals(expectedOutput, result);
 	}
 
-	private static Stream<Arguments> WindSpeed_ShouldThrowError_WithAppropriateMessage() {
+	private static Stream<Arguments> WindSpeed_ShouldThrowError() {
 		return Stream.of(
 				Arguments.of(-32.5, WeatherExceptionMessage.WIND_SPEED_IS_BELOW_0)
 		);
@@ -243,7 +243,7 @@ class WeatherDataTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void WindSpeed_ShouldThrowError_WithAppropriateMessage(double windSpeedValue, String exceptionMessage) {
+	void WindSpeed_ShouldThrowError(double windSpeedValue, String exceptionMessage) {
 		// Given
 		var throwedException = assertThrows(IllegalArgumentException.class, () -> weatherData = new WeatherData(
 				"Sunny",
@@ -326,7 +326,7 @@ class WeatherDataTests {
 		assertEquals(expectedOutput, result);
 	}
 
-	private static Stream<Arguments> Pressure_ShouldThrowError_WithAppropriateMessage() {
+	private static Stream<Arguments> Pressure_ShouldThrowError() {
 		return Stream.of(
 				Arguments.of(-32, WeatherExceptionMessage.PRESSURE_IS_BELOW_0)
 		);
@@ -334,7 +334,7 @@ class WeatherDataTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void Pressure_ShouldThrowError_WithAppropriateMessage(int pressureValue, String exceptionMessage) {
+	void Pressure_ShouldThrowError(int pressureValue, String exceptionMessage) {
 		// Given
 		var throwedException = assertThrows(IllegalArgumentException.class, () -> weatherData = new WeatherData(
 				"Sunny",

@@ -18,8 +18,10 @@ import org.weathertrack.api.service.exception.ApiServiceExceptionMessage;
 import org.weathertrack.api.service.exception.BadRequestException;
 import org.weathertrack.api.service.exception.NotFoundException;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
+import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataDTO;
 import org.weathertrack.api.service.geocoding.openmeteo.model.CityDataResponseDTO;
 import org.weathertrack.api.service.http.HttpService;
+import org.weathertrack.api.service.http.exception.ParseJsonException;
 import org.weathertrack.api.service.resource.ApiMessageResource;
 import org.weathertrack.api.service.resource.StatusCodesResource;
 import org.weathertrack.model.ResponseData;
@@ -45,7 +47,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class OpenMeteoGeocodingApiServiceTests {
 	private final static String CITY_NAME = "Kielce";
-	private static GeocodingCityData MOCKED_CITY_DATA_DTO;
+	private static CityDataDTO MOCKED_CITY_DATA_DTO;
+	private static GeocodingCityData MOCKED_GEOCODING_CITY_DATA_DTO;
 	@Mock
 	private URIBuilder mockUriBuilder;
 	@Mock
@@ -60,6 +63,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	void beforeEach() {
 		closeable = MockitoAnnotations.openMocks(this);
 		MOCKED_CITY_DATA_DTO = TestData.Provider.createCityDataDTO();
+		MOCKED_GEOCODING_CITY_DATA_DTO = TestData.Provider.createGeocodingCityData();
 		sut = new OpenMeteoGeocodingApiService(mockUriBuilder, mockHttpService);
 	}
 
@@ -68,7 +72,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		closeable.close();
 	}
 
-	private static Stream<Arguments> fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage() {
+	private static Stream<Arguments> fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException() {
 		return Stream.of(
 				Arguments.of(null, ApiServiceExceptionMessage.CITY_NAME_IS_NULL, IllegalArgumentException.class),
 				Arguments.of("", ApiServiceExceptionMessage.CITY_NAME_IS_BLANK, IllegalArgumentException.class),
@@ -78,7 +82,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException_WithAppropriateMessage(
+	void fetchCitiesForCityName_WhenCityNameIsInvalid_ShouldThrowException(
 			String cityNameValue, String expectedExceptionMessage, Class<? extends Throwable> exceptionClass) {
 		// When
 		var exception = assertThrows(exceptionClass, () -> sut.fetchCitiesForCityName(cityNameValue));
@@ -88,7 +92,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenUriSyntaxIsInvalid_ShouldThrowException_WithAppropriateMessage() throws URISyntaxException {
+	void fetchCitiesForCityName_WhenUriSyntaxIsInvalid_ShouldThrowException() throws URISyntaxException {
 		// When
 		var syntaxException = new URISyntaxException(CITY_NAME, ApiServiceExceptionMessage.URI_SYNTAX_IS_INVALID);
 
@@ -109,10 +113,10 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException {
+	void fetchCitiesForCityName_WhenCityNameAndUriIsValid_ShouldReturnResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException, ParseJsonException {
 		// When
-		var expectedCityDataResponse = new ArrayList<>();
-		expectedCityDataResponse.add(MOCKED_CITY_DATA_DTO);
+		List<GeocodingCityData> expectedCityDataResponse = new ArrayList<>();
+		expectedCityDataResponse.add(MOCKED_GEOCODING_CITY_DATA_DTO);
 
 		var expectedResult = new ResponseData<>(true, null,
 				expectedCityDataResponse
@@ -143,7 +147,7 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException_WithAppropriateMessage() throws IOException, InterruptedException {
+	void fetchCitiesForCityName_CityDataResponseDTOIsNull_ShouldThrowException() throws IOException, InterruptedException, ParseJsonException {
 		// When
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 
@@ -168,20 +172,20 @@ class OpenMeteoGeocodingApiServiceTests {
 	}
 
 	@Test
-	void fetchCitiesForCityName_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData_WithAppropriateMessage() throws IOException, InterruptedException, BadRequestException, NotFoundException {
+	void fetchCitiesForCityName_WhenCityDataResponseDTOIsEmpty_ShouldReturnResponseData() throws IOException, InterruptedException, BadRequestException, NotFoundException, ParseJsonException {
 		// When
 		var expectedResult = new ResponseData<>(false, ApiMessageResource.NO_CITIES_FOUND, null);
 
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);
 
-		String jsonResponse = "{\"results\":[]}";
-		InputStream inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
+		var jsonResponse = "{\"results\":[]}";
+		var inputStream = new ByteArrayInputStream(jsonResponse.getBytes(StandardCharsets.UTF_8));
 
 		when(mockHttpResponse.body()).thenReturn(inputStream);
 		when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
 		when(mockHttpService.sendHttpGetRequest(any())).thenReturn(mockHttpResponse);
 
-		CityDataResponseDTO mockedResponseDTO = mock(CityDataResponseDTO.class);
+		var mockedResponseDTO = mock(CityDataResponseDTO.class);
 		when(mockedResponseDTO.getResults()).thenReturn(List.of());
 		when(mockHttpService.parseJsonResponse(any(InputStream.class), eq(CityDataResponseDTO.class))).thenReturn(mockedResponseDTO);
 
@@ -192,7 +196,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(expectedResult, result);
 	}
 
-	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage() {
+	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData() {
 		return Stream.of(
 				Arguments.of(500, false, StatusCodesResource.STATUS_CODE_500, null),
 				Arguments.of(503, false, StatusCodesResource.STATUS_CODE_503, null),
@@ -202,7 +206,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData_WithAppropriateMessage(
+	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldReturnResponseData(
 			int statusCodeValue, boolean success, String responseMessage, ArrayList<GeocodingCityData> expectedCityDataResponse) throws IOException, InterruptedException, BadRequestException, NotFoundException {
 		// When
 		var expectedResult = new ResponseData<>(success, responseMessage,
@@ -221,7 +225,7 @@ class OpenMeteoGeocodingApiServiceTests {
 		assertEquals(expectedResult, result);
 	}
 
-	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage() {
+	private static Stream<Arguments> fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException() {
 		return Stream.of(
 				Arguments.of(400, ApiServiceExceptionMessage.STATUS_CODE_400, BadRequestException.class),
 				Arguments.of(404, ApiServiceExceptionMessage.STATUS_CODE_404, NotFoundException.class)
@@ -230,7 +234,7 @@ class OpenMeteoGeocodingApiServiceTests {
 
 	@ParameterizedTest
 	@MethodSource
-	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException_WithAppropriateMessage(
+	void fetchCitiesForCityName_WhenStatusCodeIsReceived_ShouldThrowException(
 			int statusCodeValue, String exceptionMessage, Class<? extends Exception> exceptionClass) throws IOException, InterruptedException {
 		// When
 		when(mockUriBuilder.setParameter("name", CITY_NAME)).thenReturn(mockUriBuilder);

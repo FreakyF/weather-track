@@ -1,10 +1,17 @@
 package org.weathertrack.input.service.userio;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.weathertrack.api.service.forecast.model.WeatherData;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.weathertrack.TestData;
+import org.weathertrack.api.service.forecast.model.ForecastData;
 import org.weathertrack.api.service.geocoding.model.GeocodingCityData;
 import org.weathertrack.input.resource.InputLogMessage;
 import org.weathertrack.logging.Logger;
@@ -12,40 +19,51 @@ import org.weathertrack.logging.factory.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class CommandLineUserIOServiceTests {
+	private static ForecastData MOCKED_FORECAST_DATA;
+	private static GeocodingCityData MOCKED_GEOCODING_CITY_DATA;
 	private static final String EXPECTED_USER_MESSAGE = "User message";
 	private static final String EXPECTED_PROMPT_MESSAGE = "Prompt message";
-	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-	private UserIOService commandLineUserInterface;
+	private ByteArrayOutputStream outputStreamCaptor;
+	@Mock
+	private LoggerFactory loggerFactory;
+	@Mock
 	private Logger<CommandLineUserIOService> logger;
+	@Mock
 	private Scanner mockScanner;
-	private static final WeatherData mockWeatherData = new WeatherData(
-			"Sunny",
-			25.0,
-			30,
-			10,
-			15.0,
-			70,
-			1015
-	);
+	private AutoCloseable closeable;
+	@InjectMocks
+	private CommandLineUserIOService sut;
 
 	@BeforeEach
-	void setUp() {
-		System.setOut(new PrintStream(outputStream));
-		var loggerFactory = mock(LoggerFactory.class);
-		logger = mock(Logger.class);
+	void beforeEach() {
+		closeable = MockitoAnnotations.openMocks(this);
+
+		MOCKED_FORECAST_DATA = TestData.Provider.createForecastData();
+		MOCKED_GEOCODING_CITY_DATA = TestData.Provider.createGeocodingCityData();
+
 		when(loggerFactory.create(CommandLineUserIOService.class)).thenReturn(logger);
-		mockScanner = mock(Scanner.class);
-		commandLineUserInterface = new CommandLineUserIOService(loggerFactory, mockScanner);
+
+		sut = new CommandLineUserIOService(loggerFactory, mockScanner);
+
+		outputStreamCaptor = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outputStreamCaptor));
+	}
+
+	@AfterEach
+	void afterEach() throws Exception {
+		closeable.close();
+		System.setOut(System.out);
 	}
 
 	@Test
@@ -54,7 +72,7 @@ class CommandLineUserIOServiceTests {
 		when(mockScanner.nextLine()).thenReturn(EXPECTED_USER_MESSAGE);
 
 		// Given
-		var result = commandLineUserInterface.getUserInput(EXPECTED_PROMPT_MESSAGE);
+		var result = sut.getUserInput(EXPECTED_PROMPT_MESSAGE);
 
 		// Then
 		assertEquals(EXPECTED_USER_MESSAGE, result);
@@ -63,45 +81,30 @@ class CommandLineUserIOServiceTests {
 	@Test
 	void getUserInput_ShouldPromptMessage() {
 		// When
-		ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-		System.setOut(new PrintStream(outputStreamCaptor));
-
 		when(mockScanner.nextLine()).thenReturn(EXPECTED_USER_MESSAGE);
 
 		// Given
-		commandLineUserInterface.getUserInput(EXPECTED_PROMPT_MESSAGE);
+		sut.getUserInput(EXPECTED_PROMPT_MESSAGE);
 
 		// Then
-		assertEquals(EXPECTED_PROMPT_MESSAGE, outputStreamCaptor.toString().trim());
+		assertEquals(EXPECTED_PROMPT_MESSAGE, outputStreamCaptor.toString());
 	}
 
 	@Test
-	void printCityDataWithSameCityName_shouldPrintCityData() {
+	void printCityDataWithSameCityName_WhenGeocodingCityDataIsValid_ShouldPrintCitiesWithSameName() {
 		// When
-		List<GeocodingCityData> GeocodingCityDataList = List.of(
-				new GeocodingCityData(
-						"Kielce",
-						"Świętokrzyskie",
-						"Poland",
-						21,
-						37),
-				new GeocodingCityData(
-						"Brenna",
-						"Silesia",
-						"Poland",
-						69,
-						69)
-		);
+		List<GeocodingCityData> mockedList = new ArrayList<>();
+		mockedList.add(MOCKED_GEOCODING_CITY_DATA);
 
-		// Given
-		commandLineUserInterface.printCitiesWithSameName(GeocodingCityDataList);
-
-		// Then
 		var expectedOutput = """
 				1. Kielce, Świętokrzyskie, Poland
-				2. Brenna, Silesia, Poland
 				""";
-		assertEquals(expectedOutput, outputStream.toString());
+
+		// Given
+		sut.printCitiesWithSameName(mockedList);
+
+		// Then
+		assertEquals(expectedOutput, outputStreamCaptor.toString());
 	}
 
 	@Test
@@ -110,7 +113,7 @@ class CommandLineUserIOServiceTests {
 		List<GeocodingCityData> GeocodingCityDataList = List.of();
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(GeocodingCityDataList);
+		sut.printCitiesWithSameName(GeocodingCityDataList);
 
 		// Then
 		verify(logger).warn(InputLogMessage.CITIES_WITH_SAME_NAME_IS_EMPTY);
@@ -129,48 +132,76 @@ class CommandLineUserIOServiceTests {
 		);
 
 		// Given
-		commandLineUserInterface.printCitiesWithSameName(GeocodingCityDataList);
+		sut.printCitiesWithSameName(GeocodingCityDataList);
 
 		// Then
 		var expectedOutput = """
 				1. Kielce, Świętokrzyskie, Poland
 				""";
-		assertEquals(expectedOutput, outputStream.toString());
+		assertEquals(expectedOutput, outputStreamCaptor.toString());
 	}
 
 	@Test
 	void printWeather_shouldPrintWeather() {
-		// Given
-		commandLineUserInterface.printWeather(mockWeatherData);
+		// When
+		sut.printWeather(MOCKED_FORECAST_DATA);
 
 		// Then
 		var newLine = System.lineSeparator();
-		var expectedOutput = "Weather Condition: Sunny" + newLine +
-				"Temperature: 25.0" + newLine +
-				"Cloudiness: 30%" + newLine +
-				"Rain Chance: 10%" + newLine +
-				"Wind Speed: 15.0" + newLine +
-				"Humidity: 70%" + newLine +
-				"Pressure: 1015 hPa";
-		assertEquals(expectedOutput, outputStream.toString());
+		var expectedOutput =
+				newLine +
+						"Weather forecast for timezone: Europe/Warsaw (UTC offset: 3600 seconds)" + newLine + newLine +
+						"Hourly forecast:" + newLine +
+						"------------------------------" + newLine +
+						"Time: 2023-08-18T21:04:16.056821" + newLine +
+						"Temperature: 22.0 °C" + newLine +
+						"Weather code: Mainly clear" + newLine +
+						"Wind speed: 10.1 Kph" + newLine +
+						"Precipitation: 2 mm" + newLine +
+						"Humidity: 2 %" + newLine +
+						"------------------------------" + newLine + newLine +
+						"Daily forecast:" + newLine +
+						"------------------------------" + newLine +
+						"Date: 2023-08-18" + newLine +
+						"Max temperature: 25.5 °C" + newLine +
+						"Weather code: Clear sky" + newLine +
+						"Max wind speed: 8.3 Kph" + newLine +
+						"Precipitation probability: 5 %" + newLine +
+						"------------------------------" + newLine;
+
+		assertEquals(expectedOutput.trim(), outputStreamCaptor.toString().trim());
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {
-			"Weather Condition: Sunny",
-			"Temperature: 25.0",
-			"Cloudiness: 30%",
-			"Rain Chance: 10%",
-			"Wind Speed: 15.0",
-			"Humidity: 70%",
-			"Pressure: 1015 hPa"
+			"Weather forecast for timezone: Europe/Warsaw (UTC offset: 3600 seconds)",
+			"\n",
+			"Hourly forecast:",
+			"------------------------------",
+			"Time: 2023-08-18T21:04:16.056821",
+			"Temperature: 22.0 °C",
+			"Weather code: Mainly clear",
+			"Wind speed: 10.1 Kph",
+			"Precipitation: 2 mm",
+			"Humidity: 2 %",
+			"------------------------------",
+			"\n",
+			"Daily forecast:",
+			"------------------------------",
+			"Date: 2023-08-18",
+			"Max temperature: 25.5 °C",
+			"Weather code: Clear sky",
+			"Max wind speed: 8.3 Kph",
+			"Precipitation probability: 5 %",
+			"------------------------------",
+			"\n"
 	})
 	void printWeather_shouldPrintWeatherInformation(String expectedOutput) {
-		// Given
-		commandLineUserInterface.printWeather(mockWeatherData);
+		// When
+		sut.printWeather(MOCKED_FORECAST_DATA);
 
 		// Then
-		var output = outputStream.toString();
+		var output = outputStreamCaptor.toString();
 		assertTrue(output.contains(expectedOutput));
 	}
 }

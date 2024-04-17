@@ -11,9 +11,9 @@ import java.util.List;
 public interface GeocodingApiService {
 	/**
 	 * @param cityName name of the city to get detailed data for.
-	 * @return List of detailed information for cities with given name.
+	 * @return A {@link ResponseData} object containing a list of detailed information for cities with the given name.
 	 * @throws IllegalArgumentException when cityName is null or is blank.
-	 * @throws IOException              when sendHttpGetRequest is null.
+	 * @throws IOException              when sendHttpGetRequest returns null.
 	 * @throws InterruptedException     when sendHttpGetRequest is interrupted.
 	 */
 	ResponseData<List<GeocodingCityData>> fetchCitiesForCityName(String cityName) throws IllegalArgumentException, IOException, InterruptedException, BadRequestException, NotFoundException;
